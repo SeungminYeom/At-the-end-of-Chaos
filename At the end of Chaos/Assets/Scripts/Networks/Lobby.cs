@@ -18,7 +18,6 @@ public class Lobby : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
 
         joinBtn.interactable = false;
-        Debug.Log("접속중");
         connectionInfoText.text = "접속중...";
     }
 
