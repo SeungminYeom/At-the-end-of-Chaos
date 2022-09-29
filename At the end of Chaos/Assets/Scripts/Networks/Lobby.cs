@@ -18,8 +18,8 @@ public class Lobby : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
 
         joinBtn.interactable = false;
-        Debug.Log("Á¢¼ÓÁß");
-        connectionInfoText.text = "Á¢¼ÓÁß...";
+        Debug.Log("ì ‘ì†ì¤‘");
+        connectionInfoText.text = "ì ‘ì†ì¤‘...";
     }
 
     public override void OnConnectedToMaster()
@@ -31,7 +31,7 @@ public class Lobby : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         joinBtn.interactable = false;
-        connectionInfoText.text = "Offline : Á¢¼Ó Àç½Ãµµ Áß...";
+        connectionInfoText.text = "Offline : ì ‘ì† ì¬ì‹œë„ ì¤‘...";
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -40,11 +40,11 @@ public class Lobby : MonoBehaviourPunCallbacks
         joinBtn.interactable = false;
         if (PhotonNetwork.IsConnected)
         {
-            connectionInfoText.text = "°ÔÀÓ¿¡ Á¢¼ÓÁß...";
+            connectionInfoText.text = "ê²Œì„ì— ì ‘ì†ì¤‘...";
             PhotonNetwork.JoinRandomRoom();
         } else
         {
-            connectionInfoText.text = "Offline : ¸ŞÀÎ ¼­¹ö¿¡ ¿¬°á ½ÇÆĞ. Àç ½ÃµµÁß...";
+            connectionInfoText.text = "Offline : ë©”ì¸ ì„œë²„ì— ì—°ê²° ì‹¤íŒ¨. ì¬ ì‹œë„ì¤‘...";
             PhotonNetwork.ConnectUsingSettings();
         }
     }
@@ -52,13 +52,13 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     public override void OnJoinRandomFailed(short returnCode, string msg)
     {
-        connectionInfoText.text = "»õ °ÔÀÓÀ» ¸¸µå´ÂÁß...";
+        connectionInfoText.text = "ìƒˆ ê²Œì„ì„ ë§Œë“œëŠ”ì¤‘...";
         PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 4 });
     }
 
     public override void OnJoinedRoom()
     {
-        connectionInfoText.text = "¿¬°áµÊ";
+        connectionInfoText.text = "ì—°ê²°ë¨";
         PhotonNetwork.LoadLevel("GameScene");
     }
 
