@@ -4,13 +4,19 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using TMPro;
 
 public class Lobby : MonoBehaviourPunCallbacks
 {
     private string gameVersion = "1.0";
+    private bool createGameEnabled = false;
 
     public Text connectionInfoText;
+    public Button createBtn;
     public Button joinBtn;
+    public Button connectBtn;
+    public TMP_InputField roomCodeInput;
+    
 
     void Start()
     {
@@ -34,31 +40,79 @@ public class Lobby : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    public void Connect()
+    public void ConnectGame()
     {
-        joinBtn.interactable = false;
-        if (PhotonNetwork.IsConnected)
+        if (roomCodeInput.text.Length == 5)
         {
-            connectionInfoText.text = "게임에 접속중...";
-            PhotonNetwork.JoinRandomRoom();
+            joinBtn.interactable = false;
+            if (PhotonNetwork.IsConnected)
+            {
+                connectionInfoText.text = "게임에 접속중...";
+                PhotonNetwork.JoinRoom(roomCodeInput.text);
+            }
+            else
+            {
+                connectionInfoText.text = "Offline : 메인 서버에 연결 실패. 재 시도중...";
+                PhotonNetwork.ConnectUsingSettings();
+            }
+        }
+        else
+        {
+            connectionInfoText.text = "게임 코드 5자리를 입력해주세요";
+        }
+        
+    }
+
+    public void JoinButton()
+    {
+        createBtn.gameObject.SetActive(false);
+        joinBtn.gameObject.SetActive(false);
+        connectBtn.gameObject.SetActive(true);
+        roomCodeInput.gameObject.SetActive(true);
+
+    }
+
+    public void CreateButton()
+    {
+        if (!createGameEnabled)
+        {
+            joinBtn.gameObject.SetActive(false);
+            roomCodeInput.gameObject.SetActive(true);
+            createGameEnabled = true;
         } else
         {
-            connectionInfoText.text = "Offline : 메인 서버에 연결 실패. 재 시도중...";
-            PhotonNetwork.ConnectUsingSettings();
+            if (roomCodeInput.text.Length == 5)
+            {
+                connectionInfoText.text = "새 게임을 만드는중...";
+                PhotonNetwork.CreateRoom(roomCodeInput.text, new RoomOptions { MaxPlayers = 4 });
+            }
+            else
+            {
+                connectionInfoText.text = "게임 코드 5자리를 입력해주세요";
+            }
         }
+        
     }
 
 
-    public override void OnJoinRandomFailed(short returnCode, string msg)
+    public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        connectionInfoText.text = "새 게임을 만드는중...";
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 4 });
+        connectionInfoText.text = "게임 참가에 실패하였습니다. \n" + returnCode + " - " + message;
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        connectionInfoText.text = "게임 생성에 실패하였습니다.\n" + returnCode + " - " + message;
     }
 
     public override void OnJoinedRoom()
     {
-        connectionInfoText.text = "연결됨";
-        PhotonNetwork.LoadLevel("GameScene");
+        connectionInfoText.text = "게임에 참가하였습니다.\nGameCode : " + roomCodeInput.text;
+    }
+
+    public override void OnCreatedRoom()
+    {
+        connectionInfoText.text = "게임 생성됨.\nGameCode : " + roomCodeInput.text;
     }
 
     void Update()
