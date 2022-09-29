@@ -23,14 +23,19 @@ public class Lobby : MonoBehaviourPunCallbacks
         PhotonNetwork.GameVersion = this.gameVersion;
         PhotonNetwork.ConnectUsingSettings();
 
+<<<<<<< Updated upstream
         joinBtn.interactable = false;
         Debug.Log("접속중");
+=======
+>>>>>>> Stashed changes
         connectionInfoText.text = "접속중...";
     }
 
     public override void OnConnectedToMaster()
     {
         joinBtn.interactable = true;
+        createBtn.gameObject.SetActive(true);
+        joinBtn.gameObject.SetActive(true);
         connectionInfoText.text = "Online";
     }
 
@@ -98,12 +103,13 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        connectionInfoText.text = "게임 참가에 실패하였습니다. \n" + returnCode + " - " + message;
+        Debug.Log(returnCode + "///" + PhotonErrorHandler.Instance.Err(returnCode));
+        connectionInfoText.text = "게임 참가에 실패하였습니다. \n" + PhotonErrorHandler.Instance.Err(returnCode);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        connectionInfoText.text = "게임 생성에 실패하였습니다.\n" + returnCode + " - " + message;
+        connectionInfoText.text = "게임 생성에 실패하였습니다.\n" + PhotonErrorHandler.Instance.Err(returnCode);
     }
 
     public override void OnJoinedRoom()
@@ -116,8 +122,4 @@ public class Lobby : MonoBehaviourPunCallbacks
         connectionInfoText.text = "게임 생성됨.\nGameCode : " + roomCodeInput.text;
     }
 
-    void Update()
-    {
-        
-    }
 }
