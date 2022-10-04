@@ -5,13 +5,16 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class Lobby : MonoBehaviourPunCallbacks
 {
     private string gameVersion = "1.0";
     private bool createGameEnabled = false;
 
-    public GameObject[] players = new GameObject[4];
+    private GameObject[] players = new GameObject[4];
+
+    public Vector2[] playerPos = new Vector2[4];
 
     public Text connectionInfoText;
     public Button createBtn;
@@ -19,13 +22,17 @@ public class Lobby : MonoBehaviourPunCallbacks
     public Button connectBtn;
     public TMP_InputField roomCodeInput;
     public TMP_InputField playerName;
+    public GameObject playerPrefab;
 
-    
-    
+    private void Awake()
+    {
+        PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.GameVersion = this.gameVersion;
+    }
 
     void Start()
     {
-        PhotonNetwork.GameVersion = this.gameVersion;
+        
         PhotonNetwork.ConnectUsingSettings();
         connectionInfoText.text = "접속중...";
 
@@ -36,6 +43,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         joinBtn.interactable = true;
         createBtn.gameObject.SetActive(true);
         joinBtn.gameObject.SetActive(true);
+        playerName.gameObject.SetActive(true);
         connectionInfoText.text = "Online";
     }
 
@@ -114,12 +122,29 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        PhotonNetwork.LocalPlayer.NickName = playerName.text;
         connectionInfoText.text = "게임에 참가하였습니다.\nGameCode : " + roomCodeInput.text;
     }
 
     public override void OnCreatedRoom()
     {
+        PhotonNetwork.LocalPlayer.NickName = playerName.text;
         connectionInfoText.text = "게임 생성됨.\nGameCode : " + roomCodeInput.text;
+        players[0] = Instantiate(playerPrefab);
+        players[0].transform.position = new Vector3(playerPos[0].x, 0.5f, playerPos[0].y);
+        players[0].transform.GetComponentInChildren<TextMesh>().text = PhotonNetwork.LocalPlayer.NickName;
     }
 
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            if (players[i].IsDestroyed())
+            {
+                players[i] = Instantiate(playerPrefab);
+                players[i].transform.position = new Vector3(playerPos[i].x, 0.5f, playerPos[i].y);
+                players[i].transform.GetComponentInChildren<TextMesh>().text = newPlayer.NickName;
+            }
+        }
+    }
 }
