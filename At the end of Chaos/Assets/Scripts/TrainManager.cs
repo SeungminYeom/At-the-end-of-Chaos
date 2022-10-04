@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class TrainManager : MonoBehaviour
 {
     public GameObject[] trains = new GameObject[5];
+    [SerializeField] SerializableDictionary<int, GameObject> _trains = new SerializableDictionary<int, GameObject>();
 
     void Start()
     {
+
     }
 
     void Update()
@@ -15,12 +18,10 @@ public class TrainManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             GameManager.instance.trainCount++;
-            Debug.Log("Z");
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
             GameManager.instance.trainCount--;
-            Debug.Log("X");
         }
     }
 
@@ -42,5 +43,13 @@ public class TrainManager : MonoBehaviour
         {
             trains[n - i].transform.position = new Vector3(i * 5.25f, 0, 0);
         }
+    }
+
+    public GameObject GetTrain(int n)
+    {
+        GameObject go;
+        _trains.TryGetValue(n, out go);
+
+        return go;
     }
 }

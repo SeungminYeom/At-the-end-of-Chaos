@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     Image timeUI_Afternoon_Image;
     Image timeUI_Night_Image;
 
+    [SerializeField] int _maxTrainCount = 5;
     [SerializeField] int _trainCount;
     [SerializeField] float _groundSpeed = 10f;
     [SerializeField] TimeState _timeState;
@@ -36,6 +37,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] float timeNightEndValue = 3;
 
 
+    public int maxTrainCount
+    {
+        get { return _maxTrainCount; }
+    }
+
     public int trainCount
     {
         get { return _trainCount; }
@@ -43,11 +49,13 @@ public class GameManager : MonoBehaviour
         {
             if (value - 1 == _trainCount)
             {
+                if (_trainCount >= maxTrainCount) return;
                 GameObject.Find("TrainManager").gameObject.SendMessage("AddTrain", _trainCount);
                 _trainCount = value;
             }
             else if (value + 1 == _trainCount)
             {
+                if (_trainCount <= 0) return;
                 GameObject.Find("TrainManager").gameObject.SendMessage("SubTrain", _trainCount);
                 _trainCount = value;
             }
