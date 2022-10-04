@@ -11,11 +11,16 @@ public class Lobby : MonoBehaviourPunCallbacks
     private string gameVersion = "1.0";
     private bool createGameEnabled = false;
 
+    public GameObject[] players = new GameObject[4];
+
     public Text connectionInfoText;
     public Button createBtn;
     public Button joinBtn;
     public Button connectBtn;
     public TMP_InputField roomCodeInput;
+    public TMP_InputField playerName;
+
+    
     
 
     void Start()
@@ -23,6 +28,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         PhotonNetwork.GameVersion = this.gameVersion;
         PhotonNetwork.ConnectUsingSettings();
         connectionInfoText.text = "접속중...";
+
     }
 
     public override void OnConnectedToMaster()
