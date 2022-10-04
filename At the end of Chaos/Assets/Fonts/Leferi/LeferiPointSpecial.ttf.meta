@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 0807928d038a07346a2ac249cf20b143
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Leferi Point Type
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 43391df408377d04b8be2bfe6fa537fb, type: 3}
+  - {fileID: 12800000, guid: 6046428e1cf6cba4385731cbad143e65, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
