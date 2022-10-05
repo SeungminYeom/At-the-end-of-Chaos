@@ -139,11 +139,17 @@ public class Lobby : MonoBehaviourPunCallbacks
     {
         for (int i = 1; i < 4; i++)
         {
-            if (players[i].IsDestroyed())
+            //if (players[i].IsDestroyed())
+            //{
+                //players[i] = Instantiate(playerPrefab);
+                //players[i].transform.position = new Vector3(playerPos[i].x, 0.5f, playerPos[i].y);
+                //players[i].transform.GetComponentInChildren<TextMesh>().text = newPlayer.NickName;
+            //}
+            if (players[i] == null)
             {
-                players[i] = Instantiate(playerPrefab);
-                players[i].transform.position = new Vector3(playerPos[i].x, 0.5f, playerPos[i].y);
-                players[i].transform.GetComponentInChildren<TextMesh>().text = newPlayer.NickName;
+                //players[i] = Instantiate(playerPrefab);
+                //players[i].transform.position = new Vector3(playerPos[i].x, 0.5f, playerPos[i].y);
+                //players[i].transform.GetComponentInChildren<TextMesh>().text = newPlayer.NickName;
             }
         }
     }
