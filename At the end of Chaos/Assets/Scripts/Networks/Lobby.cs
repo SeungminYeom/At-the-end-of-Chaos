@@ -32,7 +32,6 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        
         PhotonNetwork.ConnectUsingSettings();
         connectionInfoText.text = "접속중...";
 
@@ -56,11 +55,20 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     public void ConnectGame()
     {
+        if(playerName.text.Length == 0)
+        {
+            PhotonNetwork.LocalPlayer.NickName = "unknown";
+        } else
+        {
+            PhotonNetwork.LocalPlayer.NickName = playerName.text;
+        }
+        
         if (roomCodeInput.text.Length == 5)
         {
             joinBtn.interactable = false;
             if (PhotonNetwork.IsConnected)
             {
+
                 connectionInfoText.text = "게임에 접속중...";
                 PhotonNetwork.JoinRoom(roomCodeInput.text);
             }
@@ -122,17 +130,25 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.LocalPlayer.NickName = playerName.text;
         connectionInfoText.text = "게임에 참가하였습니다.\nGameCode : " + roomCodeInput.text;
     }
 
     public override void OnCreatedRoom()
     {
-        PhotonNetwork.LocalPlayer.NickName = playerName.text;
+        if (playerName.text.Length == 0)
+        {
+            Debug.Log("unknown");
+            PhotonNetwork.NickName = "unknown";
+        }
+        else
+        {
+            Debug.Log(PhotonNetwork.NickName);
+            PhotonNetwork.NickName = playerName.text;
+        }
+        
         connectionInfoText.text = "게임 생성됨.\nGameCode : " + roomCodeInput.text;
-        players[0] = Instantiate(playerPrefab);
-        players[0].transform.position = new Vector3(playerPos[0].x, 0.5f, playerPos[0].y);
-        players[0].transform.GetComponentInChildren<TextMesh>().text = PhotonNetwork.LocalPlayer.NickName;
+        players[0] = Instantiate(playerPrefab, new Vector3(playerPos[0].x, 0.5f, playerPos[0].y), Quaternion.identity);
+        players[0].transform.GetComponentInChildren<TextMesh>().text = PhotonNetwork.NickName;
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
