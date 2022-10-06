@@ -20,6 +20,7 @@ public class Lobby : MonoBehaviourPunCallbacks
     public Button createBtn;
     public Button joinBtn;
     public Button connectBtn;
+    public Button cancelBtn;
     public TMP_InputField roomCodeInput;
     public TMP_InputField playerName;
     public GameObject playerPrefab;
@@ -91,6 +92,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         joinBtn.gameObject.SetActive(false);
         connectBtn.gameObject.SetActive(true);
         roomCodeInput.gameObject.SetActive(true);
+        cancelBtn.gameObject.SetActive(true);
 
     }
 
@@ -100,6 +102,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         {
             joinBtn.gameObject.SetActive(false);
             roomCodeInput.gameObject.SetActive(true);
+            cancelBtn.gameObject.SetActive(true);
             createGameEnabled = true;
         } else
         {
@@ -116,6 +119,16 @@ public class Lobby : MonoBehaviourPunCallbacks
         
     }
 
+    public void Cancel()
+    {
+        createBtn.gameObject.SetActive(true);
+        joinBtn.gameObject.SetActive(true);
+        connectBtn.gameObject.SetActive(false);
+        roomCodeInput.gameObject.SetActive(false);
+        cancelBtn.gameObject.SetActive(false);
+        createGameEnabled = false;
+    }
+
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
@@ -130,6 +143,12 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        createBtn.gameObject.SetActive(false);
+        joinBtn.gameObject.SetActive(false);
+        connectBtn.gameObject.SetActive(false);
+        roomCodeInput.gameObject.SetActive(false);
+        playerName.gameObject.SetActive(false);
+        cancelBtn.gameObject.SetActive(false);
         connectionInfoText.text = "게임에 참가하였습니다.\nGameCode : " + roomCodeInput.text;
     }
 
@@ -145,7 +164,11 @@ public class Lobby : MonoBehaviourPunCallbacks
             Debug.Log(PhotonNetwork.NickName);
             PhotonNetwork.NickName = playerName.text;
         }
-        
+        createBtn.gameObject.SetActive(false);
+        joinBtn.gameObject.SetActive(false);
+        connectBtn.gameObject.SetActive(false);
+        roomCodeInput.gameObject.SetActive(false);
+        cancelBtn.gameObject.SetActive(false);
         connectionInfoText.text = "게임 생성됨.\nGameCode : " + roomCodeInput.text;
         players[0] = Instantiate(playerPrefab, new Vector3(playerPos[0].x, 0.5f, playerPos[0].y), Quaternion.identity);
         players[0].transform.GetComponentInChildren<TextMesh>().text = PhotonNetwork.NickName;
