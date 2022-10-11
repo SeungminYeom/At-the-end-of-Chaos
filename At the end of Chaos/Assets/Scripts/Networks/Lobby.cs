@@ -6,13 +6,15 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using System.Linq;
+using Photon.Pun.UtilityScripts;
 
 public class Lobby : MonoBehaviourPunCallbacks
 {
     private string gameVersion = "1.0";
     private bool createGameEnabled = false;
 
-    private GameObject[] players = new GameObject[4];
+    public GameObject[] players = new GameObject[4];
 
     public Vector2[] playerPos = new Vector2[4];
 
@@ -180,11 +182,25 @@ public class Lobby : MonoBehaviourPunCallbacks
         {
             if (players[i] == null)
             {
-                players[i] = Instantiate(playerPrefab);
-                players[i].transform.position = new Vector3(playerPos[i].x, 0.5f, playerPos[i].y);
+                players[i] = PhotonNetwork.Instantiate("Player", new Vector3(playerPos[i].x, 0.5f, playerPos[i].y), Quaternion.identity);
                 players[i].transform.GetComponentInChildren<TextMesh>().text = newPlayer.NickName;
                 return;
             }
         }
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            if (players[i] != null && players[i].GetComponentInChildren<TextMesh>().text == otherPlayer.NickName)
+            {
+                Destroy(players[i]);
+                players[i] = null;
+                return;
+            }
+            
+        }
+
     }
 }
