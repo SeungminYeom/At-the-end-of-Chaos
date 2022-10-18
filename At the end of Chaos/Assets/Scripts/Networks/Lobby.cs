@@ -13,6 +13,7 @@ public class Lobby : MonoBehaviourPunCallbacks
 {
     private string gameVersion = "1.0";
     private bool createGameEnabled = false;
+    private PhotonView pv;
 
     public GameObject[] players = new GameObject[4];
 
@@ -26,6 +27,8 @@ public class Lobby : MonoBehaviourPunCallbacks
     public TMP_InputField roomCodeInput;
     public TMP_InputField playerName;
     public GameObject playerPrefab;
+
+
 
     private void Awake()
     {
@@ -188,9 +191,11 @@ public class Lobby : MonoBehaviourPunCallbacks
             }
         }
     }
+    
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        //나간 플레이어 오브젝트를 찾아서 지운다.
         for (int i = 1; i < 4; i++)
         {
             if (players[i] != null && players[i].GetComponentInChildren<TextMesh>().text == otherPlayer.NickName)
@@ -202,5 +207,28 @@ public class Lobby : MonoBehaviourPunCallbacks
             
         }
 
+        //나간 플레이어가 Master
+        if (otherPlayer.IsMasterClient)
+        {
+
+        }
+    }
+
+    public void UpdatePlayerName()
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            if (players[i] != null)
+            {
+                string pName = players[i].GetComponentInChildren<TextMesh>().text;
+                pv.RPC("ChangePlayerName", RpcTarget.Others, players[i], pName);
+                return;
+            }
+        }
+    }
+
+    public void ChangePlayerName(GameObject p, string n)
+    {
+        p.transform.GetComponentInChildren<TextMesh>().text = n;
     }
 }
