@@ -43,14 +43,14 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     }
 
-    void Update()
-    {
-        if (pv.IsMine)
-        {
-            float h = Input.GetAxis("Horizonal");
-            transform.position += new Vector3(h * 5 * Time.deltaTime, 0, 0);
-        }
-    }
+    //void Update()
+    //{
+    //    if (pv.IsMine)
+    //    {
+    //        float h = Input.GetAxis("Horizonal");
+    //        players[0].transform.position += new Vector3(h * 5 * Time.deltaTime, 0, 0);
+    //    }
+    //}
 
     public override void OnConnectedToMaster()
     {
