@@ -43,6 +43,15 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     }
 
+    void Update()
+    {
+        if (pv.IsMine)
+        {
+            float h = Input.GetAxis("Horizonal");
+            transform.position += new Vector3(h * 5 * Time.deltaTime, 0, 0);
+        }
+    }
+
     public override void OnConnectedToMaster()
     {
         joinBtn.interactable = true;
@@ -214,20 +223,20 @@ public class Lobby : MonoBehaviourPunCallbacks
         }
     }
 
-    public void UpdatePlayerName()
-    {
-        for (int i = 1; i < 4; i++)
-        {
-            if (players[i] != null)
-            {
-                string pName = players[i].GetComponentInChildren<TextMesh>().text;
-                pv.RPC("ChangePlayerName", RpcTarget.Others, i, pName);
-            }
-        }
-    }
+    //public void UpdatePlayerName()
+    //{
+    //    for (int i = 1; i < 4; i++)
+    //    {
+    //        if (players[i] != null)
+    //        {
+    //            string pName = players[i].GetComponentInChildren<TextMesh>().text;
+    //            pv.RPC("ChangePlayerName", RpcTarget.Others, i, pName);
+    //        }
+    //    }
+    //}
 
-    public void ChangePlayerName(int p, string n)
-    {
-        players[p].transform.GetComponentInChildren<TextMesh>().text = n;
-    }
+    //public void ChangePlayerName(int p, string n)
+    //{
+    //    players[p].transform.GetComponentInChildren<TextMesh>().text = n;
+    //}
 }
