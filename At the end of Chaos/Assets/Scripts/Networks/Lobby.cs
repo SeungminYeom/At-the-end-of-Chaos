@@ -221,14 +221,13 @@ public class Lobby : MonoBehaviourPunCallbacks
             if (players[i] != null)
             {
                 string pName = players[i].GetComponentInChildren<TextMesh>().text;
-                pv.RPC("ChangePlayerName", RpcTarget.Others, players[i], pName);
-                return;
+                pv.RPC("ChangePlayerName", RpcTarget.Others, i, pName);
             }
         }
     }
 
-    public void ChangePlayerName(GameObject p, string n)
+    public void ChangePlayerName(int p, string n)
     {
-        p.transform.GetComponentInChildren<TextMesh>().text = n;
+        players[p].transform.GetComponentInChildren<TextMesh>().text = n;
     }
 }
