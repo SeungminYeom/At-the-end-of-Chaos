@@ -172,7 +172,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         roomCodeInput.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(false);
         connectionInfoText.text = "게임 생성됨.\nGameCode : " + roomCodeInput.text;
-        players[0] = Instantiate(playerPrefab, new Vector3(playerPos[0].x, 0.5f, playerPos[0].y), Quaternion.identity);
+        players[0] = PhotonNetwork.Instantiate("player", new Vector3(playerPos[0].x, 0.5f, playerPos[0].y), Quaternion.identity);
         players[0].transform.GetComponentInChildren<TextMesh>().text = PhotonNetwork.NickName;
     }
 
