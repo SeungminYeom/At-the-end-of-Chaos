@@ -134,6 +134,11 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         roomCodeInput.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(false);
         createGameEnabled = false;
+        
+        if (PhotonNetwork.IsMasterClient)
+        {
+
+        }
         PhotonNetwork.LeaveRoom();
     }
 
