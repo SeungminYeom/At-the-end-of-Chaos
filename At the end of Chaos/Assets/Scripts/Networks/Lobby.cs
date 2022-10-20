@@ -13,8 +13,8 @@ public class Lobby : MonoBehaviourPunCallbacks
 {
     private string gameVersion = "1.0";
     private bool createGameEnabled = false;
-    private PhotonView pv;
 
+    public string[] playerNames = new string[4];
     public GameObject[] players = new GameObject[4];
 
     public Vector2[] playerPos = new Vector2[4];
@@ -43,15 +43,6 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     }
 
-    //void Update()
-    //{
-    //    if (pv.IsMine)
-    //    {
-    //        float h = Input.GetAxis("Horizonal");
-    //        players[0].transform.position += new Vector3(h * 5 * Time.deltaTime, 0, 0);
-    //    }
-    //}
-
     public override void OnConnectedToMaster()
     {
         joinBtn.interactable = true;
@@ -70,14 +61,15 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     public void ConnectGame()
     {
-        if(playerName.text.Length == 0)
+        if (playerName.text.Length == 0)
         {
             PhotonNetwork.LocalPlayer.NickName = "unknown";
-        } else
+        }
+        else
         {
             PhotonNetwork.LocalPlayer.NickName = playerName.text;
         }
-        
+
         if (roomCodeInput.text.Length == 5)
         {
             joinBtn.interactable = false;
@@ -97,7 +89,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         {
             connectionInfoText.text = "게임 코드 5자리를 입력해주세요";
         }
-        
+
     }
 
     public void JoinButton()
@@ -118,7 +110,8 @@ public class Lobby : MonoBehaviourPunCallbacks
             roomCodeInput.gameObject.SetActive(true);
             cancelBtn.gameObject.SetActive(true);
             createGameEnabled = true;
-        } else
+        }
+        else
         {
             if (roomCodeInput.text.Length == 5)
             {
@@ -130,7 +123,7 @@ public class Lobby : MonoBehaviourPunCallbacks
                 connectionInfoText.text = "게임 코드 5자리를 입력해주세요";
             }
         }
-        
+
     }
 
     public void Cancel()
@@ -157,6 +150,7 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        //UI 변경
         createBtn.gameObject.SetActive(false);
         joinBtn.gameObject.SetActive(false);
         connectBtn.gameObject.SetActive(false);
@@ -164,56 +158,60 @@ public class Lobby : MonoBehaviourPunCallbacks
         playerName.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(false);
         connectionInfoText.text = "게임에 참가하였습니다.\nGameCode : " + roomCodeInput.text;
+
+        InitPlayer();
     }
 
     public override void OnCreatedRoom()
     {
         if (playerName.text.Length == 0)
         {
-            Debug.Log("unknown");
             PhotonNetwork.NickName = "unknown";
         }
         else
         {
-            Debug.Log(PhotonNetwork.NickName);
             PhotonNetwork.NickName = playerName.text;
         }
+        playerNames[0] = PhotonNetwork.NickName;
         createBtn.gameObject.SetActive(false);
         joinBtn.gameObject.SetActive(false);
         connectBtn.gameObject.SetActive(false);
         roomCodeInput.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(false);
         connectionInfoText.text = "게임 생성됨.\nGameCode : " + roomCodeInput.text;
-        players[0] = PhotonNetwork.Instantiate("player", new Vector3(playerPos[0].x, 0.5f, playerPos[0].y), Quaternion.identity);
-        players[0].transform.GetComponentInChildren<TextMesh>().text = PhotonNetwork.NickName;
+        InitPlayer();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         for (int i = 1; i < 4; i++)
         {
-            if (players[i] == null)
+            Debug.Log("player" + i + " = " + players[i].activeSelf);
+            if (!players[i].activeSelf)
             {
-                players[i] = PhotonNetwork.Instantiate("Player", new Vector3(playerPos[i].x, 0.5f, playerPos[i].y), Quaternion.identity);
-                players[i].transform.GetComponentInChildren<TextMesh>().text = newPlayer.NickName;
-                return;
+                Debug.Log(i + "player Entered");
+                playerNames[i] = newPlayer.NickName;
+                players[i].GetComponentInChildren<TextMesh>().text = playerNames[i];
+                break;
             }
+
         }
+        InitPlayer();
+
     }
-    
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         //나간 플레이어 오브젝트를 찾아서 지운다.
         for (int i = 1; i < 4; i++)
         {
-            if (players[i] != null && players[i].GetComponentInChildren<TextMesh>().text == otherPlayer.NickName)
+            if (players[i].GetComponentInChildren<TextMesh>().text == otherPlayer.NickName)
             {
-                Destroy(players[i]);
-                players[i] = null;
+                playerNames[i] = null;
+                players[i].SetActive(false);
                 return;
             }
-            
+
         }
 
         //나간 플레이어가 Master
@@ -223,20 +221,15 @@ public class Lobby : MonoBehaviourPunCallbacks
         }
     }
 
-    //public void UpdatePlayerName()
-    //{
-    //    for (int i = 1; i < 4; i++)
-    //    {
-    //        if (players[i] != null)
-    //        {
-    //            string pName = players[i].GetComponentInChildren<TextMesh>().text;
-    //            pv.RPC("ChangePlayerName", RpcTarget.Others, i, pName);
-    //        }
-    //    }
-    //}
-
-    //public void ChangePlayerName(int p, string n)
-    //{
-    //    players[p].transform.GetComponentInChildren<TextMesh>().text = n;
-    //}
+    void InitPlayer()
+    {
+        for(int i = 0; i<4; i++)
+        {
+            if (playerNames[i] != "")
+            {
+                players[i].GetComponentInChildren<TextMesh>().text = PhotonNetwork.PlayerList[i].NickName;
+                players[i].SetActive(true);
+            }
+        }
+    }
 }
