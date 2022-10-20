@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using System.Linq;
 using Photon.Pun.UtilityScripts;
 
-public class Lobby : MonoBehaviourPunCallbacks
+public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
 {
     private string gameVersion = "1.0";
     private bool createGameEnabled = false;
@@ -134,6 +134,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         roomCodeInput.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(false);
         createGameEnabled = false;
+        PhotonNetwork.LeaveRoom();
     }
 
 
@@ -156,10 +157,8 @@ public class Lobby : MonoBehaviourPunCallbacks
         connectBtn.gameObject.SetActive(false);
         roomCodeInput.gameObject.SetActive(false);
         playerName.gameObject.SetActive(false);
-        cancelBtn.gameObject.SetActive(false);
+        cancelBtn.gameObject.SetActive(true);
         connectionInfoText.text = "게임에 참가하였습니다.\nGameCode : " + roomCodeInput.text;
-
-        InitPlayer();
     }
 
     public override void OnCreatedRoom()
@@ -177,9 +176,8 @@ public class Lobby : MonoBehaviourPunCallbacks
         joinBtn.gameObject.SetActive(false);
         connectBtn.gameObject.SetActive(false);
         roomCodeInput.gameObject.SetActive(false);
-        cancelBtn.gameObject.SetActive(false);
+        cancelBtn.gameObject.SetActive(true);
         connectionInfoText.text = "게임 생성됨.\nGameCode : " + roomCodeInput.text;
-        InitPlayer();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -187,7 +185,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         for (int i = 1; i < 4; i++)
         {
             Debug.Log("player" + i + " = " + players[i].activeSelf);
-            if (!players[i].activeSelf)
+            if (PhotonNetwork.IsMasterClient && !players[i].activeSelf)
             {
                 Debug.Log(i + "player Entered");
                 playerNames[i] = newPlayer.NickName;
@@ -196,7 +194,6 @@ public class Lobby : MonoBehaviourPunCallbacks
             }
 
         }
-        InitPlayer();
 
     }
 
@@ -207,7 +204,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         {
             if (players[i].GetComponentInChildren<TextMesh>().text == otherPlayer.NickName)
             {
-                playerNames[i] = null;
+                playerNames[i] = "";
                 players[i].SetActive(false);
                 return;
             }
@@ -227,9 +224,25 @@ public class Lobby : MonoBehaviourPunCallbacks
         {
             if (playerNames[i] != "")
             {
-                players[i].GetComponentInChildren<TextMesh>().text = PhotonNetwork.PlayerList[i].NickName;
+                players[i].GetComponentInChildren<TextMesh>().text = playerNames[i];
                 players[i].SetActive(true);
             }
         }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(playerNames);
+        } else
+        {
+            playerNames = (string[])stream.ReceiveNext();
+        }
+    }
+
+    public void FixedUpdate()
+    {
+        InitPlayer();
     }
 }
