@@ -20,6 +20,7 @@ public class ZombieManager : MonoBehaviour
 
     void Update()
     {
+
     }
 
     void SpawnZombie()
@@ -30,13 +31,4 @@ public class ZombieManager : MonoBehaviour
         Vector3 pos = trainManager.GetTrain(GameManager.instance.trainCount).transform.position + new Vector3(x, 1f, z);
         zombieList.Add(Instantiate(zombie, pos, Quaternion.identity));
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawWireSphere(
-    //        GameObject.Find("TrainManager").GetComponent<TrainManager>().GetTrain(GameManager.instance.trainCount).transform.position,
-    //        spawnDistance);
-        
-    //}
 }

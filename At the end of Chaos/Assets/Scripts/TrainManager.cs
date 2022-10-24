@@ -40,7 +40,7 @@ public class TrainManager : MonoBehaviour
     {
         for (int i = 0; i <= n; i++)
         {
-            trains[n - i].transform.position = new Vector3(i * 5.25f, 0, 0);
+            trains[n - i].transform.localPosition = new Vector3(i * 5.25f, 0, 0);
         }
     }
 
