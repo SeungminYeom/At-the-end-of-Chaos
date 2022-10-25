@@ -5,8 +5,8 @@ using UnityEditor;
 using UnityEngine;
 
 public class ZombieManager : MonoBehaviour
-{
-    public GameObject zombie;
+{   
+    [SerializeField] GameObject zombie;
     public TrainManager trainManager;
     public Transform spawnSpot;
     [SerializeField] List<GameObject> zombieList = new List<GameObject>();
@@ -14,6 +14,7 @@ public class ZombieManager : MonoBehaviour
 
     void Start()
     {
+        zombie = Resources.Load<GameObject>("Zombie");
         InvokeRepeating("SpawnZombie", 0f, 2f);
         trainManager = GameObject.Find("TrainManager").GetComponent<TrainManager>();
     }

@@ -7618,9 +7618,9 @@ MonoBehaviour:
   _groundSpeed: 10
   _timeState: 0
   stateStartTime: 0
-  timeAfternoonValue: 60
+  timeAfternoonValue: 12
   timeUpgradeValue: 3
-  timeNightValue: 6
+  timeNightValue: 12
   timeNightStartValue: 3
   timeNightEndValue: 3
 --- !u!23 &586175119

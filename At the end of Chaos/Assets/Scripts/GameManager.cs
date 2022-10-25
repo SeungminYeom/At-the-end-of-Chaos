@@ -16,9 +16,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public GameObject select_UI;
-    public GameObject timeUI_afternoon;
-    public GameObject timeUI_night;
+    GameObject select_UI;
+    GameObject timeUI_afternoon;
+    GameObject timeUI_night;
     GameObject joystick;
     GameObject shootBtn;
     Image timeUI_Afternoon_Image;
@@ -92,6 +92,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        select_UI = GameObject.Find("Select_UI");
+        timeUI_afternoon = GameObject.Find("Afternoon");
+        timeUI_night = GameObject.Find("Night");
         joystick = GameObject.Find("Joystick");
         shootBtn = GameObject.Find("ShootBtn");
         timeUI_Afternoon_Image = timeUI_afternoon.GetComponent<Image>();

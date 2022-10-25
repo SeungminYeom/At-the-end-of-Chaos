@@ -3992,9 +3992,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0289ab2b94c5e9144b58e8203100cbb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  select_UI: {fileID: 1049263403}
-  timeUI_afternoon: {fileID: 633639354}
-  timeUI_night: {fileID: 1602968860}
   _stage: 0
   _maxTrainCount: 5
   _trainCount: 0
@@ -10530,7 +10527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b77350a1a977a44418ec97e04ea951fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zombie: {fileID: 1483934318562716434, guid: 44d65b49f5e3ca84083b856fb697bb7b, type: 3}
+  zombie: {fileID: 0}
   trainManager: {fileID: 0}
   spawnSpot: {fileID: 352560974}
   zombieList: []

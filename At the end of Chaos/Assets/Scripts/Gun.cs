@@ -67,7 +67,7 @@ public class Gun : MonoBehaviour
 
     IEnumerator Reload()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(GunManager.instance.gunReloadTime);
         rounds = GunManager.instance.GetGunRounds((int)typeOnHand);
     }
 }
