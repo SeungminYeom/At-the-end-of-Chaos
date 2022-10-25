@@ -120,15 +120,16 @@ namespace UnityStandardAssets.CrossPlatformInput
 		void OnDisable()
 		{
 			transform.position = m_StartPos;
-			//// remove the joysticks from the cross platform input
-			//if (m_UseX)
-			//{
-			//	m_HorizontalVirtualAxis.Remove();
-			//}
-			//if (m_UseY)
-			//{
-			//	m_VerticalVirtualAxis.Remove();
-			//}
-		}
+            CrossPlatformInputManager.SetButtonUp(JoystickBtnName);
+            //// remove the joysticks from the cross platform input
+            //if (m_UseX)
+            //{
+            //	m_HorizontalVirtualAxis.Remove();
+            //}
+            //if (m_UseY)
+            //{
+            //	m_VerticalVirtualAxis.Remove();
+            //}
+        }
 	}
 }
