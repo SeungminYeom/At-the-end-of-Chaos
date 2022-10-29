@@ -19,8 +19,12 @@ public class GameManager : MonoBehaviour
     public GameObject select_UI;
     public GameObject timeUI_afternoon;
     public GameObject timeUI_night;
+    GameObject joystick;
+    GameObject shootBtn;
     Image timeUI_Afternoon_Image;
     Image timeUI_Night_Image;
+
+    [SerializeField] int _stage = 0;
 
     [SerializeField] int _maxTrainCount = 5;
     [SerializeField] int _trainCount;
@@ -36,6 +40,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] float timeNightStartValue = 3f;
     [SerializeField] float timeNightEndValue = 3;
 
+    public int stage
+    {
+        get { return _stage; }
+        set { _stage = value; }
+    }
 
     public int maxTrainCount
     {
@@ -83,6 +92,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        joystick = GameObject.Find("Joystick");
+        shootBtn = GameObject.Find("ShootBtn");
         timeUI_Afternoon_Image = timeUI_afternoon.GetComponent<Image>();
         timeUI_Night_Image = timeUI_night.GetComponent<Image>();
         timeState = TimeState.upgrade;
@@ -115,9 +126,11 @@ public class GameManager : MonoBehaviour
     IEnumerator FromAfternoonToUpgrade()
     {
         stateStartTime = Time.time + timeAfternoonValue;
-        yield return new WaitForSecondsRealtime(timeAfternoonValue);
+        yield return new WaitForSeconds(timeAfternoonValue);
+        joystick.SetActive(false);
+        shootBtn.SetActive(false);
         timeState = TimeState.upgrade;
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         timeUI_night.transform.SetAsLastSibling();
         timeUI_Afternoon_Image.fillAmount = 1f;
         timeUI_night.SetActive(false);
@@ -129,9 +142,9 @@ public class GameManager : MonoBehaviour
     IEnumerator FromUpgradeToNight()
     {
         stateStartTime = Time.time + timeUpgradeValue;
-        yield return new WaitForSecondsRealtime(timeUpgradeValue);
+        yield return new WaitForSeconds(timeUpgradeValue);
         timeState = TimeState.nightStart;
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
         //TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
         //GameObject player = GameObject.Find("Player");
         //player.transform.parent = tm.trains[trainCount - 1].transform;
@@ -145,15 +158,20 @@ public class GameManager : MonoBehaviour
     IEnumerator NightStart()
     {
         stateStartTime = Time.time + timeNightValue;
-        yield return new WaitForSecondsRealtime(timeNightStartValue);
+        yield return new WaitForSeconds(timeNightStartValue);
+        joystick.SetActive(true);
+        shootBtn.SetActive(true);
         timeState = TimeState.night;
+        stage++;
         StartCoroutine(FromNightToAfternoon());
     }
 
     IEnumerator FromNightToAfternoon()
     {
         stateStartTime = Time.time + timeNightValue;
-        yield return new WaitForSecondsRealtime(timeNightValue);
+        yield return new WaitForSeconds(timeNightValue);
+        joystick.SetActive(false);
+        shootBtn.SetActive(false);
         timeState = TimeState.nightEnd;
         groundSpeed = 10f;
         timeUI_afternoon.transform.SetAsLastSibling();
@@ -164,7 +182,9 @@ public class GameManager : MonoBehaviour
     IEnumerator NightEnd()
     {
         stateStartTime = Time.time + timeNightValue;
-        yield return new WaitForSecondsRealtime(timeNightEndValue);
+        yield return new WaitForSeconds(timeNightEndValue);
+        joystick.SetActive(true);
+        shootBtn.SetActive(true);
         timeState = TimeState.afternoon;
         groundSpeed = 0f;
         TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();

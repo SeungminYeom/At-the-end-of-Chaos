@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,7 +16,15 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        Move();
+        if (CrossPlatformInputManager.GetButton("JoystickBtn"))
+        {
+            Rotate();
+            Move();
+        }
+        else
+        {
+            playerRigid.velocity = Vector3.zero;
+        }
     }
 
     private void Move()
@@ -26,10 +35,15 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        float x = Input.GetAxisRaw("Horizontal");
-        float z = Input.GetAxisRaw("Vertical");
-
         //transform.position += new Vector3(x, 0, z).normalized * moveSpeed * Time.deltaTime;
-        playerRigid.velocity = new Vector3(x, 0, z).normalized * moveSpeed;
+        //playerRigid.velocity = new Vector3(CrossPlatformInputManager.GetAxisRaw("Horizontal"), 0, 
+        //                                    CrossPlatformInputManager.GetAxisRaw("Vertical")).normalized * moveSpeed;
+        playerRigid.velocity = transform.forward * moveSpeed;
+    }
+
+    private void Rotate()
+    {
+        transform.localRotation = Quaternion.Euler(new Vector3(0,  Mathf.Atan2(CrossPlatformInputManager.GetAxisRaw("Horizontal"),
+                                                                        CrossPlatformInputManager.GetAxisRaw("Vertical")) * Mathf.Rad2Deg, 0));
     }
 }

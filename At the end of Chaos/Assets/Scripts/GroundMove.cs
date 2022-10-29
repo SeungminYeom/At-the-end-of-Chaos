@@ -16,10 +16,13 @@ public class GroundMove : MonoBehaviour
             GameManager.instance.timeState == TimeState.nightEnd))
             return;
 
-        transform.position = new Vector3(transform.position.x - GameManager.instance.groundSpeed * Time.deltaTime, transform.position.y, transform.position.z);
-        if (transform.position.x <= -60)
+        transform.localPosition = new Vector3(transform.localPosition.x - GameManager.instance.groundSpeed * Time.deltaTime,
+                                                transform.localPosition.y, transform.localPosition.z);
+        if (transform.localPosition.x <= -60)
         {
-            transform.position = new Vector3(transform.position.x + 120, transform.position.y, transform.position.z);
+            transform.localPosition = new Vector3(transform.localPosition.x + 120,
+                                                    transform.localPosition.y,
+                                                    transform.localPosition.z);
         }
     }
 }

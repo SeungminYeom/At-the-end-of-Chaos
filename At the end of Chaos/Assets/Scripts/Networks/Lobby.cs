@@ -8,11 +8,14 @@ using TMPro;
 using Unity.VisualScripting;
 using System.Linq;
 using Photon.Pun.UtilityScripts;
+using ExitGames.Client.Photon;
 
 public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
 {
     private string gameVersion = "1.0";
     private bool createGameEnabled = false;
+
+    private byte requiredPlayer = 3;
 
     public string[] playerNames = new string[4];
     public GameObject[] players = new GameObject[4];
@@ -24,6 +27,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     public Button joinBtn;
     public Button connectBtn;
     public Button cancelBtn;
+    public Button startBtn;
     public TMP_InputField roomCodeInput;
     public TMP_InputField playerName;
     public GameObject playerPrefab;
@@ -126,6 +130,15 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
 
     }
 
+    public void StartGame()
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerCount == requiredPlayer)
+        {
+            PhotonNetwork.LoadLevel("LabScene");
+        }
+        
+    }
+
     public void Cancel()
     {
         createBtn.gameObject.SetActive(true);
@@ -137,9 +150,16 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         
         if (PhotonNetwork.IsMasterClient)
         {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
+
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            PhotonNetwork.LeaveRoom();
 
         }
-        PhotonNetwork.LeaveRoom();
+        
     }
 
 
@@ -199,7 +219,10 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
             }
 
         }
-
+        if (PhotonNetwork.CurrentRoom.PlayerCount == requiredPlayer)
+        {
+            startBtn.gameObject.SetActive(true);
+        }
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
