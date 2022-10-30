@@ -41,7 +41,6 @@ public class EnemyFinder : MonoBehaviour
 
         // viewRadius를 반지름으로 한 구 영역 내 targetMask 레이어인 콜라이더를 모두 가져옴
         Collider[] targetsInViewRadius = Physics.OverlapSphere(viewPos, Gun.range, targetMask);
-
         for (int i = 0; i < targetsInViewRadius.Length; i++)
         {
             Transform target = targetsInViewRadius[i].transform;

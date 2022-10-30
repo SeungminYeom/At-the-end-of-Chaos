@@ -24,7 +24,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (GameManager.instance.timeState != TimeState.afternoon)
         {
-            transform.position = new Vector3(0, 2.5f, 0);
+            //transform.position = new Vector3(0, 2.0f, 0);
+            TrainManager trainManager = GameObject.Find("TrainManager").GetComponent<TrainManager>();
+            GameObject myPosObj = trainManager.GetTrain(GameManager.instance.trainCount);
+            transform.position = myPosObj.transform.Find(gameObject.tag + "_Pos").position;
             return;
         }
 

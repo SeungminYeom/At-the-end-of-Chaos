@@ -10,7 +10,7 @@ public class ZombieManager : MonoBehaviour
 
     public static ZombieManager instance;
 
-    [SerializeField] GameObject zombie;
+    GameObject[] idleZombie = new GameObject[3];
     public TrainManager trainManager;
     public Transform spawnSpot;
     [SerializeField] List<GameObject> zombieList = new List<GameObject>();
@@ -25,7 +25,9 @@ public class ZombieManager : MonoBehaviour
 
     void Start()
     {
-        zombie = Resources.Load<GameObject>("Zombie");
+        idleZombie[0] = Resources.Load<GameObject>("zombie_body_standing");
+        idleZombie[1] = Resources.Load<GameObject>("zombie_man_standing");
+        idleZombie[2] = Resources.Load<GameObject>("zombie_woman_standing");
         trainManager = GameObject.Find("TrainManager").GetComponent<TrainManager>();
     }
 
@@ -42,7 +44,7 @@ public class ZombieManager : MonoBehaviour
             float x = Mathf.Cos(angle * Mathf.Deg2Rad) * spawnDistance;
             float z = Mathf.Sin(angle * Mathf.Deg2Rad) * spawnDistance;
             Vector3 pos = trainManager.GetTrain(GameManager.instance.trainCount).transform.position + new Vector3(x, 1f, z);
-            zombieList.Add(Instantiate(zombie, pos, Quaternion.identity));
+            zombieList.Add(Instantiate(idleZombie[Random.Range(0, 3)], pos, Quaternion.identity));
 
             yield return new WaitForSeconds(spawnTimeInterval);
         }

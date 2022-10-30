@@ -13,7 +13,7 @@ public class Zombie : MonoBehaviour
 
     int health = 10;
     float def = 0;
-    [SerializeField] int speed;
+    [SerializeField] float speed;
     int attackPoint;
 
     //공격까지의 대기 시간
@@ -35,7 +35,9 @@ public class Zombie : MonoBehaviour
         //Vector3 vec = transform.position;
         //vec.x -= Time.deltaTime * 2f;
         //transform.position = vec;
-
+        target = train.GetComponent<TrainManager>().GetTrain(GameManager.instance.trainCount);
+        Vector3 zombieToTarget = target.transform.position - transform.position;
+        transform.rotation = Quaternion.Euler(new Vector3(0, Mathf.Atan2(zombieToTarget.x, zombieToTarget.z) * Mathf.Rad2Deg, 0));
         if (GameManager.instance.timeState == TimeState.nightStart)
         {
             Stronger();
@@ -49,12 +51,11 @@ public class Zombie : MonoBehaviour
     private void FixedUpdate()
     {
         target = train.GetComponent<TrainManager>().GetTrain(GameManager.instance.trainCount);
-        //rigid.AddForce((target.transform.position - transform.position).normalized * 56f);
-        //rigid.ve
-        //rigid.velocity = rigid.velocity.normalized * speed;
-        //rigid.velocity = (target.transform.position - transform.position).normalized * Time.deltaTime * speed;
-
-        transform.position += ((target.transform.position - transform.position).normalized * speed + Vector3.left) * Time.deltaTime;
+        Vector3 zombieToTarget = target.transform.position - transform.position;
+        //transform.position += ((target.transform.position - transform.position).normalized * speed + Vector3.left) * Time.deltaTime;
+        zombieToTarget = zombieToTarget.normalized * speed + Vector3.left;
+        zombieToTarget.y = rigid.velocity.y;
+        rigid.velocity = zombieToTarget;
 
         //Vector3 vec = transform.position;
         //vec.x -= Time.deltaTime;

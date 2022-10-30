@@ -138,7 +138,7 @@ public class Gun : MonoBehaviour
             Vector3 knockBack = enemyFinder.targetPos.position - transform.position;
             knockBack.y = 0;
             enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().AddForce(knockBack.normalized * 2f, ForceMode.Impulse);
+            enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().AddForce(knockBack.normalized * 10f, ForceMode.Impulse);
             enemyFinder.targetPos.gameObject.GetComponent<Zombie>().SendMessage("AttackFromPlayer", new float[]{ damage, 0 });
         }
         yield return new WaitForSeconds(gunShootingTime);
