@@ -15,10 +15,11 @@ public class GunManager : MonoBehaviour
     static public GunManager instance;
 
     [SerializeField] bool[] gunUseable = { true, false, false, false };
+    [SerializeField] float[] gunRanges = { 2, 2, 5, 3};
     [SerializeField] int[] gunRounds = { 10, 5, 1, 30 };
 
     [SerializeField] float _gunDamage = 2;
-    [SerializeField] float _gunRange = 1;
+    [SerializeField] float _gunRange = 4;
     [SerializeField] float _gunReloadTime = 1;
 
 
@@ -66,6 +67,11 @@ public class GunManager : MonoBehaviour
     public int GetGunRounds(int gunTypeNum)
     {
         return gunRounds[gunTypeNum];
+    }
+
+    public float GetGunRange(int gunTypeNum)
+    {
+        return gunRange * gunRanges[gunTypeNum];
     }
 
     public bool IsGunUseable(int gunTypeNum)

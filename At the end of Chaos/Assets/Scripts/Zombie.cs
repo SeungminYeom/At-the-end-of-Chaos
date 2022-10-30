@@ -11,8 +11,8 @@ public class Zombie : MonoBehaviour
     [SerializeField] GameObject target;
 
 
-    int health;
-    float def;
+    int health = 10;
+    float def = 0;
     [SerializeField] int speed;
     int attackPoint;
 
@@ -63,15 +63,15 @@ public class Zombie : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject == train)
-        {
-            attackDelayTime += Time.deltaTime;
-            if (attackDelayTime > attackDelay)
-            {
-                attackDelayTime = 0f;
-                AttackFromZombie();
-            }
-        }
+        //if (collision.gameObject == train)
+        //{
+        //    attackDelayTime += Time.deltaTime;
+        //    if (attackDelayTime > attackDelay)
+        //    {
+        //        attackDelayTime = 0f;
+        //        AttackFromZombie();
+        //    }
+        //}
     }
 
     private void OnCollisionExit(Collision collision)
@@ -82,13 +82,19 @@ public class Zombie : MonoBehaviour
         }
     }
 
-    void AttackFromPlayer(int damage, float defPen)
+    //void AttackFromPlayer(float damage, float defPen)
+    //{
+    //    health -= (int)((1f - def * (1f - defPen)) * damage);
+    //    if (health <= 0) Die();
+    //}
+    void AttackFromPlayer(object value)
     {
-        health -= (int)((1f - def * (1f - defPen)) * damage);
+        float[] var = (float[])value;
+        health -= (int)((1f - def * (1f - var[1])) * var[0]);
         if (health <= 0) Die();
     }
 
-    void AttackFromZombie()
+    void AttackToTrain()
     {
         Debug.Log("기차 공격!");
     }
@@ -102,6 +108,6 @@ public class Zombie : MonoBehaviour
     void Stronger()
     {
         health = (int)(health * 1.1f);
-        def *= 1.1f;
+        def += 0.1f;
     }
 }
