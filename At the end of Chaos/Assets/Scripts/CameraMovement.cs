@@ -40,7 +40,7 @@ public class CameraMovement : MonoBehaviour
                                                     cameraPos.y,
                                                     player.transform.forward.z * Gun.range + cameraPos.z);
             //playerFrontView.y = cameraPos.y;
-            transform.position = Vector3.Lerp(transform.position, playerFrontView, Time.deltaTime * cameraSpeed * 4f);
+            transform.position = Vector3.Lerp(transform.position, playerFrontView, Time.deltaTime * cameraSpeed * 8f);
         }
         else
         {
