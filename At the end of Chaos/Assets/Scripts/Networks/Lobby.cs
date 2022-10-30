@@ -8,11 +8,14 @@ using TMPro;
 using Unity.VisualScripting;
 using System.Linq;
 using Photon.Pun.UtilityScripts;
+using ExitGames.Client.Photon;
 
 public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
 {
     private string gameVersion = "1.0";
     private bool createGameEnabled = false;
+
+    private byte requiredPlayer = 2;
 
     public string[] playerNames = new string[4];
     public GameObject[] players = new GameObject[4];
@@ -24,6 +27,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     public Button joinBtn;
     public Button connectBtn;
     public Button cancelBtn;
+    public Button startBtn;
     public TMP_InputField roomCodeInput;
     public TMP_InputField playerName;
     public GameObject playerPrefab;
@@ -126,6 +130,15 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
 
     }
 
+    public void StartGame()
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerCount == requiredPlayer)
+        {
+            PhotonNetwork.LoadLevel("LabScene");
+        }
+        
+    }
+
     public void Cancel()
     {
         createBtn.gameObject.SetActive(true);
@@ -134,7 +147,19 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         roomCodeInput.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(false);
         createGameEnabled = false;
-        PhotonNetwork.LeaveRoom();
+        
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
+
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            PhotonNetwork.LeaveRoom();
+
+        }
+        
     }
 
 
@@ -182,19 +207,24 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+        //플레이어가 들어오면 MasterClient가 플레이어 닉네임 리스트를 업데이트 해준다.
         for (int i = 1; i < 4; i++)
         {
-            Debug.Log("player" + i + " = " + players[i].activeSelf);
             if (PhotonNetwork.IsMasterClient && !players[i].activeSelf)
             {
-                Debug.Log(i + "player Entered");
                 playerNames[i] = newPlayer.NickName;
-                players[i].GetComponentInChildren<TextMesh>().text = playerNames[i];
                 break;
             }
-
         }
 
+        //모든 플레이어가 다른 플레이어의 이름을 오브젝트에 업데이트 한다.
+        StartCoroutine(InitPlayer());
+
+        //플레이어가 MasterClient이면서 필요한 인원이 충족되면 게임시작 버튼을 Enable해준다.
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == requiredPlayer)
+        {
+            startBtn.gameObject.SetActive(true);
+        }
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -218,8 +248,9 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    void InitPlayer()
+    IEnumerator InitPlayer()
     {
+        yield return null;
         for(int i = 0; i<4; i++)
         {
             if (playerNames[i] != "")
@@ -230,6 +261,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    //변수 동기화
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -239,10 +271,5 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         {
             playerNames = (string[])stream.ReceiveNext();
         }
-    }
-
-    public void FixedUpdate()
-    {
-        InitPlayer();
     }
 }

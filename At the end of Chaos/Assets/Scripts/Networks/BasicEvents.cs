@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BasicEvents : MonoBehaviourPunCallbacks
 {
@@ -15,28 +16,18 @@ public class BasicEvents : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if (pv.IsMine);
+        float axisY = Input.GetAxisRaw("Vertical");
+        float axisX = Input.GetAxisRaw("Horizontal");
+        Vector3 nPos = new Vector3(axisX * Time.deltaTime * 3, 0, axisY * Time.deltaTime * 3);
+        //MoveAxis(nPos);
+        if (pv.IsMine)
         {
-            float axisY = Input.GetAxisRaw("Vertical");
-            float axisX = Input.GetAxisRaw("Horizontal");
-
-            transform.position += new Vector3(axisX * Time.deltaTime * 3,0,  axisY * Time.deltaTime * 3);
+            pv.RPC("MoveAxis", RpcTarget.All, nPos);
         }
     }
 
-    public void rpcCallback(GameObject _pObj, string _name)
-    {
-        pv.RPC("UpdateNickname", RpcTarget.Others, _pObj, _name);
-    }
-
-    public void FixedUpdate()
-    {
-        
-    }
-
     [PunRPC]
-    void UpdateNickname(GameObject _pObj, string _name)
-    {
-        _pObj.GetComponentInChildren<TextMesh>().text = _name;
+    void MoveAxis(Vector3 _pos) { 
+        gameObject.transform.Translate(_pos);
     }
 }
