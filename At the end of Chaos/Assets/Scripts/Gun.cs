@@ -50,7 +50,8 @@ public class Gun : MonoBehaviour
     {
         if (GameManager.instance.timeState == TimeState.night && rounds > 0)
         {
-            if (CrossPlatformInputManager.GetButtonDown("Shoot"))
+            //if (CrossPlatformInputManager.GetButtonDown("Shoot"))
+            if (Input.GetKeyDown(KeyCode.Space))
                 Shoot();
         }
     }
