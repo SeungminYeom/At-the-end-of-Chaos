@@ -222,7 +222,6 @@ namespace UnityStandardAssets.CrossPlatformInput
 			public void Update(float value)
 			{
 				m_Value = value;
-				Debug.Log("Success : " + value);
 			}
 
 

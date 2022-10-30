@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     GameObject timeUI_night;
     GameObject joystick;
     GameObject shootBtn;
+    Light dirLight;
     Image timeUI_Afternoon_Image;
     Image timeUI_Night_Image;
 
@@ -39,6 +40,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] float timeNightValue = 120f;
     [SerializeField] float timeNightStartValue = 3f;
     [SerializeField] float timeNightEndValue = 3;
+
+    [Header("LightSetting")]
+    [SerializeField] float dayLightColor = 5000f;
+    [SerializeField] float nightLightColor = 20000f;
+    [SerializeField] float dayLightIntensity = 2f;
+    [SerializeField] float nightLightIntensity = 0.5f;
 
     public int stage
     {
@@ -92,11 +99,12 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        select_UI = GameObject.Find("Select_UI");
-        timeUI_afternoon = GameObject.Find("Afternoon");
-        timeUI_night = GameObject.Find("Night");
-        joystick = GameObject.Find("Joystick");
-        shootBtn = GameObject.Find("ShootBtn");
+        dirLight = GameObject.Find("DirectionalLight").GetComponent<Light>();
+        select_UI = GameObject.Find("Canvas").transform.Find("Select_UI").gameObject;
+        timeUI_afternoon = GameObject.Find("Canvas").transform.Find("Afternoon").gameObject;
+        timeUI_night = GameObject.Find("Canvas").transform.Find("Night").gameObject;
+        joystick = GameObject.Find("Canvas").transform.Find("Joystick").gameObject;
+        shootBtn = GameObject.Find("Canvas").transform.Find("ShootBtn").gameObject;
         timeUI_Afternoon_Image = timeUI_afternoon.GetComponent<Image>();
         timeUI_Night_Image = timeUI_night.GetComponent<Image>();
         timeState = TimeState.upgrade;
@@ -115,13 +123,21 @@ public class GameManager : MonoBehaviour
             case TimeState.upgrade:
                 break;
             case TimeState.nightStart:
-                groundSpeed = Mathf.Lerp(groundSpeed, 10f, Time.deltaTime);
+                groundSpeed = Mathf.Lerp(groundSpeed, 10f, Time.deltaTime * timeNightStartValue);
+                dirLight.colorTemperature = Mathf.Lerp(dirLight.colorTemperature, nightLightColor,
+                                                         Time.deltaTime * timeNightStartValue);
+                dirLight.intensity = Mathf.Lerp(dirLight.intensity, nightLightIntensity,
+                                                        Time.deltaTime * timeNightStartValue);
                 break;
             case TimeState.night:
                 timeUI_Night_Image.fillAmount = (float)((stateStartTime - Time.time) / timeNightValue);
                 break;
             case TimeState.nightEnd:
-                groundSpeed = Mathf.Lerp(groundSpeed, 0f, Time.deltaTime);
+                groundSpeed = Mathf.Lerp(groundSpeed, 0f, Time.deltaTime * timeNightStartValue);
+                dirLight.colorTemperature = Mathf.Lerp(dirLight.colorTemperature, dayLightColor,
+                                                        Time.deltaTime * timeNightStartValue);
+                dirLight.intensity = Mathf.Lerp(dirLight.intensity, dayLightIntensity,
+                                                        Time.deltaTime * timeNightStartValue);
                 break;
         }
     }
@@ -134,6 +150,7 @@ public class GameManager : MonoBehaviour
         shootBtn.SetActive(false);
         timeState = TimeState.upgrade;
         //Time.timeScale = 0;
+        //하이어라키 창의 순서 변경 코드
         timeUI_night.transform.SetAsLastSibling();
         timeUI_Afternoon_Image.fillAmount = 1f;
         timeUI_night.SetActive(false);
@@ -160,8 +177,9 @@ public class GameManager : MonoBehaviour
 
     IEnumerator NightStart()
     {
-        stateStartTime = Time.time + timeNightValue;
+        stateStartTime = Time.time;
         yield return new WaitForSeconds(timeNightStartValue);
+        StartCoroutine(ZombieManager.instance.SpawnZombie());
         joystick.SetActive(true);
         shootBtn.SetActive(true);
         timeState = TimeState.night;
@@ -177,6 +195,7 @@ public class GameManager : MonoBehaviour
         shootBtn.SetActive(false);
         timeState = TimeState.nightEnd;
         groundSpeed = 10f;
+        //하이어라키 창의 순서 변경 코드
         timeUI_afternoon.transform.SetAsLastSibling();
         timeUI_Night_Image.fillAmount = 1f;
         StartCoroutine(NightEnd());
@@ -184,8 +203,9 @@ public class GameManager : MonoBehaviour
 
     IEnumerator NightEnd()
     {
-        stateStartTime = Time.time + timeNightValue;
+        stateStartTime = Time.time;
         yield return new WaitForSeconds(timeNightEndValue);
+        StopCoroutine(ZombieManager.instance.SpawnZombie());
         joystick.SetActive(true);
         shootBtn.SetActive(true);
         timeState = TimeState.afternoon;
