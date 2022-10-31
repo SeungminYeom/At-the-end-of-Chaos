@@ -203,6 +203,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         roomCodeInput.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(true);
         connectionInfoText.text = "게임 생성됨.\nGameCode : " + roomCodeInput.text;
+        StartCoroutine(InitPlayer());
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
