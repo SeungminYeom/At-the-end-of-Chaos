@@ -26,8 +26,9 @@ public class BasicEvents : MonoBehaviourPunCallbacks
         }
     }
 
-    [PunRPC]
-    void MoveAxis(Vector3 _pos) { 
-        gameObject.transform.Translate(_pos);
-    }
+    //[PunRPC]
+    //void MoveAxis(Vector3 _pos) { 
+    //    gameObject.transform.Translate(_pos);
+    //}
+
 }

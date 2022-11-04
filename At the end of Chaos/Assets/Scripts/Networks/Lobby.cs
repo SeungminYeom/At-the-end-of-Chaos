@@ -134,7 +134,10 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == requiredPlayer)
         {
-            PhotonNetwork.LoadLevel("LabScene");
+            PhotonNetwork.LoadLevel("GameScene");
+        } else
+        {
+            Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount + " != " + requiredPlayer);
         }
         
     }
@@ -146,6 +149,8 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         connectBtn.gameObject.SetActive(false);
         roomCodeInput.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(false);
+        playerName.gameObject.SetActive(true);
+        connectionInfoText.text = "Online";
         createGameEnabled = false;
         
         if (PhotonNetwork.IsMasterClient)
@@ -184,6 +189,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         playerName.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(true);
         connectionInfoText.text = "게임에 참가하였습니다.\nGameCode : " + roomCodeInput.text;
+        StartCoroutine(InitPlayer());
     }
 
     public override void OnCreatedRoom()
