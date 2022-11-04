@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
         shootBtn = GameObject.Find("Canvas").transform.Find("ShootBtn").gameObject;
         timeUI_Afternoon_Image = timeUI_afternoon.GetComponent<Image>();
         timeUI_Night_Image = timeUI_night.GetComponent<Image>();
-        timeState = TimeState.upgrade;
+        timeState = TimeState.nightStart;
         trainCount = 2;
         GameObject.Find("TrainManager").gameObject.SendMessage("SortTrain", trainCount - 1);
         StartCoroutine(FromUpgradeToNight());
@@ -123,21 +123,21 @@ public class GameManager : MonoBehaviour
             case TimeState.upgrade:
                 break;
             case TimeState.nightStart:
-                groundSpeed = Mathf.Lerp(groundSpeed, 10f, Time.deltaTime * timeNightStartValue);
-                dirLight.colorTemperature = Mathf.Lerp(dirLight.colorTemperature, nightLightColor,
-                                                         Time.deltaTime * timeNightStartValue);
-                dirLight.intensity = Mathf.Lerp(dirLight.intensity, nightLightIntensity,
-                                                        Time.deltaTime * timeNightStartValue);
+                groundSpeed = Mathf.Lerp(0, 10f, (float)(Time.time - stateStartTime) / (timeNightStartValue - 1f));
+                dirLight.colorTemperature = Mathf.Lerp(dayLightColor, nightLightColor,
+                                                        (float)(Time.time - stateStartTime) / (timeNightStartValue - 1f));
+                dirLight.intensity = Mathf.Lerp(dayLightIntensity, nightLightIntensity,
+                                                (float)(Time.time - stateStartTime) / (timeNightStartValue - 1f));
                 break;
             case TimeState.night:
                 timeUI_Night_Image.fillAmount = (float)((stateStartTime - Time.time) / timeNightValue);
                 break;
             case TimeState.nightEnd:
-                groundSpeed = Mathf.Lerp(groundSpeed, 0f, Time.deltaTime * timeNightStartValue);
-                dirLight.colorTemperature = Mathf.Lerp(dirLight.colorTemperature, dayLightColor,
-                                                        Time.deltaTime * timeNightStartValue);
-                dirLight.intensity = Mathf.Lerp(dirLight.intensity, dayLightIntensity,
-                                                        Time.deltaTime * timeNightStartValue);
+                groundSpeed = Mathf.Lerp(10, 0f, (float)(Time.time - stateStartTime) / (timeNightEndValue - 1));
+                dirLight.colorTemperature = Mathf.Lerp(nightLightColor, dayLightColor,
+                                                        (float)(Time.time - stateStartTime) / (timeNightEndValue - 1));
+                dirLight.intensity = Mathf.Lerp(nightLightIntensity, dayLightIntensity,
+                                                (float)(Time.time - stateStartTime) / (timeNightEndValue - 1));
                 break;
         }
     }
