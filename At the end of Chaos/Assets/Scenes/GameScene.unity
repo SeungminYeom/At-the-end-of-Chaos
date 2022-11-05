@@ -4356,7 +4356,7 @@ MonoBehaviour:
   _maxTrainCount: 5
   _trainCount: 0
   _groundSpeed: 10
-  _timeState: 0
+  _timeState: 2
   stateStartTime: 0
   timeAfternoonValue: 12
   timeUpgradeValue: 6
