@@ -7,7 +7,7 @@ public class CameraMovement : MonoBehaviour
 {
     public GameObject player;
     Vector3 cameraPos;
-    [SerializeField] float cameraSpeed = 1f;
+    [SerializeField] float cameraSpeed = 0.3f;
     
     void Start()
     {

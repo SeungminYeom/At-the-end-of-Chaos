@@ -15,7 +15,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     private string gameVersion = "1.0";
     private bool createGameEnabled = false;
 
-    private byte requiredPlayer = 2;
+    private byte requiredPlayer = 1;
 
     public string[] playerNames = new string[4];
     public GameObject[] players = new GameObject[4];
@@ -30,7 +30,6 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     public Button startBtn;
     public TMP_InputField roomCodeInput;
     public TMP_InputField playerName;
-    public GameObject playerPrefab;
 
 
 
@@ -132,12 +131,12 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
 
     public void StartGame()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount == requiredPlayer)
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= requiredPlayer)
         {
             PhotonNetwork.LoadLevel("GameScene");
         } else
         {
-            Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount + " != " + requiredPlayer);
+            Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount + " <= " + requiredPlayer);
         }
         
     }
@@ -152,6 +151,11 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         playerName.gameObject.SetActive(true);
         connectionInfoText.text = "Online";
         createGameEnabled = false;
+
+        for (int i = 0; i < 4; i++)
+        {
+            players[i].SetActive(false);
+        }
         
         if (PhotonNetwork.IsMasterClient)
         {
@@ -189,6 +193,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         playerName.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(true);
         connectionInfoText.text = "게임에 참가하였습니다.\nGameCode : " + roomCodeInput.text;
+
         StartCoroutine(InitPlayer());
     }
 
@@ -228,7 +233,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         StartCoroutine(InitPlayer());
 
         //플레이어가 MasterClient이면서 필요한 인원이 충족되면 게임시작 버튼을 Enable해준다.
-        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == requiredPlayer)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= requiredPlayer)
         {
             startBtn.gameObject.SetActive(true);
         }
@@ -257,7 +262,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
 
     IEnumerator InitPlayer()
     {
-        yield return null;
+        yield return new WaitForSeconds(0.1f);
         for(int i = 0; i<4; i++)
         {
             if (playerNames[i] != "")
