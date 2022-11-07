@@ -47,6 +47,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] float dayLightIntensity = 2f;
     [SerializeField] float nightLightIntensity = 0.5f;
 
+    [Header("ResourcesCollecting")]
+    [SerializeField] int woodResource = 0;
+    [SerializeField] int ironResource = 0;
+    public GameObject WoodResource;
+    public GameObject IronResource;
+    float mapScaleX = 60;
+    float mapScaleZ = 15;
+
     public int stage
     {
         get { return _stage; }
@@ -110,7 +118,7 @@ public class GameManager : MonoBehaviour
         timeState = TimeState.nightStart;
         trainCount = 2;
         GameObject.Find("TrainManager").gameObject.SendMessage("SortTrain", trainCount - 1);
-        StartCoroutine(FromUpgradeToNight());
+        StartCoroutine(NightStart());
     }
 
     void Update()
@@ -139,6 +147,22 @@ public class GameManager : MonoBehaviour
                 dirLight.intensity = Mathf.Lerp(nightLightIntensity, dayLightIntensity,
                                                 (float)(Time.time - stateStartTime) / (timeNightEndValue - 1));
                 break;
+        }
+    }
+
+    void SpawnResource()
+    {
+        //2 ~ range(15)
+        Vector3 spawnPos = new Vector3(Random.Range(mapScaleX, -mapScaleX), 0f, Random.Range(2f, mapScaleZ));
+        if (Random.Range(0, 2) == 1)
+        {
+            spawnPos.z *= -1;
+        }
+
+        //반복문 범위 조정
+        for (int i = 0; i < 10; i++)
+        {
+            Instantiate(WoodResource, spawnPos, Quaternion.identity);
         }
     }
 
@@ -207,9 +231,10 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(timeNightEndValue);
         StopCoroutine(ZombieManager.instance.SpawnZombie());
         joystick.SetActive(true);
-        shootBtn.SetActive(true);
+        //shootBtn.SetActive(true);
         timeState = TimeState.afternoon;
         groundSpeed = 0f;
+        SpawnResource();
         TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
         StartCoroutine(FromAfternoonToUpgrade());
     }
