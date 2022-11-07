@@ -211,9 +211,6 @@ public class GameManager : MonoBehaviour
         timeState = TimeState.afternoon;
         groundSpeed = 0f;
         TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
-        GameObject player = GameObject.Find("Player_1");
-        player.transform.parent = null;
-        player.transform.position = new Vector3(0, 0.01f, -1.5f);
         StartCoroutine(FromAfternoonToUpgrade());
     }
 }

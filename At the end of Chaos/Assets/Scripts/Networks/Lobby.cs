@@ -149,6 +149,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         roomCodeInput.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(false);
         playerName.gameObject.SetActive(true);
+        startBtn.gameObject.SetActive(false);
         connectionInfoText.text = "Online";
         createGameEnabled = false;
 
@@ -213,6 +214,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         connectBtn.gameObject.SetActive(false);
         roomCodeInput.gameObject.SetActive(false);
         cancelBtn.gameObject.SetActive(true);
+        startBtn.gameObject.SetActive(true);
         connectionInfoText.text = "게임 생성됨.\nGameCode : " + roomCodeInput.text;
         StartCoroutine(InitPlayer());
     }
@@ -232,11 +234,11 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         //모든 플레이어가 다른 플레이어의 이름을 오브젝트에 업데이트 한다.
         StartCoroutine(InitPlayer());
 
-        //플레이어가 MasterClient이면서 필요한 인원이 충족되면 게임시작 버튼을 Enable해준다.
-        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= requiredPlayer)
-        {
-            startBtn.gameObject.SetActive(true);
-        }
+        ////플레이어가 MasterClient이면서 필요한 인원이 충족되면 게임시작 버튼을 Enable해준다.
+        //if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= requiredPlayer)
+        //{
+        //    startBtn.gameObject.SetActive(true);
+        //}
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)

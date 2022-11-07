@@ -1,12 +1,15 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerMovement : MonoBehaviour
 {
-    PhotonView pv;
+    [DoNotSerialize]
+    public PhotonView pv;
 
     Rigidbody playerRigid;
     Vector3 playerRotation;
@@ -49,9 +52,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (CrossPlatformInputManager.GetButton("JoystickBtn") && pv.IsMine)
         {
-            playerRigid.velocity = transform.forward * moveSpeed;
+            playerRigid.velocity = new Vector3(transform.forward.x * moveSpeed, playerRigid.velocity.y, (transform.forward.z * moveSpeed));
         }
         else
-            playerRigid.velocity = Vector3.zero;
+        {
+            //playerRigid.velocity = Vector3.zero;
+        }
     }
 }

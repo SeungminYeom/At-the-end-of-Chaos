@@ -12,6 +12,7 @@ public class GameServerManager : MonoBehaviour
 
     void Start()
     {
+        PhotonNetwork.UseRpcMonoBehaviourCache = true;
         //필요한 오브젝트를 찾는다.
         LobbyObject = GameObject.Find("LobbyManager");
         MainCamera = GameObject.Find("Main Camera");

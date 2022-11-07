@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using Photon.Pun;
 
 public class Gun : MonoBehaviour
 {
@@ -50,12 +51,18 @@ public class Gun : MonoBehaviour
     {
         if (GameManager.instance.timeState == TimeState.night && rounds > 0)
         {
-            //if (CrossPlatformInputManager.GetButtonDown("Shoot"))
-            if (Input.GetKeyDown(KeyCode.Space))
-                Shoot();
+            if (CrossPlatformInputManager.GetButtonDown("Shoot") && gameObject.GetComponent<PlayerMovement>().pv.IsMine)
+            {
+                //PlayerMovement의 View를 통해서 Shoot명령 전달
+                gameObject.GetComponent<PlayerMovement>().pv.RPC("Shoot", Photon.Pun.RpcTarget.All);
+                //Shoot();
+            }
+            //if (Input.GetKeyDown(KeyCode.Space))
+                
         }
     }
 
+    [PunRPC]
     public void Shoot()
     {
         switch (typeOnHand)
