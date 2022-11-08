@@ -9,7 +9,7 @@ public class EnemyFinder : MonoBehaviour
     [Range(0, 360)]
     public float viewAngle;
 
-    //public List<Transform> target = new List<Transform>();
+    public List<Transform> targetList = new List<Transform>();
     public Transform targetPos;
 
     public LayerMask targetMask;
@@ -21,7 +21,7 @@ public class EnemyFinder : MonoBehaviour
     void Start()
     {
         // 0.2초 간격으로 코루틴 호출
-        StartCoroutine(FindTargetsWithDelay(0.2f));
+        StartCoroutine(FindTargetsWithDelay(1f));
     }
 
     IEnumerator FindTargetsWithDelay(float delay)
@@ -35,14 +35,16 @@ public class EnemyFinder : MonoBehaviour
 
     void FindVisibleTargets()
     {
-        //target.Clear();
+        targetList.Clear();
         targetPos = null;
         viewPos = new Vector2(transform.position.x, transform.position.z);
 
         // viewRadius를 반지름으로 한 구 영역 내 targetMask 레이어인 콜라이더를 모두 가져옴
         Collider[] targetsInViewRadius = Physics.OverlapSphere(viewPos, Gun.range, targetMask);
+        Debug.Log(targetsInViewRadius.Length);
         for (int i = 0; i < targetsInViewRadius.Length; i++)
         {
+            targetList.Add(targetsInViewRadius[i].transform);
             Transform target = targetsInViewRadius[i].transform;
             Vector2 tartgetPos = new Vector2(target.position.x, target.position.z);
             dirToTarget = (tartgetPos - viewPos).normalized;
@@ -52,6 +54,7 @@ public class EnemyFinder : MonoBehaviour
             // 플레이어와 forward와 target이 이루는 각이 설정한 각도 내라면
             if (Vector2.Angle(transForward, dirToTarget) < viewAngle / 2)
             {
+                //targetList.Add(target);
                 if (targetPos == null)
                 {
                     targetPos = target;
