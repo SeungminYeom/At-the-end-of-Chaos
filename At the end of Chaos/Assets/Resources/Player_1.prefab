@@ -88,6 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewRange: 3
   viewAngle: 40
+  targetList: []
   targetPos: {fileID: 0}
   targetMask:
     serializedVersion: 2

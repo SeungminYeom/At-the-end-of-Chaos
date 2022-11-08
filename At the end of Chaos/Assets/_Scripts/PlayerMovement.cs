@@ -20,6 +20,14 @@ public class PlayerMovement : MonoBehaviour
     {
         pv = gameObject.GetComponent<PhotonView>();
         playerRigid = GetComponent<Rigidbody>();
+
+        //System.Random rand1 = new System.Random(10);
+        //System.Random rand2 = new System.Random(20);
+        //System.Random rand3 = new System.Random(10);
+
+        //Debug.Log(rand1.Next(10));
+        //Debug.Log(rand2.Next());
+        //Debug.Log(rand3.Next());
     }
 
     void Update()
@@ -30,9 +38,6 @@ public class PlayerMovement : MonoBehaviour
             gameObject.transform.rotation = Quaternion.Euler(new Vector3(0, Mathf.Atan2(CrossPlatformInputManager.GetAxisRaw("Horizontal"),
                              CrossPlatformInputManager.GetAxisRaw("Vertical")) * Mathf.Rad2Deg, 0));
         }
-            
-
-
     }
 
     private void Move()
