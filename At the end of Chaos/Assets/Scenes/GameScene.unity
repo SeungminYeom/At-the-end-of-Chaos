@@ -18858,17 +18858,17 @@ PrefabInstance:
     - target: {fileID: 2354556948332208965, guid: 81963c51c2bcc864a98f08a76cf43efc,
         type: 3}
       propertyPath: m_Name
-      value: Player_4_Pos
+      value: Player_2_Pos
       objectReference: {fileID: 0}
     - target: {fileID: 2710301390203447656, guid: 81963c51c2bcc864a98f08a76cf43efc,
         type: 3}
       propertyPath: m_Name
-      value: Player_2_Pos
+      value: Player_3_Pos
       objectReference: {fileID: 0}
     - target: {fileID: 3548631808421454642, guid: 81963c51c2bcc864a98f08a76cf43efc,
         type: 3}
       propertyPath: m_Name
-      value: Player_3_Pos
+      value: Player_4_Pos
       objectReference: {fileID: 0}
     - target: {fileID: 5112996962182611132, guid: 81963c51c2bcc864a98f08a76cf43efc,
         type: 3}
