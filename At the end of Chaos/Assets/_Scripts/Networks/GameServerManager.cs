@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameServerManager : MonoBehaviour
+public class GameServerManager : MonoBehaviour, IPunObservable
 {
     public string[] playerNames = new string[4];
 
@@ -38,5 +38,19 @@ public class GameServerManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(GameManager.instance.seed);
+        }
+        else
+        {
+            GameManager.instance.seed = (int)stream.ReceiveNext();
+        }
     }
 }

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,8 @@ public enum TimeState
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
+    public int seed;
 
     GameObject select_UI;
     GameObject timeUI_afternoon;
@@ -237,5 +240,10 @@ public class GameManager : MonoBehaviour
         SpawnResource();
         TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
         StartCoroutine(FromAfternoonToUpgrade());
+    }
+
+    public int SeedGenerate()
+    {
+        return new System.Random().Next(10000);
     }
 }
