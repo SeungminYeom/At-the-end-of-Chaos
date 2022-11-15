@@ -53,8 +53,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] int ironResource = 0;
     public GameObject WoodResource;
     public GameObject IronResource;
-    float mapScaleX = 60;
-    float mapScaleZ = 15;
+    public int seed;
+    int mapScaleX = 60;
+    int mapScaleZ = 15;
 
     public int stage
     {
@@ -153,16 +154,23 @@ public class GameManager : MonoBehaviour
 
     void SpawnResource()
     {
-        //2 ~ range(15)
-        Vector3 spawnPos = new Vector3(Random.Range(mapScaleX, -mapScaleX), 0f, Random.Range(2f, mapScaleZ));
-        if (Random.Range(0, 2) == 1)
-        {
-            spawnPos.z *= -1;
-        }
+        ////2 ~ range(15)
+        //Vector3 spawnPos = new Vector3(Random.Range(mapScaleX, -mapScaleX), 0f, Random.Range(2f, mapScaleZ));
+        //if (Random.Range(0, 2) == 1)
+        //{
+        //    spawnPos.z *= -1;
+        //}
 
         //반복문 범위 조정
         for (int i = 0; i < 10; i++)
         {
+            int dx = new System.Random(seed + i).Next(mapScaleX) * 2 - mapScaleX;
+            int dz = new System.Random(seed + i).Next(2, mapScaleZ);
+            Vector3 spawnPos = new Vector3(dx, 0f, dz);
+            if (Random.Range(0, 2) == 1)
+            {
+                spawnPos.z *= -1;
+            }
             Instantiate(WoodResource, spawnPos, Quaternion.identity);
         }
     }
@@ -223,6 +231,7 @@ public class GameManager : MonoBehaviour
         //하이어라키 창의 순서 변경 코드
         timeUI_afternoon.transform.SetAsLastSibling();
         timeUI_Night_Image.fillAmount = 1f;
+        seed = new System.Random().Next();
         StartCoroutine(NightEnd());
     }
 
