@@ -41,26 +41,8 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     {
         PhotonNetwork.ConnectUsingSettings();
         connectionInfoText.text = "접속중...";
-
-        InvokeRepeating("ut", 1f, 0.01f);
     }
 
-
-    public override void OnConnectedToMaster()
-    {
-        joinBtn.interactable = true;
-        createBtn.gameObject.SetActive(true);
-        joinBtn.gameObject.SetActive(true);
-        playerName.gameObject.SetActive(true);
-        connectionInfoText.text = "Online";
-    }
-
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        joinBtn.interactable = false;
-        connectionInfoText.text = "Offline : 접속 재시도 중...";
-        PhotonNetwork.ConnectUsingSettings();
-    }
 
     public void ConnectGame()
     {
@@ -133,8 +115,6 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount >= requiredPlayer)
         {
-            var a = PhotonNetwork.PlayerList;
-            var b = PhotonNetwork.PlayerListOthers;
             PhotonNetwork.LoadLevel("GameScene");
         } else
         {
@@ -174,6 +154,21 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         
     }
 
+    public override void OnConnectedToMaster()
+    {
+        joinBtn.interactable = true;
+        createBtn.gameObject.SetActive(true);
+        joinBtn.gameObject.SetActive(true);
+        playerName.gameObject.SetActive(true);
+        connectionInfoText.text = "Online";
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        joinBtn.interactable = false;
+        connectionInfoText.text = "Offline : 접속 재시도 중...";
+        PhotonNetwork.ConnectUsingSettings();
+    }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
@@ -224,15 +219,14 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         //플레이어가 들어오면 MasterClient가 플레이어 닉네임 리스트를 업데이트 해준다.
-        for (int i = 0; i < 4; i++)
-        {
-            if (PhotonNetwork.IsMasterClient && newPlayer.NickName == playerNames[i])
-            {
-                newPlayer.NickName = new string(newPlayer.NickName + "¡");
-                break;
-            }
-        }
-
+        //for (int i = 0; i < 4; i++)
+        //{
+        //    if (PhotonNetwork.IsMasterClient && newPlayer.NickName == playerNames[i])
+        //    {
+        //        newPlayer.NickName = newPlayer.NickName + "¡";
+        //        break;
+        //    }
+        //}
         for (int i = 1; i < 4; i++)
         {
             if (PhotonNetwork.IsMasterClient && !players[i].activeSelf)

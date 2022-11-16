@@ -6,6 +6,6 @@ public class NamePin : MonoBehaviour
 {
     void Update()
     {
-        transform.rotation = Quaternion.identity;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
     }
 }
