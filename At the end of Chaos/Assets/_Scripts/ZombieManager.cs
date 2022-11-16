@@ -47,7 +47,7 @@ public class ZombieManager : MonoBehaviour
                 float x = Mathf.Cos(angle * Mathf.Deg2Rad) * spawnDistance;
                 float z = Mathf.Sin(angle * Mathf.Deg2Rad) * spawnDistance;
                 Vector3 pos = trainManager.GetTrain(GameManager.instance.trainCount).transform.position + new Vector3(x, 1f, z);
-                zombieList.Add(PhotonNetwork.Instantiate(idleZombie[Random.Range(0, 3)], pos, Quaternion.identity));
+                zombieList.Add(PhotonNetwork.InstantiateRoomObject(idleZombie[Random.Range(0, 3)], pos, Quaternion.identity));
 
                 yield return new WaitForSeconds(spawnTimeInterval);
             }

@@ -1653,7 +1653,7 @@ RectTransform:
   - {fileID: 2019576502}
   - {fileID: 552281890}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -12444,7 +12444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1557604948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12452,7 +12452,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1557604947}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70aaba81147527744a5a9f119cd35e21, type: 3}
   m_Name: 
@@ -12463,7 +12463,8 @@ MonoBehaviour:
   - 
   - 
   pv: {fileID: 0}
-  characterSelectUI: {fileID: 0}
+  players: {fileID: 1956829817}
+  characterSelectUI: {fileID: 552281889}
   b1: {fileID: 2001242737}
   b2: {fileID: 1832354992}
   b3: {fileID: 1297673400}
@@ -15534,7 +15535,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1966387100
 GameObject:
