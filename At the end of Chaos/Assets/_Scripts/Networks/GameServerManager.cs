@@ -2,6 +2,8 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class GameServerManager : MonoBehaviour, IPunObservable
 {
@@ -9,7 +11,9 @@ public class GameServerManager : MonoBehaviour, IPunObservable
 
     GameObject LobbyObject;
     GameObject MainCamera;
+    GameObject Players;
 
+    
     void Start()
     {
         PhotonNetwork.UseRpcMonoBehaviourCache = true;
@@ -23,12 +27,14 @@ public class GameServerManager : MonoBehaviour, IPunObservable
 
         for (int i = 0; i < 4; i++)
         {
-            if (playerNames[i] == PhotonNetwork.NickName)
+            if (playerNames[i] == PhotonNetwork.LocalPlayer.NickName)
             {
                 //넘어온 닉네임과 내 닉네임을 비교해서 맞는 번호의 캐릭터를 만든다.
                 string prefabName = "Player_" + (i + 1);
                 //그리고 카메라 조정을 위해 만든 캐릭터를 등록한다.
-                MainCamera.GetComponent<CameraMovement>().player = PhotonNetwork.Instantiate(prefabName, Vector3.zero, Quaternion.identity);
+                GameObject player = PhotonNetwork.Instantiate(prefabName, Vector3.zero, Quaternion.identity);
+                player.transform.Find("PlayerName").GetComponent<TextMesh>().text = PhotonNetwork.LocalPlayer.NickName;
+                MainCamera.GetComponent<CameraMovement>().player = player;
 
             }
         }

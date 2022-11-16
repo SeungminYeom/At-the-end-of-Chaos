@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Timeline;
 
 public enum TimeState
 {
@@ -19,6 +20,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public int seed;
+    public int trainSpeed = 3;
+    public bool trainStarted = false;
+    public float timec = 0;
+    public GameObject trains;
 
     GameObject select_UI;
     GameObject timeUI_afternoon;
@@ -127,7 +132,19 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        switch(timeState)
+        //if (trainStarted)
+        //{
+        //    timec += Time.deltaTime;
+        //    trains.transform.position = Vector3.Lerp(Vector3.zero, Vector3.right * 10 / (trainSpeed - timec), timec / trainSpeed);
+        //    if (timec > trainSpeed)
+        //    {
+        //        trainStarted = false;
+        //        timec = 0;
+        //        trains.transform.position = Vector3.zero;
+        //    }
+        //}
+
+        switch (timeState)
         {
             case TimeState.afternoon:
                 timeUI_Afternoon_Image.fillAmount = (float)((stateStartTime - Time.time) / timeAfternoonValue);
@@ -200,11 +217,13 @@ public class GameManager : MonoBehaviour
         timeUI_afternoon.SetActive(true);
         select_UI.SetActive(false);
         //player.transform.position = player.transform.parent.position + new Vector3(0, 2.5f, 0);
+
         StartCoroutine(NightStart());
     }
 
     IEnumerator NightStart()
     {
+        TrainStart();
         stateStartTime = Time.time;
         yield return new WaitForSeconds(timeNightStartValue);
         StartCoroutine(ZombieManager.instance.SpawnZombie());
@@ -241,6 +260,12 @@ public class GameManager : MonoBehaviour
         SpawnResource();
         TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
         StartCoroutine(FromAfternoonToUpgrade());
+    }
+
+    void TrainStart()
+    {
+        timec = 0;
+        trainStarted = true;
     }
 
     public int SeedGenerate()

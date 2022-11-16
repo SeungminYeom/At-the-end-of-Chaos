@@ -31,8 +31,6 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     public TMP_InputField roomCodeInput;
     public TMP_InputField playerName;
 
-
-
     private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -44,7 +42,9 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.ConnectUsingSettings();
         connectionInfoText.text = "접속중...";
 
+        InvokeRepeating("ut", 1f, 0.01f);
     }
+
 
     public override void OnConnectedToMaster()
     {
@@ -66,11 +66,11 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (playerName.text.Length == 0)
         {
-            PhotonNetwork.LocalPlayer.NickName = "unknown";
+            PhotonNetwork.NickName = "unknown";
         }
         else
         {
-            PhotonNetwork.LocalPlayer.NickName = playerName.text;
+            PhotonNetwork.NickName = playerName.text;
         }
 
         if (roomCodeInput.text.Length == 5)
@@ -133,6 +133,8 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount >= requiredPlayer)
         {
+            var a = PhotonNetwork.PlayerList;
+            var b = PhotonNetwork.PlayerListOthers;
             PhotonNetwork.LoadLevel("GameScene");
         } else
         {
@@ -222,6 +224,15 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         //플레이어가 들어오면 MasterClient가 플레이어 닉네임 리스트를 업데이트 해준다.
+        for (int i = 0; i < 4; i++)
+        {
+            if (PhotonNetwork.IsMasterClient && newPlayer.NickName == playerNames[i])
+            {
+                newPlayer.NickName = new string(newPlayer.NickName + "¡");
+                break;
+            }
+        }
+
         for (int i = 1; i < 4; i++)
         {
             if (PhotonNetwork.IsMasterClient && !players[i].activeSelf)
@@ -264,7 +275,7 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
 
     IEnumerator InitPlayer()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
         for(int i = 0; i<4; i++)
         {
             if (playerNames[i] != "")
@@ -286,4 +297,10 @@ public class Lobby : MonoBehaviourPunCallbacks, IPunObservable
             playerNames = (string[])stream.ReceiveNext();
         }
     }
+
+    //[PunRPC]
+    //void SyncNames()
+    //{
+
+    //}
 }
