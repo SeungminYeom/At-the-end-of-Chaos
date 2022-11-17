@@ -38,7 +38,7 @@ public class CameraMovement : MonoBehaviour
             //Vector3 playerFrontView = (player.transform.forward - player.transform.position).normalized * Gun.range / 2;
             Vector3 playerFrontView = new Vector3(player.transform.forward.x * Gun.range + cameraPos.x,
                                                     cameraPos.y,
-                                                    player.transform.forward.z * Gun.range + cameraPos.z);
+                                                    player.transform.forward.z * Gun.range * 0.75f + cameraPos.z) * 0.5f;
             //playerFrontView.y = cameraPos.y;
             transform.position = Vector3.Lerp(transform.position, playerFrontView, Time.deltaTime * cameraSpeed * 8f);
         }
