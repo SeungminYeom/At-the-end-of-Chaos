@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4795532710245073536}
   m_Layer: 0
-  m_Name: Player2_Pos
+  m_Name: Player4_Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2100525471107601809}
   m_Layer: 0
-  m_Name: Player3_Pos
+  m_Name: Player2_Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -155,7 +155,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2456038841999943774}
   m_Layer: 0
-  m_Name: Player4_Pos
+  m_Name: Player3_Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
