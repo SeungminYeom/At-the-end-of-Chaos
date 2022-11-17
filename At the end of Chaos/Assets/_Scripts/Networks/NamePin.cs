@@ -6,6 +6,7 @@ public class NamePin : MonoBehaviour
 {
     void Update()
     {
-        transform.rotation = Quaternion.identity;
+        //이름은 언제나 카메라를 바라본다.
+        transform.rotation = Quaternion.identity * Camera.main.transform.rotation;
     }
 }

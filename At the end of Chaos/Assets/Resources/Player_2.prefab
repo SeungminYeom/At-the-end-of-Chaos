@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5726540557717798053}
   m_Layer: 0
   m_Name: Player_2
-  m_TagString: Player_2
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2440718777056852767}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.37433434, y: -0.00000047683716, z: -0.15539312}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -88,6 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewRange: 3
   viewAngle: 40
+  targetList: []
   targetPos: {fileID: 0}
   targetMask:
     serializedVersion: 2

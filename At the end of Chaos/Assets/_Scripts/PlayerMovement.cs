@@ -47,7 +47,8 @@ public class PlayerMovement : MonoBehaviour
             //transform.position = new Vector3(0, 2.0f, 0);
             TrainManager trainManager = GameObject.Find("TrainManager").GetComponent<TrainManager>();
             GameObject myPosObj = trainManager.GetTrain(GameManager.instance.trainCount);
-            transform.position = myPosObj.transform.Find(gameObject.tag + "_Pos").position;
+            
+            transform.position = myPosObj.transform.Find("Player_"+ pv.CreatorActorNr + "_Pos").position;
             return;
         }
 

@@ -1,42 +1,252 @@
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class GameServerManager : MonoBehaviour
+public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
 {
-    public string[] playerNames = new string[4];
+    public static GameServerManager instance = null;
 
-    GameObject LobbyObject;
-    GameObject MainCamera;
+    public PhotonView pv;
+    GameObject lobbyObject;
+    GameObject mainCamera;
+
+    public GameObject players;
+
+    //ìºë¦­í„° ì„ íƒì°½ UI ë³€ìˆ˜
+    public GameObject characterSelectUI;
+    public Button b1, b2, b3, b4;
+    bool characterSelected = false;
+    public byte readyPlayer = 0;
+
+    //ì‹œê°„ Syncìš© - í˜„ì¬ Flowê°€ ëë‚œ í”Œë ˆì´ì–´ë“¤ì€ trueë¡œ ì„¤ì •
+    //ìˆœì„œëŠ” PhotonNetwork.PlayerListì™€ ê°™ì´ ì„¤ì •í•¨
+    public bool[] PLAYER_IS_READY;
+    public byte myPlayerNum;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            pv = gameObject.GetComponent<PhotonView>();
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    //RaiseEventë¥¼ ì‚¬ìš©í•˜ë ¤ë©´ ë“±ë¡í•´ì•¼í•¨
+    void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
 
     void Start()
     {
         PhotonNetwork.UseRpcMonoBehaviourCache = true;
-        //ÇÊ¿äÇÑ ¿ÀºêÁ§Æ®¸¦ Ã£´Â´Ù.
-        LobbyObject = GameObject.Find("LobbyManager");
-        MainCamera = GameObject.Find("Main Camera");
+        //í•„ìš”í•œ ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ëŠ”ë‹¤.
+        mainCamera = GameObject.Find("Main Camera");
 
-        //·ÎºñÀÇ ÀÖ´ø ÇÃ·¹ÀÌ¾î ÀÌ¸§À» °®°í¿À°í ·Îºñ´Â ¾ø¾Ø´Ù.
-        playerNames = LobbyObject.GetComponent<Lobby>().playerNames;
-        Destroy(LobbyObject);
+        //ë¡œë¹„ëŠ” ë”ì´ìƒ ì‚¬ìš©ë˜ì§€ ì•Šìœ¼ë¯€ë¡œ ì§€ìš´ë‹¤.
+        Destroy(GameObject.Find("LobbyManager"));
 
-        for (int i = 0; i < 4; i++)
-        {
-            if (playerNames[i] == PhotonNetwork.NickName)
-            {
-                //³Ñ¾î¿Â ´Ğ³×ÀÓ°ú ³» ´Ğ³×ÀÓÀ» ºñ±³ÇØ¼­ ¸Â´Â ¹øÈ£ÀÇ Ä³¸¯ÅÍ¸¦ ¸¸µç´Ù.
-                string prefabName = "Player_" + (i + 1);
-                //±×¸®°í Ä«¸Ş¶ó Á¶Á¤À» À§ÇØ ¸¸µç Ä³¸¯ÅÍ¸¦ µî·ÏÇÑ´Ù.
-                MainCamera.GetComponent<CameraMovement>().player = PhotonNetwork.Instantiate(prefabName, Vector3.zero, Quaternion.identity);
-
-            }
-        }
-        
+        //í”Œë ˆì´ì–´ ìˆ˜ë§Œí¼ Ready ì¹¸ì„ ë§Œë“ ë‹¤.
+        PLAYER_IS_READY = new bool[PhotonNetwork.CountOfPlayers];
     }
 
     void Update()
     {
+        if (Array.TrueForAll<bool>(PLAYER_IS_READY, x => x.Equals(true)))
+        {
+            Debug.LogWarning("ALL READY");
+        }
+    }
+
+    public void ReadyToGame1()
+    {
+        if (!characterSelected)
+        {
+            PhotonNetwork.RaiseEvent(1,
+                                        new object[] { PhotonNetwork.NickName },
+                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
+                                        new SendOptions { Reliability = true }
+                                    );
+
+            initPlayer(1);
+        }
         
     }
+    public void ReadyToGame2()
+    {
+        if (!characterSelected)
+        {
+            PhotonNetwork.RaiseEvent(2,
+                                        new object[] { PhotonNetwork.NickName },
+                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
+                                        new SendOptions { Reliability = true }
+                                    );
+
+            initPlayer(2);
+        }
+    }
+    public void ReadyToGame3()
+    {
+        if (!characterSelected)
+        {
+            PhotonNetwork.RaiseEvent(3,
+                                        new object[] { PhotonNetwork.NickName },
+                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
+                                        new SendOptions { Reliability = true }
+                                    );
+
+            initPlayer(3);
+        }
+    }
+    public void ReadyToGame4()
+    {
+        if (!characterSelected)
+        {
+            
+            PhotonNetwork.RaiseEvent(4,
+                                        new object[] { PhotonNetwork.NickName },
+                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
+                                        new SendOptions { Reliability = true }
+                                    );
+
+            initPlayer(4);
+        }
+    }
+
+    public void initPlayer(short _num)
+    {
+        characterSelected = true;
+        GameObject player = PhotonNetwork.Instantiate("Player_" + _num, Vector3.zero, Quaternion.identity);
+        player.transform.Find("PlayerName").GetComponent<TextMesh>().text = PhotonNetwork.NickName;
+        mainCamera.GetComponent<CameraMovement>().player = player;
+
+        if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
+        {
+            pv.RPC("StartGame", RpcTarget.AllBuffered);
+        }
+    }
+
+    public void OnEvent(EventData _Event)
+    {
+        object[] data = (object[])_Event.CustomData;
+
+        switch (_Event.Code)
+        {
+            case 0: //í”Œë ˆì´ì–´ Ready
+                PLAYER_IS_READY[(int)data[0]] = true;
+                break;
+            case 1:
+                readyPlayer++;
+                b1.interactable = false;
+                b1.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
+                Ready();
+                if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
+                {
+                    pv.RPC("StartGame", RpcTarget.AllBuffered);
+                }
+
+                break;
+            case 2:
+                readyPlayer++;
+                b2.interactable = false;
+                b2.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
+                Ready();
+                if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
+                {
+                    
+                    pv.RPC("StartGame", RpcTarget.AllBuffered);
+                }
+                break;
+            case 3:
+                readyPlayer++;
+                b3.interactable = false;
+                b3.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
+                Ready();
+                if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
+                {
+                    
+                    pv.RPC("StartGame", RpcTarget.AllBuffered);
+                }
+                break;
+            case 4:
+                readyPlayer++;
+                b4.interactable = false;
+                b4.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
+                Ready();
+                if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
+                {
+                    
+                    pv.RPC("StartGame", RpcTarget.AllBuffered);
+                }
+                break;
+            default:
+                break;
+        }
+
+        return;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(GameManager.instance.seed);
+        }
+        else
+        {
+            GameManager.instance.seed = (int)stream.ReceiveNext();
+        }
+    }
+
+    [PunRPC]
+    public void StartGame()
+    {
+        //ê° í´ë¼ì´ì–¸íŠ¸ë“¤ì´ ë§Œë“  í”Œë ˆì´ì–´ë¥¼ ì „ë¶€ ì°¾ì•„ì„œ
+        GameObject[] pGO = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < pGO.Length; i++)
+        {
+            //Players ì•„ë˜ì— ì „ë¶€ ë„£ì–´ì¤€ë‹¤.
+            pGO[i].transform.parent = players.transform;
+            //ê·¸ë¦¬ê³  ì£¼ì¸ì˜ ì´ë¦„ì„ ë‹¬ì•„ì¤€ë‹¤.
+            pGO[i].GetComponentInChildren<TextMesh>().text = pGO[i].GetComponent<PhotonView>().Owner.NickName;
+        }
+
+        characterSelectUI.SetActive(false);
+
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+
+    public void Ready()
+    {
+        PhotonNetwork.RaiseEvent(4,
+                                        new object[] { PhotonNetwork.LocalPlayer.ActorNumber },
+                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
+                                        new SendOptions { Reliability = true }
+                                    );
+    }
+
+    //[PunRPC]
+    //public void Ready_RPC(int _who)
+    //{
+    //    PLAYER_IS_READY[_who] = true;
+    //}
 }

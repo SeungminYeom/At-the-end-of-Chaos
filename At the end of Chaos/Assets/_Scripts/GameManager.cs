@@ -1,8 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Timeline;
 
 public enum TimeState
 {
@@ -16,6 +18,12 @@ public enum TimeState
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
+    public int seed;
+    public int trainSpeed = 3;
+    public bool trainStarted = false;
+    public float timec = 0;
+    public GameObject trains;
 
     GameObject select_UI;
     GameObject timeUI_afternoon;
@@ -53,9 +61,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] int ironResource = 0;
     public GameObject WoodResource;
     public GameObject IronResource;
-    public int seed;
-    int mapScaleX = 60;
-    int mapScaleZ = 15;
+    float mapScaleX = 60;
+    float mapScaleZ = 15;
 
     public int stage
     {
@@ -125,7 +132,19 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        switch(timeState)
+        //if (trainStarted)
+        //{
+        //    timec += Time.deltaTime;
+        //    trains.transform.position = Vector3.Lerp(Vector3.zero, Vector3.right * 10 / (trainSpeed - timec), timec / trainSpeed);
+        //    if (timec > trainSpeed)
+        //    {
+        //        trainStarted = false;
+        //        timec = 0;
+        //        trains.transform.position = Vector3.zero;
+        //    }
+        //}
+
+        switch (timeState)
         {
             case TimeState.afternoon:
                 timeUI_Afternoon_Image.fillAmount = (float)((stateStartTime - Time.time) / timeAfternoonValue);
@@ -154,23 +173,16 @@ public class GameManager : MonoBehaviour
 
     void SpawnResource()
     {
-        ////2 ~ range(15)
-        //Vector3 spawnPos = new Vector3(Random.Range(mapScaleX, -mapScaleX), 0f, Random.Range(2f, mapScaleZ));
-        //if (Random.Range(0, 2) == 1)
-        //{
-        //    spawnPos.z *= -1;
-        //}
+        //2 ~ range(15)
+        Vector3 spawnPos = new Vector3(Random.Range(mapScaleX, -mapScaleX), 0f, Random.Range(2f, mapScaleZ));
+        if (Random.Range(0, 2) == 1)
+        {
+            spawnPos.z *= -1;
+        }
 
         //반복문 범위 조정
         for (int i = 0; i < 10; i++)
         {
-            int dx = new System.Random(seed + i).Next(mapScaleX) * 2 - mapScaleX;
-            int dz = new System.Random(seed + i).Next(2, mapScaleZ);
-            Vector3 spawnPos = new Vector3(dx, 0f, dz);
-            if (Random.Range(0, 2) == 1)
-            {
-                spawnPos.z *= -1;
-            }
             Instantiate(WoodResource, spawnPos, Quaternion.identity);
         }
     }
@@ -205,11 +217,13 @@ public class GameManager : MonoBehaviour
         timeUI_afternoon.SetActive(true);
         select_UI.SetActive(false);
         //player.transform.position = player.transform.parent.position + new Vector3(0, 2.5f, 0);
+
         StartCoroutine(NightStart());
     }
 
     IEnumerator NightStart()
     {
+        TrainStart();
         stateStartTime = Time.time;
         yield return new WaitForSeconds(timeNightStartValue);
         StartCoroutine(ZombieManager.instance.SpawnZombie());
@@ -231,7 +245,6 @@ public class GameManager : MonoBehaviour
         //하이어라키 창의 순서 변경 코드
         timeUI_afternoon.transform.SetAsLastSibling();
         timeUI_Night_Image.fillAmount = 1f;
-        seed = new System.Random().Next();
         StartCoroutine(NightEnd());
     }
 
@@ -247,5 +260,16 @@ public class GameManager : MonoBehaviour
         SpawnResource();
         TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
         StartCoroutine(FromAfternoonToUpgrade());
+    }
+
+    void TrainStart()
+    {
+        timec = 0;
+        trainStarted = true;
+    }
+
+    public int SeedGenerate()
+    {
+        return new System.Random().Next(10000);
     }
 }
