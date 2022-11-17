@@ -1,6 +1,7 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -23,6 +24,11 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
     public Button b1, b2, b3, b4;
     bool characterSelected = false;
     public byte readyPlayer = 0;
+
+    //시간 Sync용 - 현재 Flow가 끝난 플레이어들은 true로 설정
+    //순서는 PhotonNetwork.PlayerList와 같이 설정함
+    public bool[] PLAYER_IS_READY;
+    public byte myPlayerNum;
 
     void Awake()
     {
@@ -57,11 +63,17 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
 
         //로비는 더이상 사용되지 않으므로 지운다.
         Destroy(GameObject.Find("LobbyManager"));
+
+        //플레이어 수만큼 Ready 칸을 만든다.
+        PLAYER_IS_READY = new bool[PhotonNetwork.CountOfPlayers];
     }
 
     void Update()
     {
-        
+        if (Array.TrueForAll<bool>(PLAYER_IS_READY, x => x.Equals(true)))
+        {
+            Debug.LogWarning("ALL READY");
+        }
     }
 
     public void ReadyToGame1()
@@ -138,21 +150,28 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
 
         switch (_Event.Code)
         {
+            case 0: //플레이어 Ready
+                PLAYER_IS_READY[(int)data[0]] = true;
+                break;
             case 1:
                 readyPlayer++;
                 b1.interactable = false;
                 b1.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
+                Ready();
                 if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
                 {
                     pv.RPC("StartGame", RpcTarget.AllBuffered);
                 }
+
                 break;
             case 2:
                 readyPlayer++;
                 b2.interactable = false;
                 b2.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
+                Ready();
                 if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
                 {
+                    
                     pv.RPC("StartGame", RpcTarget.AllBuffered);
                 }
                 break;
@@ -160,8 +179,10 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
                 readyPlayer++;
                 b3.interactable = false;
                 b3.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
+                Ready();
                 if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
                 {
+                    
                     pv.RPC("StartGame", RpcTarget.AllBuffered);
                 }
                 break;
@@ -169,8 +190,10 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
                 readyPlayer++;
                 b4.interactable = false;
                 b4.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
+                Ready();
                 if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
                 {
+                    
                     pv.RPC("StartGame", RpcTarget.AllBuffered);
                 }
                 break;
@@ -210,4 +233,20 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
 
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
+
+
+    public void Ready()
+    {
+        PhotonNetwork.RaiseEvent(4,
+                                        new object[] { PhotonNetwork.LocalPlayer.ActorNumber },
+                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
+                                        new SendOptions { Reliability = true }
+                                    );
+    }
+
+    //[PunRPC]
+    //public void Ready_RPC(int _who)
+    //{
+    //    PLAYER_IS_READY[_who] = true;
+    //}
 }
