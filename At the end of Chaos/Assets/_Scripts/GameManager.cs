@@ -8,6 +8,9 @@ using UnityEngine.Timeline;
 
 public enum TimeState
 {
+    none,
+    characterSelect,
+    startPhase,
     afternoon,
     upgrade,
     nightStart,
@@ -124,10 +127,10 @@ public class GameManager : MonoBehaviour
         shootBtn = GameObject.Find("Canvas").transform.Find("ShootBtn").gameObject;
         timeUI_Afternoon_Image = timeUI_afternoon.GetComponent<Image>();
         timeUI_Night_Image = timeUI_night.GetComponent<Image>();
-        timeState = TimeState.nightStart;
         trainCount = 2;
+        timeState = TimeState.none;
+        StartCoroutine(LoadDelay());
         GameObject.Find("TrainManager").gameObject.SendMessage("SortTrain", trainCount - 1);
-        StartCoroutine(NightStart());
     }
 
     void Update()
@@ -144,13 +147,22 @@ public class GameManager : MonoBehaviour
         //    }
         //}
 
+        //캐릭터 선택 종료후 넘어가는 게이트웨이
+        if (timeState == TimeState.startPhase)
+        {
+            timeState = TimeState.nightStart;
+            StartCoroutine(NightStart());
+        }
+
         switch (timeState)
         {
             case TimeState.afternoon:
                 timeUI_Afternoon_Image.fillAmount = (float)((stateStartTime - Time.time) / timeAfternoonValue);
                 break;
+
             case TimeState.upgrade:
                 break;
+
             case TimeState.nightStart:
                 groundSpeed = Mathf.Lerp(0, 10f, (float)(Time.time - stateStartTime) / (timeNightStartValue - 1f));
                 dirLight.colorTemperature = Mathf.Lerp(dayLightColor, nightLightColor,
@@ -158,15 +170,20 @@ public class GameManager : MonoBehaviour
                 dirLight.intensity = Mathf.Lerp(dayLightIntensity, nightLightIntensity,
                                                 (float)(Time.time - stateStartTime) / (timeNightStartValue - 1f));
                 break;
+
             case TimeState.night:
                 timeUI_Night_Image.fillAmount = (float)((stateStartTime - Time.time) / timeNightValue);
                 break;
+
             case TimeState.nightEnd:
                 groundSpeed = Mathf.Lerp(10, 0f, (float)(Time.time - stateStartTime) / (timeNightEndValue - 1));
                 dirLight.colorTemperature = Mathf.Lerp(nightLightColor, dayLightColor,
                                                         (float)(Time.time - stateStartTime) / (timeNightEndValue - 1));
                 dirLight.intensity = Mathf.Lerp(nightLightIntensity, dayLightIntensity,
                                                 (float)(Time.time - stateStartTime) / (timeNightEndValue - 1));
+                break;
+
+            default:
                 break;
         }
     }
@@ -262,6 +279,12 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FromAfternoonToUpgrade());
     }
 
+    IEnumerator LoadDelay()
+    {
+        yield return new WaitForSeconds(3f);
+        timeState = TimeState.characterSelect;
+    }
+
     void TrainStart()
     {
         timec = 0;
@@ -272,4 +295,5 @@ public class GameManager : MonoBehaviour
     {
         return new System.Random().Next(10000);
     }
+
 }

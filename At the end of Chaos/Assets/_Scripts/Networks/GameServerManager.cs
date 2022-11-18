@@ -1,4 +1,3 @@
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -8,8 +7,11 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using WebSocketSharp;
+using static UnityEngine.Rendering.DebugUI;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
+public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static GameServerManager instance = null;
 
@@ -21,14 +23,15 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
 
     //캐릭터 선택창 UI 변수
     public GameObject characterSelectUI;
-    public Button b1, b2, b3, b4;
+    public UnityEngine.UI.Button b1, b2, b3, b4;
     bool characterSelected = false;
-    public byte readyPlayer = 0;
 
-    //시간 Sync용 - 현재 Flow가 끝난 플레이어들은 true로 설정
-    //순서는 PhotonNetwork.PlayerList와 같이 설정함
-    public bool[] PLAYER_IS_READY;
-    public byte myPlayerNum;
+    //플레이어 준비 상태 저장용
+    bool localReady;
+    public bool[] playersReady;
+    Hashtable[] otherPlayerProps;
+
+
 
     void Awake()
     {
@@ -44,17 +47,6 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
         }
     }
 
-    //RaiseEvent를 사용하려면 등록해야함
-    void OnEnable()
-    {
-        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
-    }
-
-    void OnDisable()
-    {
-        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
-    }
-
     void Start()
     {
         PhotonNetwork.UseRpcMonoBehaviourCache = true;
@@ -63,29 +55,24 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
 
         //로비는 더이상 사용되지 않으므로 지운다.
         Destroy(GameObject.Find("LobbyManager"));
+        var a = PhotonNetwork.PlayerList;
 
-        //플레이어 수만큼 Ready 칸을 만든다.
-        PLAYER_IS_READY = new bool[PhotonNetwork.CountOfPlayers];
+        //
+        PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "isReady", false } });
+        PhotonNetwork.CurrentRoom.IsOpen = false;
     }
 
     void Update()
     {
-        if (Array.TrueForAll<bool>(PLAYER_IS_READY, x => x.Equals(true)))
-        {
-            Debug.LogWarning("ALL READY");
-        }
+
     }
 
     public void ReadyToGame1()
     {
         if (!characterSelected)
         {
-            PhotonNetwork.RaiseEvent(1,
-                                        new object[] { PhotonNetwork.NickName },
-                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
-                                        new SendOptions { Reliability = true }
-                                    );
-
+            pv.RPC("SelectCharactor", RpcTarget.All, 11, PhotonNetwork.LocalPlayer.NickName);
+            IReady = true;
             initPlayer(1);
         }
         
@@ -94,12 +81,8 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
     {
         if (!characterSelected)
         {
-            PhotonNetwork.RaiseEvent(2,
-                                        new object[] { PhotonNetwork.NickName },
-                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
-                                        new SendOptions { Reliability = true }
-                                    );
-
+            pv.RPC("SelectCharactor", RpcTarget.All, 2, PhotonNetwork.LocalPlayer.NickName);
+            IReady = true;
             initPlayer(2);
         }
     }
@@ -107,12 +90,8 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
     {
         if (!characterSelected)
         {
-            PhotonNetwork.RaiseEvent(3,
-                                        new object[] { PhotonNetwork.NickName },
-                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
-                                        new SendOptions { Reliability = true }
-                                    );
-
+            pv.RPC("SelectCharactor", RpcTarget.All, 3, PhotonNetwork.LocalPlayer.NickName);
+            IReady = true;
             initPlayer(3);
         }
     }
@@ -120,13 +99,8 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
     {
         if (!characterSelected)
         {
-            
-            PhotonNetwork.RaiseEvent(4,
-                                        new object[] { PhotonNetwork.NickName },
-                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
-                                        new SendOptions { Reliability = true }
-                                    );
-
+            pv.RPC("SelectCharactor", RpcTarget.All, 4, PhotonNetwork.LocalPlayer.NickName);
+            IReady = true;
             initPlayer(4);
         }
     }
@@ -137,71 +111,15 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
         GameObject player = PhotonNetwork.Instantiate("Player_" + _num, Vector3.zero, Quaternion.identity);
         player.transform.Find("PlayerName").GetComponent<TextMesh>().text = PhotonNetwork.NickName;
         mainCamera.GetComponent<CameraMovement>().player = player;
+    }
 
-        if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        Debug.Log("CHANGED : " + targetPlayer.NickName + " -> " + changedProps.Keys);
+        if (Array.TrueForAll<bool>(WeReady, x => x.Equals(true)))
         {
             pv.RPC("StartGame", RpcTarget.AllBuffered);
         }
-    }
-
-    public void OnEvent(EventData _Event)
-    {
-        object[] data = (object[])_Event.CustomData;
-
-        switch (_Event.Code)
-        {
-            case 0: //플레이어 Ready
-                PLAYER_IS_READY[(int)data[0]] = true;
-                break;
-            case 1:
-                readyPlayer++;
-                b1.interactable = false;
-                b1.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
-                Ready();
-                if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
-                {
-                    pv.RPC("StartGame", RpcTarget.AllBuffered);
-                }
-
-                break;
-            case 2:
-                readyPlayer++;
-                b2.interactable = false;
-                b2.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
-                Ready();
-                if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
-                {
-                    
-                    pv.RPC("StartGame", RpcTarget.AllBuffered);
-                }
-                break;
-            case 3:
-                readyPlayer++;
-                b3.interactable = false;
-                b3.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
-                Ready();
-                if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
-                {
-                    
-                    pv.RPC("StartGame", RpcTarget.AllBuffered);
-                }
-                break;
-            case 4:
-                readyPlayer++;
-                b4.interactable = false;
-                b4.GetComponentInChildren<TMP_Text>().text = data[0] + "\nSelected!";
-                Ready();
-                if (readyPlayer == PhotonNetwork.CurrentRoom.PlayerCount)
-                {
-                    
-                    pv.RPC("StartGame", RpcTarget.AllBuffered);
-                }
-                break;
-            default:
-                break;
-        }
-
-        return;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -216,6 +134,7 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
         }
     }
 
+
     [PunRPC]
     public void StartGame()
     {
@@ -228,20 +147,76 @@ public class GameServerManager : MonoBehaviour, IOnEventCallback, IPunObservable
             //그리고 주인의 이름을 달아준다.
             pGO[i].GetComponentInChildren<TextMesh>().text = pGO[i].GetComponent<PhotonView>().Owner.NickName;
         }
-
+        PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "isReady", false } });
         characterSelectUI.SetActive(false);
-
-        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+        GameManager.instance.timeState = TimeState.startPhase;
     }
 
-
-    public void Ready()
+    [PunRPC]
+    public void SelectCharactor(int _num, string _nick)
     {
-        PhotonNetwork.RaiseEvent(4,
-                                        new object[] { PhotonNetwork.LocalPlayer.ActorNumber },
-                                        new RaiseEventOptions { Receivers = ReceiverGroup.All },
-                                        new SendOptions { Reliability = true }
-                                    );
+        switch (_num)
+        {
+            case 1:
+                b1.interactable = false;
+                b1.GetComponentInChildren<TMP_Text>().text = _nick + "\nSelected!";
+                break;
+
+            case 2:
+                b2.interactable = false;
+                b2.GetComponentInChildren<TMP_Text>().text = _nick + "\nSelected!";
+                break;
+
+            case 3:
+                b3.interactable = false;
+                b3.GetComponentInChildren<TMP_Text>().text = _nick + "\nSelected!";
+                break;
+
+            case 4:
+                b4.interactable = false;
+                b4.GetComponentInChildren<TMP_Text>().text = _nick + "\nSelected!";
+                break;
+
+            default:
+                break;
+        }
+
+        return;
+    }
+
+    //접속중인 플레이어들의 목록을 뽑아서 isReady부분만 모아서 확인한다.
+    public bool[] WeReady
+    {
+        get {
+            playersReady = new bool[PhotonNetwork.CountOfPlayers];
+            otherPlayerProps = new Hashtable[PhotonNetwork.CountOfPlayers];
+
+            for (int i = 0; i < PhotonNetwork.CountOfPlayers; i++)
+            {
+                otherPlayerProps[i] = PhotonNetwork.PlayerList[i].CustomProperties;
+                if (otherPlayerProps[i]["isReady"] == null) continue;
+                playersReady[i] = (bool)otherPlayerProps[i]["isReady"];
+            }
+
+            //그리고 bool배열을 반환한다.
+            return playersReady;
+        }
+
+        set { }
+        
+    }
+    
+    //나의 Ready상태를 반환
+    public bool IReady
+    {
+        get {
+            if (PhotonNetwork.LocalPlayer.CustomProperties["isReady"] == null) return false;
+            return (bool)PhotonNetwork.LocalPlayer.CustomProperties["isReady"]; 
+        }
+
+        set {
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { "isReady", value} });
+        }
     }
 
     //[PunRPC]
