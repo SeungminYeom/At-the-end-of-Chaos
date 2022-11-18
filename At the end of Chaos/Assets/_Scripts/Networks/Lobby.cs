@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 using System.Linq;
 using Photon.Pun.UtilityScripts;
 using ExitGames.Client.Photon;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
 {
@@ -100,9 +101,14 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
             if (roomCodeInput.text.Length == 5)
             {
                 connectionInfoText.text = "새 게임을 만드는중...";
-                PhotonNetwork.CreateRoom(roomCodeInput.text, new RoomOptions { MaxPlayers = 4 });
+                PhotonNetwork.CreateRoom(roomCodeInput.text, new RoomOptions {
+                                                                                MaxPlayers = 4,
+                                                                                CustomRoomProperties = new Hashtable {
+                                                                                    { "waitToSync", false } //방 상태 Sync용
+                                                                                }
+                });
             }
-            else
+            else 
             {
                 connectionInfoText.text = "게임 코드 5자리를 입력해주세요";
             }

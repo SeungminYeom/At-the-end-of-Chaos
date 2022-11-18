@@ -8,9 +8,9 @@ using UnityEngine.Timeline;
 
 public enum TimeState
 {
-    none,
-    characterSelect,
-    startPhase,
+    none, //로딩용 대기
+    characterSelect, //캐릭터 선택창
+    startPhase, //캐릭터 선택후 로딩용
     afternoon,
     upgrade,
     nightStart,
@@ -128,8 +128,11 @@ public class GameManager : MonoBehaviour
         timeUI_Afternoon_Image = timeUI_afternoon.GetComponent<Image>();
         timeUI_Night_Image = timeUI_night.GetComponent<Image>();
         trainCount = 2;
+
+        //GameServer가 준비되기 전에 넘어가는 문제가 있어서 잠시 기다렸다가 넘어간다.
         timeState = TimeState.none;
         StartCoroutine(LoadDelay());
+
         GameObject.Find("TrainManager").gameObject.SendMessage("SortTrain", trainCount - 1);
     }
 
@@ -281,7 +284,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator LoadDelay()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.5f);
         timeState = TimeState.characterSelect;
     }
 

@@ -8,7 +8,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using WebSocketSharp;
-using static UnityEngine.Rendering.DebugUI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
@@ -27,7 +26,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     bool characterSelected = false;
 
     //플레이어 준비 상태 저장용
-    bool localReady;
     public bool[] playersReady;
     Hashtable[] otherPlayerProps;
 
@@ -57,9 +55,10 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         Destroy(GameObject.Find("LobbyManager"));
         var a = PhotonNetwork.PlayerList;
 
-        //
-        PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "isReady", false } });
-        PhotonNetwork.CurrentRoom.IsOpen = false;
+        //플레이어 State Sync용
+        PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "isReady", false } }); //플레이어 각각의 Ready 상태
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { "waitToSync", true} }); //현재 Sync를 위해 Wait중인가?
+        PhotonNetwork.CurrentRoom.IsOpen = false; //방에 못들어오게 잠근다.
     }
 
     void Update()
@@ -67,11 +66,12 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     }
 
+    #region BUTTON_ACTION
     public void ReadyToGame1()
     {
         if (!characterSelected)
         {
-            pv.RPC("SelectCharactor", RpcTarget.All, 11, PhotonNetwork.LocalPlayer.NickName);
+            pv.RPC("SelectCharactor", RpcTarget.All, 1, PhotonNetwork.LocalPlayer.NickName);
             IReady = true;
             initPlayer(1);
         }
@@ -104,22 +104,47 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
             initPlayer(4);
         }
     }
+    #endregion
 
+    //플레이어 생성
     public void initPlayer(short _num)
     {
         characterSelected = true;
         GameObject player = PhotonNetwork.Instantiate("Player_" + _num, Vector3.zero, Quaternion.identity);
-        player.transform.Find("PlayerName").GetComponent<TextMesh>().text = PhotonNetwork.NickName;
+        //카메라는 current player를 따라가도록 설정
         mainCamera.GetComponent<CameraMovement>().player = player;
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        Debug.Log("CHANGED : " + targetPlayer.NickName + " -> " + changedProps.Keys);
-        if (Array.TrueForAll<bool>(WeReady, x => x.Equals(true)))
+        //현재 방의 상태가 Sync대기중이면서, 모든 플레이어가 Ready상태일때만 작동
+        if ((bool)PhotonNetwork.CurrentRoom.CustomProperties["waitToSync"] && AllPlayerReady) 
         {
-            pv.RPC("StartGame", RpcTarget.AllBuffered);
+            switch (GameManager.instance.timeState)
+            {
+                case TimeState.none:
+                    break;
+                case TimeState.characterSelect:
+                    pv.RPC("StartGame", RpcTarget.AllBuffered);
+                    break;
+                case TimeState.startPhase:
+                    break;
+                case TimeState.afternoon:
+                    break;
+                case TimeState.upgrade:
+                    break;
+                case TimeState.nightStart:
+                    break;
+                case TimeState.night:
+                    break;
+                case TimeState.nightEnd:
+                    break;
+                default:
+                    break;
+            }
         }
+        //Debug.Log("CHANGED : " + targetPlayer.NickName + " -> " + changedProps.Keys);
+        
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -135,6 +160,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     }
 
 
+    #region PRCs
     [PunRPC]
     public void StartGame()
     {
@@ -183,6 +209,18 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
 
         return;
     }
+    #endregion
+
+    #region PLAYER_READY
+    public bool AllPlayerReady
+    {
+        get {
+            //모든 플레이어의 isReady가 true이면 true를 반환한다.
+            if (Array.TrueForAll<bool>(WeReady, x => x.Equals(true))) return true;
+            else return false;
+        }
+        private set { }
+    }
 
     //접속중인 플레이어들의 목록을 뽑아서 isReady부분만 모아서 확인한다.
     public bool[] WeReady
@@ -191,6 +229,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
             playersReady = new bool[PhotonNetwork.CountOfPlayers];
             otherPlayerProps = new Hashtable[PhotonNetwork.CountOfPlayers];
 
+            //한명한명 뽑아서 배열에 저장한다.
             for (int i = 0; i < PhotonNetwork.CountOfPlayers; i++)
             {
                 otherPlayerProps[i] = PhotonNetwork.PlayerList[i].CustomProperties;
@@ -202,7 +241,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
             return playersReady;
         }
 
-        set { }
+        private set { }
         
     }
     
@@ -218,10 +257,5 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
             PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { "isReady", value} });
         }
     }
-
-    //[PunRPC]
-    //public void Ready_RPC(int _who)
-    //{
-    //    PLAYER_IS_READY[_who] = true;
-    //}
+    #endregion
 }
