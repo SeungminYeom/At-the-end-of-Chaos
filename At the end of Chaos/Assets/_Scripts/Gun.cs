@@ -70,7 +70,7 @@ public class Gun : MonoBehaviour
         {
             case GunType.pistol:
                 //Debug.Log("pistol " + GunManager.instance.gunDamage.ToString());
-                if (enemyFinder.targetPos != null)
+                if (enemyFinder.target != null)
                 {
                     StartCoroutine(FireVFX(pistolFireTransform.position, GunManager.instance.gunDamage, true));
                 }
@@ -81,7 +81,7 @@ public class Gun : MonoBehaviour
                 break;
             case GunType.shotgun:
                 //Debug.Log("shotgun " + GunManager.instance.gunDamage.ToString());
-                if (enemyFinder.targetPos != null)
+                if (enemyFinder.target != null)
                 {
                     StartCoroutine(FireVFX(shotgunFireTransform.position, GunManager.instance.gunDamage, true));
                 }
@@ -92,7 +92,7 @@ public class Gun : MonoBehaviour
                 break;
             case GunType.sniperRifle:
                 //Debug.Log("sniperRifle " + (GunManager.instance.gunDamage * 2).ToString());
-                if (enemyFinder.targetPos != null)
+                if (enemyFinder.target != null)
                 {
                     StartCoroutine(FireVFX(sniperRifleFireTransform.position, GunManager.instance.gunDamage * 3, true));
                 }
@@ -103,7 +103,7 @@ public class Gun : MonoBehaviour
                 break;
             case GunType.assaultRifle:
                 //Debug.Log("assaultRifle " + (GunManager.instance.gunDamage * 0.5f).ToString());
-                if (enemyFinder.targetPos != null)
+                if (enemyFinder.target != null)
                 {
                     StartCoroutine(FireVFX(assaultRifleFireTransform.position, GunManager.instance.gunDamage, true));
                 }
@@ -143,12 +143,12 @@ public class Gun : MonoBehaviour
         bulletLine.SetPosition(1, transform.forward * 10f);
         if (isEnemy)
         {
-            bulletLine.SetPosition(1, enemyFinder.targetPos.position);
-            Vector3 knockBack = enemyFinder.targetPos.position - transform.position;
+            bulletLine.SetPosition(1, enemyFinder.target.position);
+            Vector3 knockBack = enemyFinder.target.position - transform.position;
             knockBack.y = 0;
-            enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().AddForce(knockBack.normalized * 10f, ForceMode.Impulse);
-            enemyFinder.targetPos.gameObject.GetComponent<Zombie>().SendMessage("AttackFromPlayer", new float[]{ damage, 0 });
+            enemyFinder.target.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            enemyFinder.target.gameObject.GetComponent<Rigidbody>().AddForce(knockBack.normalized * 10f, ForceMode.Impulse);
+            enemyFinder.target.gameObject.GetComponent<Zombie>().SendMessage("AttackFromPlayer", new float[]{ damage, 0 });
         }
         yield return new WaitForSeconds(gunShootingTime);
         bulletLine.enabled = false;

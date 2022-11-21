@@ -4426,7 +4426,7 @@ MonoBehaviour:
   stateStartTime: 0
   timeAfternoonValue: 10
   timeUpgradeValue: 3
-  timeNightValue: 20
+  timeNightValue: 60
   timeNightStartValue: 3
   timeNightEndValue: 3
   dayLightColor: 5000
@@ -12457,11 +12457,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70aaba81147527744a5a9f119cd35e21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNames:
-  - 
-  - 
-  - 
-  - 
   pv: {fileID: 0}
   players: {fileID: 1956829817}
   characterSelectUI: {fileID: 552281889}
@@ -12469,6 +12464,9 @@ MonoBehaviour:
   b2: {fileID: 1832354992}
   b3: {fileID: 1297673400}
   b4: {fileID: 1587051479}
+  readyPlayer: 0
+  PLAYER_IS_READY: 
+  myPlayerNum: 0
 --- !u!4 &1557604949
 Transform:
   m_ObjectHideFlags: 0
