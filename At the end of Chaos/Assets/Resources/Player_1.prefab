@@ -60,6 +60,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pv: {fileID: 0}
   moveSpeed: 5
+  targetResource: {fileID: 0}
+  isFarming: 0
 --- !u!114 &214349240198293055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,7 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97efc8af94bfae041bee84609def2ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayDeg: 3
+  rayDeg: 0.3
   target: {fileID: 0}
   targetMask:
     serializedVersion: 2

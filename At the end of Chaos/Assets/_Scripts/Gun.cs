@@ -140,7 +140,8 @@ public class Gun : MonoBehaviour
         fireLight.transform.position = firePos;
         bulletLine.enabled = true;
         bulletLine.SetPosition(0, firePos);
-        bulletLine.SetPosition(1, transform.forward * 10f);
+        //bulletLine.SetPosition(1, transform.forward * 10f);
+        bulletLine.SetPosition(1, transform.position + transform.forward * 10f);
         if (isEnemy)
         {
             bulletLine.SetPosition(1, enemyFinder.target.position);

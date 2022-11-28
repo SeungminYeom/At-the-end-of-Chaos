@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Player_4
+  - Player_3
+  - Player_2
+  - Player_1
+  - WoodResource
+  - IronResource
   layers:
   - Default
   - TransparentFX

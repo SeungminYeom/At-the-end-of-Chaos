@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Timeline;
+using UnityStandardAssets.CrossPlatformInput;
 
 public enum TimeState
 {
@@ -19,7 +20,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public int seed;
     public int trainSpeed = 3;
     public bool trainStarted = false;
     public float timec = 0;
@@ -59,10 +59,21 @@ public class GameManager : MonoBehaviour
     [Header("ResourcesCollecting")]
     [SerializeField] int woodResource = 0;
     [SerializeField] int ironResource = 0;
+    [SerializeField] int spawnValue = 10;
     public GameObject WoodResource;
     public GameObject IronResource;
+    List<GameObject> resourcePool = new List<GameObject>();
     float mapScaleX = 60;
     float mapScaleZ = 15;
+    int _seed;
+
+    IEnumerator spawnZombie;
+
+    public int seed
+    {
+        get { return _seed; }
+        set { _seed = value; }
+    }
 
     public int stage
     {
@@ -126,6 +137,7 @@ public class GameManager : MonoBehaviour
         timeUI_Night_Image = timeUI_night.GetComponent<Image>();
         timeState = TimeState.nightStart;
         trainCount = 2;
+        spawnZombie = ZombieManager.instance.SpawnZombie();
         GameObject.Find("TrainManager").gameObject.SendMessage("SortTrain", trainCount - 1);
         StartCoroutine(NightStart());
     }
@@ -173,17 +185,25 @@ public class GameManager : MonoBehaviour
 
     void SpawnResource()
     {
-        //2 ~ range(15)
-        Vector3 spawnPos = new Vector3(Random.Range(mapScaleX, -mapScaleX), 0f, Random.Range(2f, mapScaleZ));
-        if (Random.Range(0, 2) == 1)
+        GameObject parent = GameObject.Find("MasterGameObject");
+        for (int i = 0; i < spawnValue; i++)
         {
-            spawnPos.z *= -1;
-        }
+            GameObject go;
 
-        //반복문 범위 조정
-        for (int i = 0; i < 10; i++)
-        {
-            Instantiate(WoodResource, spawnPos, Quaternion.identity);
+            Vector3 spawnPos = new Vector3(new System.Random().Next((int)-mapScaleX, (int)mapScaleX), 0f, new System.Random().Next(2, (int)mapScaleZ));
+            if (new System.Random().Next(0, 2) == 1) spawnPos.z *= -1;
+
+            if (new System.Random().Next(2, 4) == 2)
+            {
+                go = Instantiate(WoodResource, spawnPos, Quaternion.identity);
+            }
+            else
+            {
+                go = Instantiate(IronResource, spawnPos, Quaternion.identity);
+            }
+            resourcePool.Add(go);
+            go.transform.parent = parent.transform;
+            seed += 10;
         }
     }
 
@@ -216,6 +236,11 @@ public class GameManager : MonoBehaviour
         timeUI_night.SetActive(true);
         timeUI_afternoon.SetActive(true);
         select_UI.SetActive(false);
+        for (int i = 0; i < resourcePool.Count; i++)
+        {
+            Destroy(resourcePool[i]);
+        }
+        resourcePool.Clear();
         //player.transform.position = player.transform.parent.position + new Vector3(0, 2.5f, 0);
 
         StartCoroutine(NightStart());
@@ -226,7 +251,7 @@ public class GameManager : MonoBehaviour
         TrainStart();
         stateStartTime = Time.time;
         yield return new WaitForSeconds(timeNightStartValue);
-        StartCoroutine(ZombieManager.instance.SpawnZombie());
+        StartCoroutine(spawnZombie);
         joystick.SetActive(true);
         shootBtn.SetActive(true);
         timeState = TimeState.night;
@@ -252,7 +277,8 @@ public class GameManager : MonoBehaviour
     {
         stateStartTime = Time.time;
         yield return new WaitForSeconds(timeNightEndValue);
-        StopCoroutine(ZombieManager.instance.SpawnZombie());
+        CrossPlatformInputManager.SetButtonUp("Shoot");
+        StopCoroutine(spawnZombie);
         joystick.SetActive(true);
         //shootBtn.SetActive(true);
         timeState = TimeState.afternoon;
@@ -271,5 +297,12 @@ public class GameManager : MonoBehaviour
     public int SeedGenerate()
     {
         return new System.Random().Next(10000);
+    }
+
+    public void inCreaseResource(int _wood, int _iron)
+    {
+        Debug.Log("받음 : " + _wood + ", " + _iron);
+        woodResource += _wood;
+        ironResource += _iron;
     }
 }
