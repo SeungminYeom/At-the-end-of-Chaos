@@ -8,7 +8,7 @@ using TMPro;
 public class Gun : MonoBehaviour
 {
     [SerializeField] GunType _typeOnHand;
-    [SerializeField] int rounds; //ÀÜÅº·®
+    [SerializeField] int rounds; //ï¿½ï¿½Åºï¿½ï¿½
     [SerializeField] public static float range;
     [SerializeField] float gunShootingTime = 0.2f;
 
@@ -54,7 +54,7 @@ public class Gun : MonoBehaviour
         {
             if (CrossPlatformInputManager.GetButtonDown("Shoot") && gameObject.GetComponent<PlayerMovement>().pv.IsMine)
             {
-                //PlayerMovementÀÇ View¸¦ ÅëÇØ¼­ Shoot¸í·É Àü´Þ
+                //PlayerMovementï¿½ï¿½ Viewï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ Shootï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 gameObject.GetComponent<PlayerMovement>().pv.RPC("Shoot", Photon.Pun.RpcTarget.All);
                 //Shoot();
             }
@@ -70,7 +70,7 @@ public class Gun : MonoBehaviour
         {
             case GunType.pistol:
                 //Debug.Log("pistol " + GunManager.instance.gunDamage.ToString());
-                if (enemyFinder.targetPos != null)
+                if (enemyFinder.target != null)
                 {
                     StartCoroutine(FireVFX(pistolFireTransform.position, GunManager.instance.gunDamage, true));
                 }
@@ -81,7 +81,7 @@ public class Gun : MonoBehaviour
                 break;
             case GunType.shotgun:
                 //Debug.Log("shotgun " + GunManager.instance.gunDamage.ToString());
-                if (enemyFinder.targetPos != null)
+                if (enemyFinder.target != null)
                 {
                     StartCoroutine(FireVFX(shotgunFireTransform.position, GunManager.instance.gunDamage, true));
                 }
@@ -92,7 +92,7 @@ public class Gun : MonoBehaviour
                 break;
             case GunType.sniperRifle:
                 //Debug.Log("sniperRifle " + (GunManager.instance.gunDamage * 2).ToString());
-                if (enemyFinder.targetPos != null)
+                if (enemyFinder.target != null)
                 {
                     StartCoroutine(FireVFX(sniperRifleFireTransform.position, GunManager.instance.gunDamage * 3, true));
                 }
@@ -103,7 +103,7 @@ public class Gun : MonoBehaviour
                 break;
             case GunType.assaultRifle:
                 //Debug.Log("assaultRifle " + (GunManager.instance.gunDamage * 0.5f).ToString());
-                if (enemyFinder.targetPos != null)
+                if (enemyFinder.target != null)
                 {
                     StartCoroutine(FireVFX(assaultRifleFireTransform.position, GunManager.instance.gunDamage, true));
                 }
@@ -120,7 +120,7 @@ public class Gun : MonoBehaviour
         }
     }
 
-    //ÃÑÀÌ È°¼ºÈ­µÉ ¶§ ÀÌ ÇÔ¼ö¸¦ È£ÃâÇÔ
+    //ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½ï¿½
     public void EquipGun(GunType t)
     {
         typeOnHand = t;
@@ -140,11 +140,12 @@ public class Gun : MonoBehaviour
         fireLight.transform.position = firePos;
         bulletLine.enabled = true;
         bulletLine.SetPosition(0, firePos);
-        bulletLine.SetPosition(1, transform.forward * 10f);
+        //bulletLine.SetPosition(1, transform.forward * 10f);
+        bulletLine.SetPosition(1, transform.position + transform.forward * 10f);
         if (isEnemy)
         {
-            bulletLine.SetPosition(1, enemyFinder.targetPos.position);
-            Vector3 knockBack = enemyFinder.targetPos.position - transform.position;
+            bulletLine.SetPosition(1, enemyFinder.target.position);
+            Vector3 knockBack = enemyFinder.target.position - transform.position;
             knockBack.y = 0;
             enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().AddForce(knockBack.normalized * 10f, ForceMode.Impulse);

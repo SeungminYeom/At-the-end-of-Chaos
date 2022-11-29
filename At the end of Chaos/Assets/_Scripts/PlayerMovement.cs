@@ -16,6 +16,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] float moveSpeed = 5f;
 
+    [SerializeField] GameObject targetResource;
+    [SerializeField] bool isFarming;
+
     void Start()
     {
         pv = gameObject.GetComponent<PhotonView>();
@@ -38,6 +41,14 @@ public class PlayerMovement : MonoBehaviour
             gameObject.transform.rotation = Quaternion.Euler(new Vector3(0, Mathf.Atan2(CrossPlatformInputManager.GetAxisRaw("Horizontal"),
                              CrossPlatformInputManager.GetAxisRaw("Vertical")) * Mathf.Rad2Deg, 0));
         }
+        if (GameManager.instance.timeState == TimeState.afternoon)
+        {
+            if (CrossPlatformInputManager.GetButtonDown("Shoot") && !isFarming/* && gameObject.GetComponent<PlayerMovement>().pv.IsMine*/)
+            {
+                //gameObject.GetComponent<PlayerMovement>().pv.RPC("Shoot", Photon.Pun.RpcTarget.All);
+                Farming();
+            }
+        }
     }
 
     private void Move()
@@ -56,6 +67,8 @@ public class PlayerMovement : MonoBehaviour
         //playerRigid.velocity = new Vector3(CrossPlatformInputManager.GetAxisRaw("Horizontal"), 0, 
         //                                    CrossPlatformInputManager.GetAxisRaw("Vertical")).normalized * moveSpeed;
 
+        if (isFarming) return;
+
         if (CrossPlatformInputManager.GetButton("JoystickBtn") && pv.IsMine)
         {
             playerRigid.velocity = new Vector3(transform.forward.x * moveSpeed, playerRigid.velocity.y, (transform.forward.z * moveSpeed));
@@ -64,5 +77,40 @@ public class PlayerMovement : MonoBehaviour
         {
             //playerRigid.velocity = Vector3.zero;
         }
+    }
+
+    void Farming()
+    {
+        isFarming = true;
+        StartCoroutine(FarmingWait());
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "WoodResource" || other.tag == "IronResource")
+        {
+            GameObject.Find("Canvas").transform.Find("ShootBtn").gameObject.SetActive(true);
+            targetResource = other.gameObject;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "WoodResource" || other.tag == "IronResource")
+        {
+            targetResource = null;
+            GameObject.Find("Canvas").transform.Find("ShootBtn").gameObject.SetActive(false);
+        }
+    }
+
+    IEnumerator FarmingWait()
+    {
+        yield return new WaitForSeconds(1f);
+        if (targetResource != null)
+        {
+            //GameManager.instance.inCreaseResource(targetResource.GetComponent<Resource>().wood, targetResource.GetComponent<Resource>().iron);
+            Destroy(targetResource);
+        }
+            isFarming = false;
     }
 }

@@ -4,19 +4,36 @@ using UnityEngine;
 
 public class Resource : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    public int wood = 0;
+    public int iron = 0;
+
+    private void OnEnable()
     {
-        if (other.tag == "Player")
-        {
-            GameObject.Find("ShootBtn").SetActive(true);
-        }
+        if (tag == "WoodResource")
+            wood = new System.Random().Next(3) + 1;
+        else
+            iron = new System.Random().Next(3) + 1;
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnDestroy()
     {
-        if (other.tag == "Player")
-        {
-            GameObject.Find("ShootBtn").SetActive(false);
-        }
+        GameManager.instance.inCreaseResource(wood, iron);
+        Debug.Log("РќДо : " + wood + ", " + iron);
     }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.tag == "Player")
+    //    {
+    //        GameObject.Find("ShootBtn").SetActive(true);
+    //    }
+    //}
+
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.tag == "Player")
+    //    {
+    //        GameObject.Find("ShootBtn").SetActive(false);
+    //    }
+    //}
 }

@@ -5,12 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Timeline;
+using UnityStandardAssets.CrossPlatformInput;
 
 public enum TimeState
 {
-    none, //·Îµù¿ë ´ë±â
-    characterSelect, //Ä³¸¯ÅÍ ¼±ÅÃÃ¢
-    startPhase, //Ä³¸¯ÅÍ ¼±ÅÃÈÄ ·Îµù¿ë
+    none, //ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    characterSelect, //Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¢
+    startPhase, //Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½
     afternoon,
     upgrade,
     nightStart,
@@ -22,7 +23,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public int seed;
     public int trainSpeed = 3;
     public bool trainStarted = false;
     public float timec = 0;
@@ -62,10 +62,21 @@ public class GameManager : MonoBehaviour
     [Header("ResourcesCollecting")]
     [SerializeField] int woodResource = 0;
     [SerializeField] int ironResource = 0;
+    [SerializeField] int spawnValue = 10;
     public GameObject WoodResource;
     public GameObject IronResource;
+    List<GameObject> resourcePool = new List<GameObject>();
     float mapScaleX = 60;
     float mapScaleZ = 15;
+    int _seed;
+
+    IEnumerator spawnZombie;
+
+    public int seed
+    {
+        get { return _seed; }
+        set { _seed = value; }
+    }
 
     public int stage
     {
@@ -128,11 +139,11 @@ public class GameManager : MonoBehaviour
         timeUI_Afternoon_Image = timeUI_afternoon.GetComponent<Image>();
         timeUI_Night_Image = timeUI_night.GetComponent<Image>();
         trainCount = 2;
-
-        //GameServer°¡ ÁØºñµÇ±â Àü¿¡ ³Ñ¾î°¡´Â ¹®Á¦°¡ ÀÖ¾î¼­ Àá½Ã ±â´Ù·È´Ù°¡ ³Ñ¾î°£´Ù.
+        //GameServerï¿½ï¿½ ï¿½Øºï¿½Ç±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾î°¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾î¼­ ï¿½ï¿½ï¿½ ï¿½ï¿½Ù·È´Ù°ï¿½ ï¿½Ñ¾î°£ï¿½ï¿½.
         timeState = TimeState.none;
         StartCoroutine(LoadDelay());
 
+        spawnZombie = ZombieManager.instance.SpawnZombie();
         GameObject.Find("TrainManager").gameObject.SendMessage("SortTrain", trainCount - 1);
     }
 
@@ -192,17 +203,25 @@ public class GameManager : MonoBehaviour
 
     void SpawnResource()
     {
-        //2 ~ range(15)
-        Vector3 spawnPos = new Vector3(Random.Range(mapScaleX, -mapScaleX), 0f, Random.Range(2f, mapScaleZ));
-        if (Random.Range(0, 2) == 1)
+        GameObject parent = GameObject.Find("MasterGameObject");
+        for (int i = 0; i < spawnValue; i++)
         {
-            spawnPos.z *= -1;
-        }
+            GameObject go;
 
-        //¹Ýº¹¹® ¹üÀ§ Á¶Á¤
-        for (int i = 0; i < 10; i++)
-        {
-            Instantiate(WoodResource, spawnPos, Quaternion.identity);
+            Vector3 spawnPos = new Vector3(new System.Random().Next((int)-mapScaleX, (int)mapScaleX), 0f, new System.Random().Next(2, (int)mapScaleZ));
+            if (new System.Random().Next(0, 2) == 1) spawnPos.z *= -1;
+
+            if (new System.Random().Next(2, 4) == 2)
+            {
+                go = Instantiate(WoodResource, spawnPos, Quaternion.identity);
+            }
+            else
+            {
+                go = Instantiate(IronResource, spawnPos, Quaternion.identity);
+            }
+            resourcePool.Add(go);
+            go.transform.parent = parent.transform;
+            seed += 10;
         }
     }
 
@@ -214,7 +233,7 @@ public class GameManager : MonoBehaviour
         shootBtn.SetActive(false);
         timeState = TimeState.upgrade;
         //Time.timeScale = 0;
-        //ÇÏÀÌ¾î¶óÅ° Ã¢ÀÇ ¼ø¼­ º¯°æ ÄÚµå
+        //ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½Å° Ã¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½
         timeUI_night.transform.SetAsLastSibling();
         timeUI_Afternoon_Image.fillAmount = 1f;
         timeUI_night.SetActive(false);
@@ -235,6 +254,11 @@ public class GameManager : MonoBehaviour
         timeUI_night.SetActive(true);
         timeUI_afternoon.SetActive(true);
         select_UI.SetActive(false);
+        for (int i = 0; i < resourcePool.Count; i++)
+        {
+            Destroy(resourcePool[i]);
+        }
+        resourcePool.Clear();
         //player.transform.position = player.transform.parent.position + new Vector3(0, 2.5f, 0);
 
         StartCoroutine(NightStart());
@@ -245,7 +269,7 @@ public class GameManager : MonoBehaviour
         TrainStart();
         stateStartTime = Time.time;
         yield return new WaitForSeconds(timeNightStartValue);
-        StartCoroutine(ZombieManager.instance.SpawnZombie());
+        StartCoroutine(spawnZombie);
         joystick.SetActive(true);
         shootBtn.SetActive(true);
         timeState = TimeState.night;
@@ -261,7 +285,7 @@ public class GameManager : MonoBehaviour
         shootBtn.SetActive(false);
         timeState = TimeState.nightEnd;
         groundSpeed = 10f;
-        //ÇÏÀÌ¾î¶óÅ° Ã¢ÀÇ ¼ø¼­ º¯°æ ÄÚµå
+        //ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½Å° Ã¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½
         timeUI_afternoon.transform.SetAsLastSibling();
         timeUI_Night_Image.fillAmount = 1f;
         StartCoroutine(NightEnd());
@@ -271,7 +295,8 @@ public class GameManager : MonoBehaviour
     {
         stateStartTime = Time.time;
         yield return new WaitForSeconds(timeNightEndValue);
-        StopCoroutine(ZombieManager.instance.SpawnZombie());
+        CrossPlatformInputManager.SetButtonUp("Shoot");
+        StopCoroutine(spawnZombie);
         joystick.SetActive(true);
         //shootBtn.SetActive(true);
         timeState = TimeState.afternoon;
@@ -296,6 +321,13 @@ public class GameManager : MonoBehaviour
     public int SeedGenerate()
     {
         return new System.Random().Next(10000);
+    }
+
+    public void inCreaseResource(int _wood, int _iron)
+    {
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ : " + _wood + ", " + _iron);
+        woodResource += _wood;
+        ironResource += _iron;
     }
 
 }

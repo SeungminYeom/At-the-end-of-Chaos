@@ -4413,7 +4413,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0289ab2b94c5e9144b58e8203100cbb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 0
   trainSpeed: 3
   trainStarted: 0
   timec: 0
@@ -4424,9 +4423,9 @@ MonoBehaviour:
   _groundSpeed: 10
   _timeState: 2
   stateStartTime: 0
-  timeAfternoonValue: 10
+  timeAfternoonValue: 20
   timeUpgradeValue: 3
-  timeNightValue: 20
+  timeNightValue: 12
   timeNightStartValue: 3
   timeNightEndValue: 3
   dayLightColor: 5000
@@ -4437,7 +4436,9 @@ MonoBehaviour:
   ironResource: 0
   WoodResource: {fileID: 7165729110340431487, guid: e0d654f2369472c488ae2ef051f0d374,
     type: 3}
-  IronResource: {fileID: 0}
+  IronResource: {fileID: 7165729110340431487, guid: ad7191d3c4547ae4f8e8b51b7f168ade,
+    type: 3}
+  spawnValue: 10
 --- !u!1 &610437376
 GameObject:
   m_ObjectHideFlags: 0
@@ -12457,6 +12458,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70aaba81147527744a5a9f119cd35e21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerNames:
+  - 
+  - 
+  - 
+  - 
   pv: {fileID: 0}
   players: {fileID: 1956829817}
   characterSelectUI: {fileID: 552281889}
