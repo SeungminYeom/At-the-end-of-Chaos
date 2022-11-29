@@ -52,7 +52,7 @@ public class Gun : MonoBehaviour
     {
         if (GameManager.instance.timeState == TimeState.night && rounds > 0)
         {
-            if (CrossPlatformInputManager.GetButton("Shoot") && gameObject.GetComponent<PlayerMovement>().pv.IsMine)
+            if (CrossPlatformInputManager.GetButtonDown("Shoot") && gameObject.GetComponent<PlayerMovement>().pv.IsMine)
             {
                 //PlayerMovement의 View를 통해서 Shoot명령 전달
                 gameObject.GetComponent<PlayerMovement>().pv.RPC("Shoot", Photon.Pun.RpcTarget.All);
@@ -148,7 +148,8 @@ public class Gun : MonoBehaviour
             knockBack.y = 0;
             enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().AddForce(knockBack.normalized * 10f, ForceMode.Impulse);
-            enemyFinder.targetPos.gameObject.GetComponent<Zombie>().SendMessage("AttackFromPlayer", new float[]{ damage, 0 });
+            //enemyFinder.targetPos.gameObject.GetComponent<Zombie>().SendMessage("AttackFromPlayer", new float[]{ damage, 0 });
+            enemyFinder.targetPos.gameObject.GetComponent<Zombie>().pv.RPC("AttackFromPlayer", RpcTarget.All, damage, 0f);
         }
         yield return new WaitForSeconds(gunShootingTime);
         bulletLine.enabled = false;

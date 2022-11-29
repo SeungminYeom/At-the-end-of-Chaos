@@ -48,6 +48,7 @@ MonoBehaviour:
   - StartGame
   - Ready_RPC
   - SelectCharactor
+  - AttackFromPlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

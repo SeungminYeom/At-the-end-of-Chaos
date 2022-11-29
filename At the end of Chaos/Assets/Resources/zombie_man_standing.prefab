@@ -50,8 +50,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  health: 10
   speed: 3
   attackDelayTime: 0
+  pv: {fileID: 0}
 --- !u!54 &563035729981916222
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -100,6 +102,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 7301874131978639409}
   - {fileID: 7321016010831926632}
   sceneViewId: 0
   InstantiationId: 0

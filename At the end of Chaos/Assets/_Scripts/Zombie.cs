@@ -11,9 +11,10 @@ public class Zombie : MonoBehaviour
     //공격할 대상
     [SerializeField] GameObject target;
 
-
+    [SerializeField]
     int health = 10;
     float def = 0;
+
     [SerializeField] float speed;
     int attackPoint;
 
@@ -22,11 +23,14 @@ public class Zombie : MonoBehaviour
     //현재 좀비의 대기 시간
     [SerializeField] float attackDelayTime;
 
+    public PhotonView pv;
+
 
     void Start()
     {
         train = GameObject.Find("TrainManager");
         rigid = GetComponent<Rigidbody>();
+        pv = GetComponent<PhotonView>();
     }
 
     void Update()
@@ -89,12 +93,6 @@ public class Zombie : MonoBehaviour
     //    health -= (int)((1f - def * (1f - defPen)) * damage);
     //    if (health <= 0) Die();
     //}
-    void AttackFromPlayer(object value)
-    {
-        float[] var = (float[])value;
-        health -= (int)((1f - def * (1f - var[1])) * var[0]);
-        if (health <= 0) Die();
-    }
 
     void AttackToTrain()
     {
@@ -112,4 +110,12 @@ public class Zombie : MonoBehaviour
         health = (int)(health * 1.1f);
         def += 0.1f;
     }
+
+    [PunRPC]
+    void AttackFromPlayer(float damage, float pierce)
+    {
+        health -= (int)((1f - def * (1f - pierce) * damage));
+        if (health <= 0) Die();
+    }
 }
+    

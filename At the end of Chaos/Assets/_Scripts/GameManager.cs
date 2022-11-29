@@ -150,15 +150,14 @@ public class GameManager : MonoBehaviour
         //    }
         //}
 
-        //캐릭터 선택 종료후 넘어가는 게이트웨이
-        if (timeState == TimeState.startPhase)
-        {
-            timeState = TimeState.nightStart;
-            StartCoroutine(NightStart());
-        }
 
         switch (timeState)
         {
+            case TimeState.startPhase:
+                timeState = TimeState.nightStart;
+                StartCoroutine(NightStart());
+                break;
+
             case TimeState.afternoon:
                 timeUI_Afternoon_Image.fillAmount = (float)((stateStartTime - Time.time) / timeAfternoonValue);
                 break;
