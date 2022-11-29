@@ -91,12 +91,15 @@ public class GameManager : MonoBehaviour
         get { return _trainCount; }
         set
         {
+
+            //열차 추가
             if (value - 1 == _trainCount)
             {
                 if (_trainCount >= maxTrainCount) return;
                 GameObject.Find("TrainManager").gameObject.SendMessage("AddTrain", _trainCount);
                 _trainCount = value;
             }
+            //열차 감소
             else if (value + 1 == _trainCount)
             {
                 if (_trainCount <= 0) return;

@@ -96,11 +96,6 @@ public class Zombie : MonoBehaviour
         if (health <= 0) Die();
     }
 
-    void AttackToTrain()
-    {
-        Debug.Log("기차 공격!");
-    }
-
     void Die()
     {
         StopAllCoroutines();

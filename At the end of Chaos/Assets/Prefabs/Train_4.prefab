@@ -10,12 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 2922168617493686858}
   - component: {fileID: 2577871310737715441}
+  - component: {fileID: 3133910716751640404}
   m_Layer: 0
   m_Name: Train_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &2922168617493686858
 Transform:
@@ -50,6 +51,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5.301195, y: 2.6942096, z: 1.7340491}
   m_Center: {x: -0.25705814, y: 1.3418128, z: -0.022024512}
+--- !u!114 &3133910716751640404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2577871310737715440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f17c3c9c8db3414687652b4b4b595da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 10
+  invincible: 0
 --- !u!1 &4316208593813694026
 GameObject:
   m_ObjectHideFlags: 0
@@ -64,7 +79,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &6652144883615302488
 Transform:
@@ -95,7 +110,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &6055989458155235216
 Transform:
@@ -128,7 +143,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &2377219810754583314
 Transform:
@@ -209,7 +224,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4545447163490382053
 Transform:
@@ -240,7 +255,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &2918533656837458568
 Transform:

@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &6877934867465975396
 Transform:
@@ -41,12 +41,13 @@ GameObject:
   m_Component:
   - component: {fileID: 3105008645710087045}
   - component: {fileID: 2331989692387514680}
+  - component: {fileID: 5226681588377855608}
   m_Layer: 0
   m_Name: Train_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &3105008645710087045
 Transform:
@@ -81,6 +82,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5.595055, y: 2.236671, z: 1.6}
   m_Center: {x: -0.42000008, y: 1.1183355, z: 0}
+--- !u!114 &5226681588377855608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2331989692387514687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f17c3c9c8db3414687652b4b4b595da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 10
+  invincible: 0
 --- !u!1 &3625516493809738209
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,7 +110,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &3102396481716040250
 Transform:
@@ -126,7 +141,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &3591792253015016626
 Transform:
@@ -159,7 +174,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &2551008655576937181
 Transform:
@@ -240,7 +255,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &6432492591288767008
 Transform:

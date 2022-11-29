@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 7055443813989561142}
   m_Layer: 20
   m_Name: zombie_woman_standing
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
