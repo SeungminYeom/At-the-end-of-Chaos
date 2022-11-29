@@ -226,11 +226,11 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool[] WeReady
     {
         get {
-            playersReady = new bool[PhotonNetwork.CountOfPlayers];
-            otherPlayerProps = new Hashtable[PhotonNetwork.CountOfPlayers];
+            playersReady = new bool[PhotonNetwork.CurrentRoom.PlayerCount];
+            otherPlayerProps = new Hashtable[PhotonNetwork.CurrentRoom.PlayerCount];
 
             //한명한명 뽑아서 배열에 저장한다.
-            for (int i = 0; i < PhotonNetwork.CountOfPlayers; i++)
+            for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
             {
                 otherPlayerProps[i] = PhotonNetwork.PlayerList[i].CustomProperties;
                 if (otherPlayerProps[i]["isReady"] == null) continue;

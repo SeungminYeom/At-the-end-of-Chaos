@@ -147,10 +147,7 @@ public class Gun : MonoBehaviour
             bulletLine.SetPosition(1, enemyFinder.target.position);
             Vector3 knockBack = enemyFinder.target.position - transform.position;
             knockBack.y = 0;
-            enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            enemyFinder.targetPos.gameObject.GetComponent<Rigidbody>().AddForce(knockBack.normalized * 10f, ForceMode.Impulse);
-            //enemyFinder.targetPos.gameObject.GetComponent<Zombie>().SendMessage("AttackFromPlayer", new float[]{ damage, 0 });
-            enemyFinder.targetPos.gameObject.GetComponent<Zombie>().pv.RPC("AttackFromPlayer", RpcTarget.All, damage, 0f);
+            enemyFinder.target.gameObject.GetComponent<Zombie>().pv.RPC("AttackFromPlayer", RpcTarget.All, damage, 0f, knockBack);
         }
         yield return new WaitForSeconds(gunShootingTime);
         bulletLine.enabled = false;

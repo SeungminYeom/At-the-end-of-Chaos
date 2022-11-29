@@ -17,7 +17,7 @@ public class EnemyFinder : MonoBehaviour
 
     //RaycastHit hit;
 
-    Vector2 viewPos;
+    Vector3 viewPos;
     public Vector3 dirToTarget;
 
     void Start()
@@ -33,7 +33,7 @@ public class EnemyFinder : MonoBehaviour
             yield return new WaitForSeconds(delay);
             target = null;
 
-            viewPos = new Vector2(transform.position.x, transform.position.z);
+            viewPos = new Vector3(transform.position.x, 0, transform.position.z);
             Physics.SphereCast(viewPos, rayDeg, transform.forward, out RaycastHit hit, Gun.range, targetMask);
             //Physics.Raycast(viewPos, transform.forward, out RaycastHit hit, Gun.range, targetMask);
             Debug.DrawRay(viewPos, transform.forward * Gun.range, Color.red);

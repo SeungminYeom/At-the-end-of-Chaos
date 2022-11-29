@@ -100,7 +100,7 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
         {
             if (roomCodeInput.text.Length == 5)
             {
-                connectionInfoText.text = "새 게임을 만드는중...";
+                connectionInfoText.text = "새 게임을 만드는중...";  
                 PhotonNetwork.CreateRoom(roomCodeInput.text, new RoomOptions {
                                                                                 MaxPlayers = 4,
                                                                                 CustomRoomProperties = new Hashtable {

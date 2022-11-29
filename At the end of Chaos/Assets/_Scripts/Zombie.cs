@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zombie : MonoBehaviour
+public class Zombie : MonoBehaviourPun, IPunObservable
 {
     GameObject train;
     Rigidbody rigid;
@@ -112,10 +112,17 @@ public class Zombie : MonoBehaviour
     }
 
     [PunRPC]
-    void AttackFromPlayer(float damage, float pierce)
+    void AttackFromPlayer(float damage, float pierce, Vector3 vec)
     {
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().AddForce(vec.normalized * 10f, ForceMode.Impulse);
         health -= (int)((1f - def * (1f - pierce) * damage));
         if (health <= 0) Die();
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        //throw new System.NotImplementedException();
     }
 }
     
