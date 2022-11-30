@@ -4425,7 +4425,7 @@ MonoBehaviour:
   stateStartTime: 0
   timeAfternoonValue: 20
   timeUpgradeValue: 3
-  timeNightValue: 12
+  timeNightValue: 30
   timeNightStartValue: 3
   timeNightEndValue: 3
   dayLightColor: 5000
@@ -11464,7 +11464,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!64 &1434230338
 MeshCollider:
