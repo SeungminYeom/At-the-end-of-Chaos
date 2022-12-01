@@ -307,6 +307,9 @@ MonoBehaviour:
   _typeOnHand: 0
   rounds: 0
   gunShootingTime: 0.1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1048576
 --- !u!114 &4570933435087291478
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     public PhotonView pv;
     GameObject lobbyObject;
     GameObject mainCamera;
+    public GameObject player;
 
     public GameObject players;
 
@@ -110,7 +111,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     public void initPlayer(short _num)
     {
         characterSelected = true;
-        GameObject player = PhotonNetwork.Instantiate("Player_" + _num, Vector3.zero, Quaternion.identity);
+        player = PhotonNetwork.Instantiate("Player_" + _num, Vector3.zero, Quaternion.identity);
         //카메라는 current player를 따라가도록 설정
         mainCamera.GetComponent<CameraMovement>().player = player;
     }

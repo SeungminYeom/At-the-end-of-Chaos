@@ -9,7 +9,7 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public enum TimeState
 {
-    none, //�ε��� ���
+    none, //�ε��� ���?
     characterSelect, //ĳ���� ����â
     startPhase, //ĳ���� ������ �ε���
     afternoon,
@@ -69,6 +69,8 @@ public class GameManager : MonoBehaviour
     float mapScaleX = 60;
     float mapScaleZ = 15;
     int _seed;
+
+    [SerializeField] float timeScale = 1f;
 
     IEnumerator spawnZombie;
 
@@ -142,7 +144,7 @@ public class GameManager : MonoBehaviour
         timeUI_Afternoon_Image = timeUI_afternoon.GetComponent<Image>();
         timeUI_Night_Image = timeUI_night.GetComponent<Image>();
         trainCount = 2;
-        //GameServer�� �غ�Ǳ� ���� �Ѿ�� ������ �־ ��� ��ٷȴٰ� �Ѿ��.
+        //GameServer�� �غ�Ǳ�?���� �Ѿ�� ������ �־ ���?��ٷȴٰ�?�Ѿ��.
         timeState = TimeState.none;
         StartCoroutine(LoadDelay());
 
@@ -152,6 +154,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        Time.timeScale = timeScale;
         //if (trainStarted)
         //{
         //    timec += Time.deltaTime;
@@ -236,7 +239,7 @@ public class GameManager : MonoBehaviour
         shootBtn.SetActive(false);
         timeState = TimeState.upgrade;
         //Time.timeScale = 0;
-        //���̾��Ű â�� ���� ���� �ڵ�
+        //���̾���?â�� ���� ���� �ڵ�
         timeUI_night.transform.SetAsLastSibling();
         timeUI_Afternoon_Image.fillAmount = 1f;
         timeUI_night.SetActive(false);
@@ -288,7 +291,7 @@ public class GameManager : MonoBehaviour
         shootBtn.SetActive(false);
         timeState = TimeState.nightEnd;
         groundSpeed = 10f;
-        //���̾��Ű â�� ���� ���� �ڵ�
+        //���̾���?â�� ���� ���� �ڵ�
         timeUI_afternoon.transform.SetAsLastSibling();
         timeUI_Night_Image.fillAmount = 1f;
         StartCoroutine(NightEnd());

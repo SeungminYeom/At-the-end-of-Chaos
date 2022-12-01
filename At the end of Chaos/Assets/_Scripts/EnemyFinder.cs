@@ -36,7 +36,7 @@ public class EnemyFinder : MonoBehaviour
             viewPos = new Vector3(transform.position.x, 0, transform.position.z);
             Physics.SphereCast(viewPos, rayDeg, transform.forward, out RaycastHit hit, Gun.range, targetMask);
             //Physics.Raycast(viewPos, transform.forward, out RaycastHit hit, Gun.range, targetMask);
-            Debug.DrawRay(viewPos, transform.forward * Gun.range, Color.red);
+            //Debug.DrawRay(viewPos, transform.forward * Gun.range, Color.red);
 
             if (hit.collider != null)
                 target = hit.transform;
