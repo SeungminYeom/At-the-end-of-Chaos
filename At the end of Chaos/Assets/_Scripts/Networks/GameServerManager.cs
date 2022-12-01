@@ -15,7 +15,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     public static GameServerManager instance = null;
 
     public PhotonView pv;
-    GameObject lobbyObject;
     GameObject mainCamera;
     public GameObject player;
 
@@ -29,8 +28,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     //플레이어 준비 상태 저장용
     public bool[] playersReady;
     Hashtable[] otherPlayerProps;
-
-
 
     void Awake()
     {
@@ -60,6 +57,8 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "isReady", false } }); //플레이어 각각의 Ready 상태
         PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { "waitToSync", true} }); //현재 Sync를 위해 Wait중인가?
         PhotonNetwork.CurrentRoom.IsOpen = false; //방에 못들어오게 잠근다.
+
+        
     }
 
     void Update()
@@ -114,6 +113,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         player = PhotonNetwork.Instantiate("Player_" + _num, Vector3.zero, Quaternion.identity);
         //카메라는 current player를 따라가도록 설정
         mainCamera.GetComponent<CameraMovement>().player = player;
+
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)

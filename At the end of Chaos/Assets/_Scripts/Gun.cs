@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using Photon.Pun;
 using TMPro;
+using UnityEngine.Rendering.UI;
 
 public class Gun : MonoBehaviour
 {
@@ -31,6 +32,10 @@ public class Gun : MonoBehaviour
     Transform gun;
     Vector3 gunPos;
     Vector3 hitOffsetPos;
+
+    BulletTrailManager bulletTrailManager;
+  
+
 
     GunType typeOnHand
     {
@@ -60,11 +65,13 @@ public class Gun : MonoBehaviour
         testSp = GameObject.Find("Target");
         gun = GameServerManager.instance.player.transform.Find("Pistol");
         gunPos = gun.GetChild(0).position;
+
+        bulletTrailManager = GameObject.Find("BulletTrailsPool").GetComponent<BulletTrailManager>();
     }
 
     void Update()
     {
-        Transform gun = GameServerManager.instance.player.transform.Find("Pistol");
+        Transform gun = GameServerManager.instance.player.transform.Find("Pistol"); //총의 Transform을 얻어와 저장
         Vector3 gunPos = gun.GetChild(0).position;
         Vector3 linePos = new Vector3(gunPos.x, 0f, gunPos.z); //좀비는 아래에 있으니깐 아래에서 쏜다.
         if (Physics.Raycast(linePos, transform.forward, out hit, range, layerMask))
@@ -75,6 +82,16 @@ public class Gun : MonoBehaviour
             testSp.transform.position = hit.collider.transform.position;
             gun.LookAt(hitOffsetPos);
             //총도 대상을 바라본다.
+
+            if (GameManager.instance.timeState == TimeState.night && rounds > 0)
+            {
+                if (CrossPlatformInputManager.GetButtonDown("Shoot"))
+                {
+                    bulletTrailManager.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hit.collider.transform.position);
+                    //gameObject.GetComponent<PlayerMovement>().pv.RPC("Shoot", Photon.Pun.RpcTarget.All);
+                }
+            }
+
         } else {
             r = new Ray(transform.position, transform.forward);
             Vector3 rangeInGround = new Vector3(r.GetPoint(range).x, 0, r.GetPoint(range).z);
@@ -85,17 +102,7 @@ public class Gun : MonoBehaviour
             gun.LookAt(rangeInGround);
         }
         
-        if (GameManager.instance.timeState == TimeState.night && rounds > 0)
-        {
-            if (CrossPlatformInputManager.GetButtonDown("Shoot") && gameObject.GetComponent<PlayerMovement>().pv.IsMine)
-            {
-                //PlayerMovement�� View�� ���ؼ� Shoot���� ����
-                gameObject.GetComponent<PlayerMovement>().pv.RPC("Shoot", Photon.Pun.RpcTarget.All);
-                //Shoot();
-            }
-            //if (Input.GetKeyDown(KeyCode.Space))
-                
-        }
+        
     }
 
     [PunRPC]
