@@ -25,10 +25,24 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     public UnityEngine.UI.Button b1, b2, b3, b4;
     bool characterSelected = false;
 
+    public GameObject pauseUI;
+
     //플레이어 준비 상태 저장용
     public bool[] playersReady;
     Hashtable[] otherPlayerProps;
 
+    private void OnApplicationFocus(bool focus)
+    {
+        Debug.Log("FOCUS" + focus);
+        if (focus)
+        {
+            GameServerManager.instance.pv.RPC("ResumeGame", RpcTarget.AllBuffered);
+        } else
+        {
+            GameServerManager.instance.pv.RPC("PauseGame", RpcTarget.AllBuffered);
+        }
+        
+    }
     void Awake()
     {
         if (instance == null)
@@ -58,7 +72,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { "waitToSync", true} }); //현재 Sync를 위해 Wait중인가?
         PhotonNetwork.CurrentRoom.IsOpen = false; //방에 못들어오게 잠근다.
 
-        
+        characterSelectUI.SetActive(true);
     }
 
     void Update()
@@ -121,28 +135,64 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         //현재 방의 상태가 Sync대기중이면서, 모든 플레이어가 Ready상태일때만 작동
         if ((bool)PhotonNetwork.CurrentRoom.CustomProperties["waitToSync"] && AllPlayerReady) 
         {
+            IReady = false;
+
+            /* %%% 여기 있는 행동들은 해당 state가 종료된 다음에 호출됨 %%% */
+
             switch (GameManager.instance.timeState)
             {
                 case TimeState.none:
+                    //시작시에만 사용됨
                     break;
+
                 case TimeState.characterSelect:
-                    pv.RPC("StartGame", RpcTarget.AllBuffered);
+                    #region initPlayername
+                    //각 클라이언트들이 만든 플레이어를 전부 찾아서
+                    GameObject[] pGO = GameObject.FindGameObjectsWithTag("Player");
+  
+                    for (int i = 0; i < pGO.Length; i++)
+                    {
+                        //Players 아래에 전부 넣어준다.
+                        pGO[i].transform.parent = players.transform;
+                        //그리고 주인의 이름을 달아준다.
+                        pGO[i].GetComponentInChildren<TextMesh>().text = pGO[i].GetComponent<PhotonView>().Owner.NickName;
+                    }
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "isReady", false } });
+                    characterSelectUI.SetActive(false);
+                    #endregion
+                    GameManager.instance.timeState = TimeState.nightStart;
                     break;
+
                 case TimeState.startPhase:
+                    //1회만 사용됨
                     break;
+
                 case TimeState.afternoon:
+                    GameManager.instance.timeState = TimeState.upgrade;
                     break;
+
                 case TimeState.upgrade:
+                    GameManager.instance.timeState = TimeState.nightStart;
                     break;
+
                 case TimeState.nightStart:
+                    GameManager.instance.timeState = TimeState.night;
                     break;
+
                 case TimeState.night:
+                    GameManager.instance.timeState = TimeState.nightEnd;
                     break;
+
                 case TimeState.nightEnd:
+                    GameManager.instance.timeState = TimeState.afternoon;
                     break;
+
                 default:
                     break;
             }
+
+            //위에서 정해준 State를 가지고 Manager에서 처리
+            GameManager.instance.StartCoroutine(GameManager.instance.WaitDuration());
         }
         //Debug.Log("CHANGED : " + targetPlayer.NickName + " -> " + changedProps.Keys);
         
@@ -161,24 +211,13 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     }
 
 
-    #region PRCs
-    [PunRPC]
     public void StartGame()
     {
-        //각 클라이언트들이 만든 플레이어를 전부 찾아서
-        GameObject[] pGO = GameObject.FindGameObjectsWithTag("Player");
-        for (int i = 0; i < pGO.Length; i++)
-        {
-            //Players 아래에 전부 넣어준다.
-            pGO[i].transform.parent = players.transform;
-            //그리고 주인의 이름을 달아준다.
-            pGO[i].GetComponentInChildren<TextMesh>().text = pGO[i].GetComponent<PhotonView>().Owner.NickName;
-        }
-        PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "isReady", false } });
-        characterSelectUI.SetActive(false);
-        GameManager.instance.timeState = TimeState.startPhase;
+        
     }
 
+
+    #region PRCs
     [PunRPC]
     public void SelectCharactor(int _num, string _nick)
     {
@@ -259,4 +298,24 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
     #endregion
+
+    [PunRPC]
+    void PauseGame()
+    {
+        pauseUI.SetActive(true);
+        Debug.Log("PAUSED");
+        Time.timeScale = 0.001f;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        
+    }
+
+    [PunRPC]
+    void ResumeGame()
+    {
+        pauseUI.SetActive(false);
+        Debug.Log("RESUMED");
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        
+    }
 }

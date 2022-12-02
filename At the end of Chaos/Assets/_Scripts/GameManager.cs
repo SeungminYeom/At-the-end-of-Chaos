@@ -9,9 +9,9 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public enum TimeState
 {
-    none, //�ε��� ���?
-    characterSelect, //ĳ���� ����â
-    startPhase, //ĳ���� ������ �ε���
+    none,
+    characterSelect,
+    startPhase,
     afternoon,
     upgrade,
     nightStart,
@@ -52,6 +52,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] float timeNightValue = 120f;
     [SerializeField] float timeNightStartValue = 3f;
     [SerializeField] float timeNightEndValue = 3;
+
+    WaitForSeconds wfs_Afternoon;
+    WaitForSeconds wfs_Upgrade;
+    WaitForSeconds wfs_Night;
+    WaitForSeconds wfs_NightStart;
+    WaitForSeconds wfs_NightEnd;
 
     [Header("LightSetting")]
     [SerializeField] float dayLightColor = 5000f;
@@ -97,14 +103,14 @@ public class GameManager : MonoBehaviour
         set
         {
 
-            //���� �߰�
+            //열차 추가
             if (value - 1 == _trainCount)
             {
                 if (_trainCount >= maxTrainCount) return;
                 GameObject.Find("TrainManager").gameObject.SendMessage("AddTrain", _trainCount);
                 _trainCount = value;
             }
-            //���� ����
+            //열차 감소
             else if (value + 1 == _trainCount)
             {
                 if (_trainCount <= 0) return;
@@ -144,9 +150,15 @@ public class GameManager : MonoBehaviour
         timeUI_Afternoon_Image = timeUI_afternoon.GetComponent<Image>();
         timeUI_Night_Image = timeUI_night.GetComponent<Image>();
         trainCount = 2;
-        //GameServer�� �غ�Ǳ�?���� �Ѿ�� ������ �־ ���?��ٷȴٰ�?�Ѿ��.
         timeState = TimeState.none;
         StartCoroutine(LoadDelay());
+        
+        //재할당 회피용
+        wfs_Afternoon = new WaitForSeconds(timeAfternoonValue);
+        wfs_Upgrade = new WaitForSeconds(timeUpgradeValue);
+        wfs_Night = new WaitForSeconds(timeNightValue);
+        wfs_NightStart = new WaitForSeconds(timeNightStartValue);
+        wfs_NightEnd = new WaitForSeconds(timeNightEndValue);
 
         spawnZombie = ZombieManager.instance.SpawnZombie();
         GameObject.Find("TrainManager").gameObject.SendMessage("SortTrain", trainCount - 1);
@@ -154,7 +166,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        Time.timeScale = timeScale;
+        //Time.timeScale = timeScale;
         //if (trainStarted)
         //{
         //    timec += Time.deltaTime;
@@ -170,11 +182,6 @@ public class GameManager : MonoBehaviour
 
         switch (timeState)
         {
-            case TimeState.startPhase:
-                timeState = TimeState.nightStart;
-                StartCoroutine(NightStart());
-                break;
-
             case TimeState.afternoon:
                 timeUI_Afternoon_Image.fillAmount = (float)((stateStartTime - Time.time) / timeAfternoonValue);
                 break;
@@ -231,90 +238,176 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator FromAfternoonToUpgrade()
+    public IEnumerator WaitDuration()
     {
-        stateStartTime = Time.time + timeAfternoonValue;
-        yield return new WaitForSeconds(timeAfternoonValue);
-        joystick.SetActive(false);
-        shootBtn.SetActive(false);
-        timeState = TimeState.upgrade;
-        //Time.timeScale = 0;
-        //���̾���?â�� ���� ���� �ڵ�
-        timeUI_night.transform.SetAsLastSibling();
-        timeUI_Afternoon_Image.fillAmount = 1f;
-        timeUI_night.SetActive(false);
-        timeUI_afternoon.SetActive(false);
-        select_UI.SetActive(true);
-        StartCoroutine(FromUpgradeToNight());
-    }
 
-    IEnumerator FromUpgradeToNight()
-    {
-        stateStartTime = Time.time + timeUpgradeValue;
-        yield return new WaitForSeconds(timeUpgradeValue);
-        timeState = TimeState.nightStart;
-        //Time.timeScale = 1;
-        //TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
-        //GameObject player = GameObject.Find("Player");
-        //player.transform.parent = tm.trains[trainCount - 1].transform;
-        timeUI_night.SetActive(true);
-        timeUI_afternoon.SetActive(true);
-        select_UI.SetActive(false);
-        for (int i = 0; i < resourcePool.Count; i++)
+        /* %%% 여기 있는 행동들은 해당 state가 시작되기 전에 호출됨 %%% */
+
+        switch (timeState)
         {
-            Destroy(resourcePool[i]);
+            case TimeState.none:
+                //호출될일 없음
+                break;
+
+            case TimeState.characterSelect:
+                //~
+                break;
+
+            case TimeState.startPhase:
+                //호출될일 없음
+                break;
+
+            case TimeState.afternoon:
+                CrossPlatformInputManager.SetButtonUp("Shoot");
+                StopCoroutine(spawnZombie);
+                joystick.SetActive(true);
+                groundSpeed = 0f;
+                SpawnResource();
+                TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
+                yield return wfs_Afternoon;
+                GameServerManager.instance.IReady = true;
+                break;
+
+            case TimeState.upgrade:
+                joystick.SetActive(false);
+                shootBtn.SetActive(false);
+                timeUI_night.transform.SetAsLastSibling();
+                timeUI_Afternoon_Image.fillAmount = 1f;
+                timeUI_night.SetActive(false);
+                timeUI_afternoon.SetActive(false);
+                select_UI.SetActive(true);
+
+                yield return wfs_Upgrade; //없애고 다른 조건으로 바꿔야함
+                GameServerManager.instance.IReady = true; //없애고 다른 조건으로 바꿔야함
+                break;
+
+            case TimeState.nightStart:
+
+                timeUI_night.SetActive(true);
+                timeUI_afternoon.SetActive(true);
+                select_UI.SetActive(false);
+                for (int i = 0; i < resourcePool.Count; i++)
+                {
+                    Destroy(resourcePool[i]);
+                }
+                resourcePool.Clear();
+
+                TrainStart();
+                stateStartTime = Time.time;
+                yield return wfs_NightStart;
+                GameServerManager.instance.IReady = true;
+                break;
+
+            case TimeState.night:
+                stateStartTime = Time.time + timeNightValue;
+                StartCoroutine(spawnZombie);
+                joystick.SetActive(true);
+                shootBtn.SetActive(true);
+                stage++;
+                yield return wfs_Night;
+                GameServerManager.instance.IReady = true;
+                break;
+
+            case TimeState.nightEnd:
+                stateStartTime = Time.time;
+                joystick.SetActive(false);
+                shootBtn.SetActive(false);
+                groundSpeed = 10f;
+                timeUI_afternoon.transform.SetAsLastSibling();
+                timeUI_Night_Image.fillAmount = 1f;
+                yield return wfs_NightEnd;
+                GameServerManager.instance.IReady = true;
+                break;
+
+            default:
+                break;
         }
-        resourcePool.Clear();
-        //player.transform.position = player.transform.parent.position + new Vector3(0, 2.5f, 0);
-
-        StartCoroutine(NightStart());
     }
 
-    IEnumerator NightStart()
-    {
-        TrainStart();
-        stateStartTime = Time.time;
-        yield return new WaitForSeconds(timeNightStartValue);
-        StartCoroutine(spawnZombie);
-        joystick.SetActive(true);
-        shootBtn.SetActive(true);
-        timeState = TimeState.night;
-        stage++;
-        StartCoroutine(FromNightToAfternoon());
-    }
+    //IEnumerator FromAfternoonToUpgrade()
+    //{
+    //    stateStartTime = Time.time + timeAfternoonValue;
+    //    yield return new WaitForSeconds(timeAfternoonValue);
+    //    joystick.SetActive(false);
+    //    shootBtn.SetActive(false);
+    //    timeState = TimeState.upgrade;
+    //    //Time.timeScale = 0;
+    //    //占쏙옙占싱억옙占신?창占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙 占쌘듸옙
+    //    timeUI_night.transform.SetAsLastSibling();
+    //    timeUI_Afternoon_Image.fillAmount = 1f;
+    //    timeUI_night.SetActive(false);
+    //    timeUI_afternoon.SetActive(false);
+    //    select_UI.SetActive(true);
+    //    StartCoroutine(FromUpgradeToNight());
+    //}
 
-    IEnumerator FromNightToAfternoon()
-    {
-        stateStartTime = Time.time + timeNightValue;
-        yield return new WaitForSeconds(timeNightValue);
-        joystick.SetActive(false);
-        shootBtn.SetActive(false);
-        timeState = TimeState.nightEnd;
-        groundSpeed = 10f;
-        //���̾���?â�� ���� ���� �ڵ�
-        timeUI_afternoon.transform.SetAsLastSibling();
-        timeUI_Night_Image.fillAmount = 1f;
-        StartCoroutine(NightEnd());
-    }
+    //IEnumerator FromUpgradeToNight()
+    //{
+    //    stateStartTime = Time.time + timeUpgradeValue;
+    //    yield return new WaitForSeconds(timeUpgradeValue);
+    //    timeState = TimeState.nightStart;
+    //    //Time.timeScale = 1;
+    //    //TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
+    //    //GameObject player = GameObject.Find("Player");
+    //    //player.transform.parent = tm.trains[trainCount - 1].transform;
+    //    timeUI_night.SetActive(true);
+    //    timeUI_afternoon.SetActive(true);
+    //    select_UI.SetActive(false);
+    //    for (int i = 0; i < resourcePool.Count; i++)
+    //    {
+    //        Destroy(resourcePool[i]);
+    //    }
+    //    resourcePool.Clear();
+    //    //player.transform.position = player.transform.parent.position + new Vector3(0, 2.5f, 0);
 
-    IEnumerator NightEnd()
-    {
-        stateStartTime = Time.time;
-        yield return new WaitForSeconds(timeNightEndValue);
-        CrossPlatformInputManager.SetButtonUp("Shoot");
-        StopCoroutine(spawnZombie);
-        joystick.SetActive(true);
-        //shootBtn.SetActive(true);
-        timeState = TimeState.afternoon;
-        groundSpeed = 0f;
-        SpawnResource();
-        TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
-        StartCoroutine(FromAfternoonToUpgrade());
-    }
+    //    StartCoroutine(NightStart());
+    //}
+
+    //public IEnumerator NightStart()
+    //{
+    //    TrainStart();
+    //    stateStartTime = Time.time;
+    //    yield return new WaitForSeconds(timeNightStartValue);
+    //    StartCoroutine(spawnZombie);
+    //    joystick.SetActive(true);
+    //    shootBtn.SetActive(true);
+    //    timeState = TimeState.night;
+    //    stage++;
+    //    StartCoroutine(FromNightToAfternoon());
+    //}
+
+    //IEnumerator FromNightToAfternoon()
+    //{
+    //    stateStartTime = Time.time + timeNightValue;
+    //    yield return new WaitForSeconds(timeNightValue);
+    //    joystick.SetActive(false);
+    //    shootBtn.SetActive(false);
+    //    timeState = TimeState.nightEnd;
+    //    groundSpeed = 10f;
+    //    //占쏙옙占싱억옙占신?창占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙 占쌘듸옙
+    //    timeUI_afternoon.transform.SetAsLastSibling();
+    //    timeUI_Night_Image.fillAmount = 1f;
+    //    StartCoroutine(NightEnd());
+    //}
+
+    //IEnumerator NightEnd()
+    //{
+    //    stateStartTime = Time.time;
+    //    yield return new WaitForSeconds(timeNightEndValue);
+    //    CrossPlatformInputManager.SetButtonUp("Shoot");
+    //    StopCoroutine(spawnZombie);
+    //    joystick.SetActive(true);
+    //    //shootBtn.SetActive(true);
+    //    timeState = TimeState.afternoon;
+    //    groundSpeed = 0f;
+    //    SpawnResource();
+    //    TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
+    //    StartCoroutine(FromAfternoonToUpgrade());
+    //}
 
     IEnumerator LoadDelay()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         timeState = TimeState.characterSelect;
     }
 
@@ -331,9 +424,10 @@ public class GameManager : MonoBehaviour
 
     public void inCreaseResource(int _wood, int _iron)
     {
-        Debug.Log("���� : " + _wood + ", " + _iron);
+        Debug.Log("占쏙옙占쏙옙 : " + _wood + ", " + _iron);
         woodResource += _wood;
         ironResource += _iron;
     }
 
+    
 }
