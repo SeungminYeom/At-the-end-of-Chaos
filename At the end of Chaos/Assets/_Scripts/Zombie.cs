@@ -12,8 +12,8 @@ public class Zombie : MonoBehaviourPun, IPunObservable
     [SerializeField] GameObject target;
 
     [SerializeField]
-    int health = 10;
-    float def = 0;
+    int health;
+    float def;
 
     [SerializeField] float speed;
     int attackPoint;
@@ -28,6 +28,8 @@ public class Zombie : MonoBehaviourPun, IPunObservable
 
     void Start()
     {
+        health = ((int)ZombieManager.instance.health);
+        def = ZombieManager.instance.def;
         train = GameObject.Find("TrainManager");
         rigid = GetComponent<Rigidbody>();
         pv = GetComponent<PhotonView>();
@@ -43,14 +45,15 @@ public class Zombie : MonoBehaviourPun, IPunObservable
         target = train.GetComponent<TrainManager>().GetTrain(GameManager.instance.trainCount);
         Vector3 zombieToTarget = target.transform.position - transform.position;
         transform.rotation = Quaternion.Euler(new Vector3(0, Mathf.Atan2(zombieToTarget.x, zombieToTarget.z) * Mathf.Rad2Deg, 0));
-        if (GameManager.instance.timeState == TimeState.nightStart)
-        {
-            Stronger();
-        }
-        else if (GameManager.instance.timeState != TimeState.night)
-        {
-            Die();
-        }
+        //if (GameManager.instance.timeState == TimeState.nightStart)
+        //{
+        //    Debug.Log("STR");
+        //    Stronger();
+        //}
+        //else if (GameManager.instance.timeState != TimeState.night)
+        //{
+        //    Die();
+        //}
     }
 
     private void FixedUpdate()
@@ -94,17 +97,12 @@ public class Zombie : MonoBehaviourPun, IPunObservable
     //    if (health <= 0) Die();
     //}
 
-    void Die()
+    public void Die()
     {
         StopAllCoroutines();
         PhotonNetwork.Destroy(gameObject);
     }
 
-    void Stronger()
-    {
-        health = (int)(health * 1.1f);
-        def += 0.1f;
-    }
 
     [PunRPC]
     void AttackFromPlayer(float damage, float pierce, Vector3 vec)

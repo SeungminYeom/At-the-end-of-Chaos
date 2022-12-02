@@ -13684,6 +13684,8 @@ MonoBehaviour:
   zombieList: []
   spawnDistance: 14
   spawnTimeInterval: 1
+  health: 10
+  def: 0
 --- !u!4 &1666303715
 Transform:
   m_ObjectHideFlags: 0

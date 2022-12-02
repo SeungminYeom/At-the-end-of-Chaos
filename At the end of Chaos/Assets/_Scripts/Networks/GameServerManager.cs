@@ -303,9 +303,8 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     void PauseGame()
     {
         pauseUI.SetActive(true);
-        Debug.Log("PAUSED");
         Time.timeScale = 0.001f;
-        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        Time.fixedDeltaTime = 0;
         
     }
 
@@ -313,7 +312,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     void ResumeGame()
     {
         pauseUI.SetActive(false);
-        Debug.Log("RESUMED");
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
         

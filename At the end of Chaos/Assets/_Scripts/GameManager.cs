@@ -190,6 +190,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.nightStart:
+                
                 groundSpeed = Mathf.Lerp(0, 10f, (float)(Time.time - stateStartTime) / (timeNightStartValue - 1f));
                 dirLight.colorTemperature = Mathf.Lerp(dayLightColor, nightLightColor,
                                                         (float)(Time.time - stateStartTime) / (timeNightStartValue - 1f));
@@ -259,7 +260,6 @@ public class GameManager : MonoBehaviour
 
             case TimeState.afternoon:
                 CrossPlatformInputManager.SetButtonUp("Shoot");
-                StopCoroutine(spawnZombie);
                 joystick.SetActive(true);
                 groundSpeed = 0f;
                 SpawnResource();
@@ -282,7 +282,6 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.nightStart:
-
                 timeUI_night.SetActive(true);
                 timeUI_afternoon.SetActive(true);
                 select_UI.SetActive(false);
@@ -313,6 +312,9 @@ public class GameManager : MonoBehaviour
                 joystick.SetActive(false);
                 shootBtn.SetActive(false);
                 groundSpeed = 10f;
+                StopCoroutine(spawnZombie);
+                ZombieManager.instance.DestroyZombies();
+                ZombieManager.instance.StrongerZombies();
                 timeUI_afternoon.transform.SetAsLastSibling();
                 timeUI_Night_Image.fillAmount = 1f;
                 yield return wfs_NightEnd;
