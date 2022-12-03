@@ -20,7 +20,7 @@ public class GunManager : MonoBehaviour
 
     [SerializeField] float _gunDamage = 2;
     [SerializeField] float _gunRange = 4;
-    [SerializeField] float _gunReloadTime = 1;
+    [SerializeField] float _gunReloadTime = 2;
 
 
     public float gunDamage
@@ -64,9 +64,9 @@ public class GunManager : MonoBehaviour
         gunUseable[gunTypeNum] = true;
     }
 
-    public int GetGunRounds(int gunTypeNum)
+    public int GetGunRounds(GunType gunTypeNum)
     {
-        return gunRounds[gunTypeNum];
+        return gunRounds[(int)gunTypeNum];
     }
 
     public float GetGunRange(int gunTypeNum)

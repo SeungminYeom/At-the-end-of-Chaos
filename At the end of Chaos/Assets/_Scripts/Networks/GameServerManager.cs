@@ -36,10 +36,10 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         Debug.Log("FOCUS" + focus);
         if (focus)
         {
-            GameServerManager.instance.pv.RPC("ResumeGame", RpcTarget.AllBuffered);
+            pv.RPC("ResumeGame", RpcTarget.AllBuffered);
         } else
         {
-            GameServerManager.instance.pv.RPC("PauseGame", RpcTarget.AllBuffered);
+            pv.RPC("PauseGame", RpcTarget.AllBuffered);
         }
         
     }
@@ -127,6 +127,9 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         player = PhotonNetwork.Instantiate("Player_" + _num, Vector3.zero, Quaternion.identity);
         //카메라는 current player를 따라가도록 설정
         mainCamera.GetComponent<CameraMovement>().player = player;
+
+        //소리는 자신이 기준으로 되야 하므로 자신의 플레이어에만 AudioListener를 추가시켜준다.
+        player.AddComponent<AudioListener>();
 
     }
 

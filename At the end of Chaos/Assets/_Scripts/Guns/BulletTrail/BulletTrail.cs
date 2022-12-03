@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class BulletTrail : MonoBehaviour
 {
-    [SerializeField] float delay = 0.1f;
+    [SerializeField] float delay = 0.03f;
 
     WaitForSeconds t;
     LineRenderer line;

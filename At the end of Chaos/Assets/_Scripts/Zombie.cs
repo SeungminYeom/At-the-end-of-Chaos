@@ -11,10 +11,8 @@ public class Zombie : MonoBehaviourPun, IPunObservable
     //공격할 대상
     [SerializeField] GameObject target;
 
-    [SerializeField]
-    int health;
-    float def;
-
+    [SerializeField] int health;
+    [SerializeField] float def;
     [SerializeField] float speed;
     int attackPoint;
 
@@ -107,9 +105,14 @@ public class Zombie : MonoBehaviourPun, IPunObservable
     [PunRPC]
     void AttackFromPlayer(float damage, float pierce, Vector3 vec)
     {
+        Debug.Log("IMHIT : " + pv.ViewID);
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().AddForce(vec.normalized * 10f, ForceMode.Impulse);
-        health -= (int)((1f - def * (1f - pierce) * damage));
+        health -= (int)((1 - (def * (1 - pierce / 100)) / 100) * damage);
+        //Debug.Log("Damage : " + "((1 - (" + def + " * (1 - " + pierce + " / 100)) / 100) * " + damage +")" + " =>(int) " + ((int)((1 - (def * (1 - pierce / 100)) / 100) * damage)) );
+        //관통력 1 = 방어력의 1% 무시
+        //방어력 1 = 공격력의 1% 무시
+        //최종 데미지는 소숫점을 버림
         if (health <= 0) Die();
     }
 

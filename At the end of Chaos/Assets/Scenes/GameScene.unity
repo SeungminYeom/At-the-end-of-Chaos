@@ -1438,7 +1438,7 @@ MonoBehaviour:
   - 2
   - 5
   - 3
-  gunRounds: 1027000005000000010000001e000000
+  gunRounds: 0a00000005000000010000001e000000
   _gunDamage: 2
   _gunRange: 3
   _gunReloadTime: 1
@@ -1730,7 +1730,7 @@ RectTransform:
   - {fileID: 552281890}
   - {fileID: 112869724}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2329,7 +2329,6 @@ GameObject:
   m_Component:
   - component: {fileID: 330585546}
   - component: {fileID: 330585545}
-  - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
   m_Layer: 0
@@ -2339,14 +2338,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &330585544
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330585543}
-  m_Enabled: 1
 --- !u!20 &330585545
 Camera:
   m_ObjectHideFlags: 0
@@ -2887,7 +2878,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &347036706
 MonoBehaviour:
@@ -4528,6 +4519,8 @@ GameObject:
   m_Component:
   - component: {fileID: 585556800}
   - component: {fileID: 585556801}
+  - component: {fileID: 585556802}
+  - component: {fileID: 585556803}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4589,6 +4582,35 @@ MonoBehaviour:
   IronResource: {fileID: 7165729110340431487, guid: ad7191d3c4547ae4f8e8b51b7f168ade,
     type: 3}
   timeScale: 1
+--- !u!114 &585556802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585556798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99f8dbb3392414c4598a2fb031571245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pistolFire: []
+  pistolCocking: []
+  pistolRM: []
+  pistolIM: []
+--- !u!114 &585556803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585556798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d67ecd936ae01634e84a70f51b0ad984, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunSpark: {fileID: 0}
 --- !u!1 &610437376
 GameObject:
   m_ObjectHideFlags: 0
@@ -12959,7 +12981,7 @@ Transform:
   m_Children:
   - {fileID: 1614491160}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1579413945
 GameObject:
@@ -15838,7 +15860,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1966387100
 GameObject:

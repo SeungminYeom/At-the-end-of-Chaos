@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Train : MonoBehaviour
 {
-    [SerializeField] int health = 10;
+    int health = 1000;
     [SerializeField] bool invincible;
 
     void Start()

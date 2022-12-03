@@ -5,6 +5,8 @@ using UnityEditor;
 using UnityEngine;
 using Photon.Pun;
 using ExitGames.Client.Photon.StructWrapping;
+using Unity.VisualScripting;
+using System;
 
 public class ZombieManager : MonoBehaviour
 {
@@ -19,8 +21,8 @@ public class ZombieManager : MonoBehaviour
     [SerializeField] float spawnDistance;
     [SerializeField] float spawnTimeInterval = 1f;
 
-    [SerializeField] public float health = 10;
-    [SerializeField] public float def = 0;
+    [NonSerialized] public float health = 100;
+    [NonSerialized] public float def = 1;
 
     GameObject zombieAnchor;
 
@@ -50,11 +52,11 @@ public class ZombieManager : MonoBehaviour
         {
             while (true)
             {
-                int angle = Random.Range(0, 360);
+                int angle = UnityEngine.Random.Range(0, 360);
                 float x = Mathf.Cos(angle * Mathf.Deg2Rad) * spawnDistance;
                 float z = Mathf.Sin(angle * Mathf.Deg2Rad) * spawnDistance;
                 Vector3 pos = trainManager.GetTrain(GameManager.instance.trainCount).transform.position + new Vector3(x, 1f, z);
-                zombieList.Add(PhotonNetwork.InstantiateRoomObject(idleZombie[Random.Range(0, 3)], pos, Quaternion.identity));
+                zombieList.Add(PhotonNetwork.InstantiateRoomObject(idleZombie[UnityEngine.Random.Range(0, 3)], pos, Quaternion.identity));
                 zombieList[zombieList.Count - 1].transform.parent = zombieAnchor.transform;
                 yield return new WaitForSeconds(spawnTimeInterval);
             }
@@ -72,6 +74,7 @@ public class ZombieManager : MonoBehaviour
     public void StrongerZombies()
     {
         health *= 1.1f;
-        def += 0.1f;
+        //def += 0.1f;
+        //난이도 조절은 체력만으로 하고 방어력은 특수 좀비가 갖는다.
     }
 }

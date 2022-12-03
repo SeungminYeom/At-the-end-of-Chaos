@@ -78,6 +78,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] float timeScale = 1f;
 
+    Gun gun;
+
     IEnumerator spawnZombie;
 
     public int seed
@@ -293,6 +295,8 @@ public class GameManager : MonoBehaviour
 
                 TrainStart();
                 stateStartTime = Time.time;
+                gun.testSp.SetActive(true);
+                gun.targetingLazer.enabled = true;
                 yield return wfs_NightStart;
                 GameServerManager.instance.IReady = true;
                 break;
@@ -317,6 +321,8 @@ public class GameManager : MonoBehaviour
                 ZombieManager.instance.StrongerZombies();
                 timeUI_afternoon.transform.SetAsLastSibling();
                 timeUI_Night_Image.fillAmount = 1f;
+                gun.testSp.SetActive(false);
+                gun.targetingLazer.enabled = false;
                 yield return wfs_NightEnd;
                 GameServerManager.instance.IReady = true;
                 break;
@@ -431,5 +437,8 @@ public class GameManager : MonoBehaviour
         ironResource += _iron;
     }
 
-    
+    public void gunLocate(Gun _gun)
+    {
+        gun = _gun;
+    }
 }
