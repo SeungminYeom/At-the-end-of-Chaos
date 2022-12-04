@@ -269,6 +269,7 @@ public class GameManager : MonoBehaviour
                 groundSpeed = 0f;
                 SpawnResource();
                 TrainManager tm = GameObject.Find("TrainManager").GetComponent<TrainManager>();
+                GameServerManager.instance.player.GetComponent<Gun>().Armoury(false);
                 yield return wfs_Afternoon;
                 GameServerManager.instance.IReady = true;
                 break;
@@ -323,7 +324,6 @@ public class GameManager : MonoBehaviour
                 ZombieManager.instance.StrongerZombies();
                 timeUI_afternoon.transform.SetAsLastSibling();
                 timeUI_Night_Image.fillAmount = 1f;
-                GameServerManager.instance.player.GetComponent<Gun>().Armoury(false);
                 yield return wfs_NightEnd;
                 GameServerManager.instance.IReady = true;
                 break;

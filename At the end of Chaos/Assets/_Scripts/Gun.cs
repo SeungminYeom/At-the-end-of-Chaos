@@ -234,8 +234,12 @@ public class Gun : MonoBehaviour
 
     IEnumerator Reload()
     {
-        targetingLazer.enabled = false;
-        testSp.SetActive(false);
+        if (pv.IsMine)
+        {
+            targetingLazer.enabled = false;
+            testSp.SetActive(false);
+        }
+        
         switch (typeOnHand)
         {
             case GunType.pistol:
