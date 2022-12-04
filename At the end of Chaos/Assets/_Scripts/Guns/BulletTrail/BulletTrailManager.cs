@@ -5,22 +5,30 @@ using UnityEngine;
 
 public class BulletTrailManager : MonoBehaviour
 {
-    [SerializeField] GameObject bulletTrailGameObject;
-    [SerializeField] int BTPoolSize;
+    public static BulletTrailManager instance;
 
     public PhotonView pv;
     GameObject[] bulletTrails;
+    GameObject bulletTrailPool;
+    public GameObject bulletTrailGameObject;
     int bulletTrailPoolSize;
+    int BTPoolSize = 5;
 
     void Start()
     {
+        instance = this;
         pv = GetComponent<PhotonView>();
 
         bulletTrailPoolSize = PhotonNetwork.CurrentRoom.PlayerCount * BTPoolSize;
+
         bulletTrails = new GameObject[bulletTrailPoolSize];
+        bulletTrailPool = new GameObject("BulletTrailsPool");
+        bulletTrailGameObject = Resources.Load<GameObject>("BulletTrail");
+        
         for (int i = 0; i < bulletTrailPoolSize; i++)
         {
             bulletTrails[i] = Instantiate(bulletTrailGameObject, Vector3.zero, Quaternion.identity);
+            bulletTrails[i].transform.parent = bulletTrailPool.transform;
         }
     }
 

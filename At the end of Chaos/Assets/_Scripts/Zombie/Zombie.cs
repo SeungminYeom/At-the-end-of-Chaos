@@ -23,6 +23,8 @@ public class Zombie : MonoBehaviourPun, IPunObservable
 
     public PhotonView pv;
 
+    int takenDamage = 0;
+
 
     void Start()
     {
@@ -102,13 +104,16 @@ public class Zombie : MonoBehaviourPun, IPunObservable
     }
 
 
-    [PunRPC]
-    void AttackFromPlayer(float damage, float pierce, Vector3 vec)
+    public void AttackFromPlayer(float damage, float pierce, Vector3 vec)
     {
-        Debug.Log("IMHIT : " + pv.ViewID);
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().AddForce(vec.normalized * 10f, ForceMode.Impulse);
-        health -= (int)((1 - (def * (1 - pierce / 100)) / 100) * damage);
+
+        takenDamage = (int)((1 - (def * (1 - pierce / 100)) / 100) * damage);
+        health -= takenDamage;
+
+        DamageDisplayManager.instance.Display(takenDamage, transform.position);
+
         //Debug.Log("Damage : " + "((1 - (" + def + " * (1 - " + pierce + " / 100)) / 100) * " + damage +")" + " =>(int) " + ((int)((1 - (def * (1 - pierce / 100)) / 100) * damage)) );
         //관통력 1 = 방어력의 1% 무시
         //방어력 1 = 공격력의 1% 무시

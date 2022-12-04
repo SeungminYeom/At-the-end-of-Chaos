@@ -1,20 +1,43 @@
+using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VFXPlayer : MonoBehaviour
+public class VFXPlayer : MonoBehaviourPun
 {
+    public enum vfx
+    {
+        gunSpark
+    }
+
     public static VFXPlayer instance;
-    public ParticleSystem gunSpark;
+    public PhotonView pv;
+
+    public List<ParticleSystem> particlesPool;
+
+
+    [SerializeField] float destroyDelay = 2f;
+    WaitForSeconds destroyTime;
     void Start()
     {
         instance = this;
+        pv = GameServerManager.instance.pv;
 
-        gunSpark = Resources.LoadAll<GameObject>("VFX/Gun/GunSpark")[0].GetComponent<ParticleSystem>();
+        destroyTime = new WaitForSeconds(destroyDelay);
+
+        particlesPool.Add(Resources.LoadAll<GameObject>("VFX/Gun/GunSpark")[0].GetComponent<ParticleSystem>());
     }
 
-    void Update()
+    [PunRPC] void PlayVFX(int _vfx, Vector3 _pos, Quaternion _rot)
     {
-        
+        ParticleSystem vfx = Instantiate(particlesPool[_vfx], _pos, _rot); //юс╫ц
+        StartCoroutine(DestroyObject(vfx));
+    }
+
+    IEnumerator DestroyObject(ParticleSystem _obj)
+    {
+        yield return destroyTime;
+        Destroy(_obj.gameObject);
     }
 }

@@ -52,12 +52,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] float timeNightValue = 120f;
     [SerializeField] float timeNightStartValue = 3f;
     [SerializeField] float timeNightEndValue = 3;
+    [SerializeField] float timeStartPhase = 1;
 
     WaitForSeconds wfs_Afternoon;
     WaitForSeconds wfs_Upgrade;
     WaitForSeconds wfs_Night;
     WaitForSeconds wfs_NightStart;
     WaitForSeconds wfs_NightEnd;
+    WaitForSeconds wfs_StartPhase;
 
     [Header("LightSetting")]
     [SerializeField] float dayLightColor = 5000f;
@@ -161,6 +163,7 @@ public class GameManager : MonoBehaviour
         wfs_Night = new WaitForSeconds(timeNightValue);
         wfs_NightStart = new WaitForSeconds(timeNightStartValue);
         wfs_NightEnd = new WaitForSeconds(timeNightEndValue);
+        wfs_StartPhase = new WaitForSeconds(timeStartPhase);
 
         spawnZombie = ZombieManager.instance.SpawnZombie();
         GameObject.Find("TrainManager").gameObject.SendMessage("SortTrain", trainCount - 1);
@@ -253,11 +256,11 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.characterSelect:
-                //~
                 break;
 
             case TimeState.startPhase:
-                //호출될일 없음
+                yield return wfs_StartPhase;
+                GameServerManager.instance.IReady = true;
                 break;
 
             case TimeState.afternoon:
@@ -295,8 +298,6 @@ public class GameManager : MonoBehaviour
 
                 TrainStart();
                 stateStartTime = Time.time;
-                gun.testSp.SetActive(true);
-                gun.targetingLazer.enabled = true;
                 yield return wfs_NightStart;
                 GameServerManager.instance.IReady = true;
                 break;
@@ -307,6 +308,7 @@ public class GameManager : MonoBehaviour
                 joystick.SetActive(true);
                 shootBtn.SetActive(true);
                 stage++;
+                GameServerManager.instance.player.GetComponent<Gun>().Armoury(true);
                 yield return wfs_Night;
                 GameServerManager.instance.IReady = true;
                 break;
@@ -321,8 +323,7 @@ public class GameManager : MonoBehaviour
                 ZombieManager.instance.StrongerZombies();
                 timeUI_afternoon.transform.SetAsLastSibling();
                 timeUI_Night_Image.fillAmount = 1f;
-                gun.testSp.SetActive(false);
-                gun.targetingLazer.enabled = false;
+                GameServerManager.instance.player.GetComponent<Gun>().Armoury(false);
                 yield return wfs_NightEnd;
                 GameServerManager.instance.IReady = true;
                 break;
@@ -437,8 +438,4 @@ public class GameManager : MonoBehaviour
         ironResource += _iron;
     }
 
-    public void gunLocate(Gun _gun)
-    {
-        gun = _gun;
-    }
 }

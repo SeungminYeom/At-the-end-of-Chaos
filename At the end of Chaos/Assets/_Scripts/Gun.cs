@@ -35,7 +35,6 @@ public class Gun : MonoBehaviour
     Vector3 gunPos;
     Vector3 hitOffsetPos;
 
-    BulletTrailManager bulletTrailManager;
     public LineRenderer targetingLazer;
     public GameObject testSp;
 
@@ -61,10 +60,7 @@ public class Gun : MonoBehaviour
         
         testSp = GameObject.Find("Target");
 
-        bulletTrailManager = GameObject.Find("BulletTrailsPool").GetComponent<BulletTrailManager>();
         targetingLazer = GetComponent<LineRenderer>();
-
-        GameManager.instance.gunLocate(this);
 
         StartCoroutine(Reload());
     }
@@ -79,7 +75,6 @@ public class Gun : MonoBehaviour
             linePos.y = 0; //좀비는 아래에 있으니깐 아래에서 판정선을 쏜다.
             targetingLazer.SetPosition(0, gunPos);
             r.origin = transform.position;
-
             if (
                 GameManager.instance.timeState == TimeState.night &&
                 rounds > 0 &&
@@ -98,7 +93,8 @@ public class Gun : MonoBehaviour
 
                 if (CrossPlatformInputManager.GetButtonDown("Shoot"))
                 {
-                    bulletTrailManager.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
+                    BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
+                    VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, Quaternion.Euler(r.direction));
                     pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit.collider.gameObject.GetPhotonView().ViewID);
                 }
             }
@@ -118,8 +114,9 @@ public class Gun : MonoBehaviour
                 if (CrossPlatformInputManager.GetButtonDown("Shoot"))
                 {
                     pv.RPC("Shoot", Photon.Pun.RpcTarget.All, -1);
-                    bulletTrailManager.pv.RPC("PlayEffect", RpcTarget.All, gunPos, rangeInGround);
-                    ParticleSystem spark = Instantiate(VFXPlayer.instance.gunSpark, rangeInGround, Quaternion.identity); //임시
+                    BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, rangeInGround);
+                    VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), rangeInGround, Quaternion.Inverse(gun.rotation));
+                    VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, gun.rotation);
                 }
             }
         }
@@ -127,7 +124,7 @@ public class Gun : MonoBehaviour
 
     [PunRPC] public void Shoot(int _target)
     {
-        AudioSource.PlayClipAtPoint(SoundPlayer.instance.pistolFire[Random.Range(0, SoundPlayer.instance.pistolFire.Length)], gunPos);
+        SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolFire, gunPos);
         if (_target == -1) { //아무도 못맞췄을떄
             if (--rounds <= 0)
             {
@@ -135,7 +132,7 @@ public class Gun : MonoBehaviour
             }
             return;
         }
-        Debug.Log("WHO : " + _target);
+
         float damage;
         float knockbackMul;
         GameObject target = PhotonView.Find(_target).gameObject;
@@ -146,28 +143,25 @@ public class Gun : MonoBehaviour
             case GunType.pistol:
                 damage = 30f;
                 knockbackMul = 1f;
-                target.GetComponent<Zombie>().pv.RPC("AttackFromPlayer", RpcTarget.All, damage, 0f, knockBack * knockbackMul);
                 break;
             case GunType.shotgun:
-                //Debug.Log("shotgun " + GunManager.instance.gunDamage.ToString());
                 damage = 30f;
                 knockbackMul = 1f;
-                target.GetComponent<Zombie>().pv.RPC("AttackFromPlayer", RpcTarget.All, damage, 0f, knockBack * knockbackMul);
                 break;
             case GunType.sniperRifle:
-                //Debug.Log("sniperRifle " + (GunManager.instance.gunDamage * 2).ToString());
                 damage = 30f;
                 knockbackMul = 1f;
-                target.GetComponent<Zombie>().pv.RPC("AttackFromPlayer", RpcTarget.All, damage, 0f, knockBack * knockbackMul);
                 break;
             case GunType.assaultRifle:
-                //Debug.Log("assaultRifle " + (GunManager.instance.gunDamage * 0.5f).ToString());
                 damage = 30f;
                 knockbackMul = 1f;
-                target.GetComponent<Zombie>().pv.RPC("AttackFromPlayer", RpcTarget.All, damage, 0f, knockBack * knockbackMul);
+                break;
+            default:
+                damage = 0f;
+                knockbackMul = 0;
                 break;
         }
-
+        target.GetComponent<Zombie>().AttackFromPlayer(damage, 0f, knockBack * knockbackMul);
         if (--rounds <= 0)
         {
             StartCoroutine(Reload());
@@ -246,11 +240,11 @@ public class Gun : MonoBehaviour
         {
             case GunType.pistol:
                 WaitForSeconds time = new WaitForSeconds(GunManager.instance.gunReloadTime / 3);
-                AudioSource.PlayClipAtPoint(SoundPlayer.instance.pistolRM[Random.Range(0, SoundPlayer.instance.pistolRM.Length)], gunPos);
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
                 yield return time;
-                AudioSource.PlayClipAtPoint(SoundPlayer.instance.pistolIM[Random.Range(0, SoundPlayer.instance.pistolIM.Length)], gunPos);
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolIM, gunPos);
                 yield return time;
-                AudioSource.PlayClipAtPoint(SoundPlayer.instance.pistolCocking[Random.Range(0, SoundPlayer.instance.pistolCocking.Length)], gunPos);
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolCocking, gunPos);
                 yield return time;
                 break;
             case GunType.shotgun:
@@ -286,4 +280,16 @@ public class Gun : MonoBehaviour
     //    bulletLine.enabled = false;
     //    fireLight.SetActive(false);
     //}
+
+    public void Armoury(bool _armoury)
+    {
+        if (!_armoury)
+        {
+            testSp.SetActive(false);
+            targetingLazer.enabled = false;
+        } else
+        {
+            Reload();
+        }
+    }
 }

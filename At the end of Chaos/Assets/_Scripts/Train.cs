@@ -22,6 +22,7 @@ public class Train : MonoBehaviour
         if (collision.gameObject.tag == "Zombie" && !invincible)
         {
             health -= 1;
+            SoundPlayer.instance.PlaySound(SoundPlayer.instance.TrainAttacked, collision.transform.position);
             if (health <= 0)
             {
                 StartCoroutine(trainTimeEffect());

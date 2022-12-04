@@ -31,9 +31,9 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool[] playersReady;
     Hashtable[] otherPlayerProps;
 
+    GameObject damageDisplayer;
     private void OnApplicationFocus(bool focus)
     {
-        Debug.Log("FOCUS" + focus);
         if (focus)
         {
             pv.RPC("ResumeGame", RpcTarget.AllBuffered);
@@ -149,25 +149,24 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
                     break;
 
                 case TimeState.characterSelect:
-                    #region initPlayername
+                    GameManager.instance.timeState = TimeState.startPhase;
+                    break;
+
+                case TimeState.startPhase:
                     //각 클라이언트들이 만든 플레이어를 전부 찾아서
                     GameObject[] pGO = GameObject.FindGameObjectsWithTag("Player");
-  
+
                     for (int i = 0; i < pGO.Length; i++)
                     {
                         //Players 아래에 전부 넣어준다.
                         pGO[i].transform.parent = players.transform;
                         //그리고 주인의 이름을 달아준다.
-                        pGO[i].GetComponentInChildren<TextMesh>().text = pGO[i].GetComponent<PhotonView>().Owner.NickName;
+                        pGO[i].GetComponentInChildren<TMP_Text>().text = pGO[i].GetComponent<PhotonView>().Owner.NickName;
+                        Debug.Log(pGO[i].GetComponent<PhotonView>().Owner.NickName);
                     }
                     PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "isReady", false } });
                     characterSelectUI.SetActive(false);
-                    #endregion
                     GameManager.instance.timeState = TimeState.nightStart;
-                    break;
-
-                case TimeState.startPhase:
-                    //1회만 사용됨
                     break;
 
                 case TimeState.afternoon:
@@ -211,12 +210,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             GameManager.instance.seed = (int)stream.ReceiveNext();
         }
-    }
-
-
-    public void StartGame()
-    {
-        
     }
 
 
