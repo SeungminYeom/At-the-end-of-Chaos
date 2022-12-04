@@ -26,7 +26,7 @@ public class DamageDisplayManager : MonoBehaviour
         for (int i = 0; i < damageDisplayPoolSize; i++)
         {
             damageDisplay[i] = Instantiate(damageDisplayGameObject, Vector3.zero, Quaternion.identity);
-            damageDisplay[i].transform.parent = damageDisplayPool.transform;
+            damageDisplay[i].transform.SetParent(damageDisplayPool.transform);
         }
     }
 

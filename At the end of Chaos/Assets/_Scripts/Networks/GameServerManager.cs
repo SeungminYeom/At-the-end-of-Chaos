@@ -159,7 +159,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
                     for (int i = 0; i < pGO.Length; i++)
                     {
                         //Players 아래에 전부 넣어준다.
-                        pGO[i].transform.parent = players.transform;
+                        pGO[i].transform.SetParent(players.transform);
                         //그리고 주인의 이름을 달아준다.
                         pGO[i].GetComponentInChildren<TMP_Text>().text = pGO[i].GetComponent<PhotonView>().Owner.NickName;
                         Debug.Log(pGO[i].GetComponent<PhotonView>().Owner.NickName);

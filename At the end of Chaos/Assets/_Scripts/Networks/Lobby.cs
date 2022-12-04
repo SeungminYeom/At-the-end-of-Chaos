@@ -10,6 +10,8 @@ using System.Linq;
 using Photon.Pun.UtilityScripts;
 using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.SceneManagement;
+using System.Security.Cryptography.X509Certificates;
 
 public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
 {
@@ -31,9 +33,13 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
     public TMP_InputField roomCodeInput;
     public TMP_InputField playerName;
 
+    public AsyncOperation load;
+    int loaded = 0;
+    WaitForSeconds t = new WaitForSeconds(0.1f);
+
     private void Awake()
     {
-        PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.AutomaticallySyncScene = false;
         PhotonNetwork.GameVersion = this.gameVersion;
     }
 
@@ -120,7 +126,9 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount >= requiredPlayer)
         {
-            PhotonNetwork.LoadLevel("GameScene");
+            startBtn.gameObject.SetActive(false);
+            photonView.RPC("StartLoadingScene", RpcTarget.AllBuffered, 0);
+            //PhotonNetwork.LoadLevel("GameScene");
         } else
         {
             Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount + " <= " + requiredPlayer);
@@ -251,15 +259,38 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
         }
     }
 
-    //변수 동기화
-    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    //{
-    //    if (stream.IsWriting)
-    //    {
-    //        stream.SendNext(playerNames);
-    //    } else
-    //    {
-    //        playerNames = (string[])stream.ReceiveNext();
-    //    }
-    //}
+    [PunRPC] void StartLoadingScene(int _info, PhotonMessageInfo _minfo)
+    {
+        if(_info == 0)
+        {
+            StartCoroutine(LoadingScene());
+        } else if (_info == 1)
+        {
+            GetComponent<SceneChanger>().ChangeScene();
+        } else if (_info == 2)
+        {
+            loaded++;
+            if (loaded >= PhotonNetwork.CurrentRoom.PlayerCount)
+            {
+                Debug.Log(_minfo.Sender.NickName + "Ready");
+                photonView.RPC("StartLoadingScene", RpcTarget.AllBuffered, 1);
+            }
+        }
+    }
+
+    IEnumerator LoadingScene()
+    {
+        bool loaded = false;
+        load = SceneManager.LoadSceneAsync("GameScene");
+        load.allowSceneActivation = false;
+        while (!load.isDone)
+        {
+            if (!loaded && load.progress >= 0.9f)
+            {
+                loaded = true;
+                photonView.RPC("StartLoadingScene", RpcTarget.MasterClient, 2);
+            }
+            yield return null;
+        }
+    }
 }

@@ -28,12 +28,12 @@ public class BulletTrailManager : MonoBehaviour
         for (int i = 0; i < bulletTrailPoolSize; i++)
         {
             bulletTrails[i] = Instantiate(bulletTrailGameObject, Vector3.zero, Quaternion.identity);
-            bulletTrails[i].transform.parent = bulletTrailPool.transform;
+            bulletTrails[i].transform.SetParent(bulletTrailPool.transform);
         }
     }
 
     [PunRPC] public void PlayEffect(Vector3 from, Vector3 to)
-    {
+    {   
         for (int i = 0; i < bulletTrailPoolSize; i++)
         {
             if (!bulletTrails[i].activeSelf)

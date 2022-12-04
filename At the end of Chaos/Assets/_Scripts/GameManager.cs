@@ -239,7 +239,7 @@ public class GameManager : MonoBehaviour
                 go = Instantiate(IronResource, spawnPos, Quaternion.identity);
             }
             resourcePool.Add(go);
-            go.transform.parent = parent.transform;
+            go.transform.SetParent(parent.transform);
             seed += 10;
         }
     }

@@ -13,7 +13,7 @@ public class BulletTrail : MonoBehaviour
     void Start()
     {
         t = new WaitForSeconds(delay);
-        transform.parent = GameObject.Find("BulletTrailsPool").transform;
+        transform.SetParent(GameObject.Find("BulletTrailsPool").transform);
         line = GetComponent<LineRenderer>();
         gameObject.SetActive(false);
     }
