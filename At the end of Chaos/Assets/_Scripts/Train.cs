@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Train : MonoBehaviour
 {
-    int health = 1000;
+    [SerializeField] int health = 10;
     [SerializeField] bool invincible;
 
     void Start()
@@ -23,7 +23,7 @@ public class Train : MonoBehaviour
         {
             health -= 1;
             SoundPlayer.instance.PlaySound(SoundPlayer.instance.TrainAttacked, collision.transform.position);
-            if (health <= 0)
+            if (health == 0)
             {
                 StartCoroutine(trainTimeEffect());
                 //GameManager.instance.trainCount--;
@@ -33,11 +33,39 @@ public class Train : MonoBehaviour
 
     IEnumerator trainTimeEffect()
     {
-        Time.timeScale = 0.4f;
+        float sTime = Time.time;
+        gameObject.transform.parent.Find("TrainExplosion_A").GetComponent<ParticleSystem>().Play();
+        gameObject.transform.parent.Find("TrainExplosion_B").GetComponent<ParticleSystem>().Play();
+        gameObject.transform.parent.Find("TrainExplosion_A").GetComponent<AudioSource>().Play();
+        gameObject.transform.parent.Find("TrainExplosion_B").GetComponent<AudioSource>().Play();
+        transform.Find("default").gameObject.SetActive(false);
+        Time.timeScale = 0.5f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
-        yield return new WaitForSeconds(2f);
-        Time.timeScale = 1f;
-        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        while (true)
+        {
+            if (Time.timeScale == 0.1f) break;
+            Time.timeScale = Mathf.Lerp(Time.timeScale, 0.1f, (Time.time - sTime) / 1f);
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+            yield return null;
+        }
+        Debug.Log("느리게 만들기 끝");
+
+        sTime = Time.time;
+        while (true)
+        {
+            if (Time.timeScale == 1f) break;
+            Time.timeScale = Mathf.Lerp(Time.timeScale, 1f, (Time.time - sTime) / 0.3f);
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+            Debug.Log(Time.timeScale);
+            Debug.Log(Time.time);
+            yield return null;
+        }
+        Debug.Log("빠르게 만들기 끝");
+
+        transform.Find("default").gameObject.SetActive(true);
         GameManager.instance.trainCount--;
+
+
+        yield break;
     }
 }
