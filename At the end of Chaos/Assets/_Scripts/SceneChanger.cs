@@ -12,7 +12,10 @@ public class SceneChanger : MonoBehaviour
 {
     public UnityEngine.UI.Image img;
 
-    
+    public bool isLobby;
+
+    public GameObject top, bottom;
+
     float time = 0f;
 
     Color color = Color.black; //½ÃÀÛ »ö
@@ -32,15 +35,19 @@ public class SceneChanger : MonoBehaviour
 
     IEnumerator Open()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
+        if (isLobby) yield return new WaitForSeconds(2f);
         while (color.a > 0f)
         {
             time += Time.deltaTime / fadeTime;
             color.a = Mathf.Lerp(1, 0, time);
 
-            Camera.main.transform.rotation = Quaternion.Euler(
+            if (isLobby)
+            {
+                Camera.main.transform.rotation = Quaternion.Euler(
                 start + (end - start) * (1 - Mathf.Pow(1 - time, easing))
-                , 10, 0); 
+                , 10, 0);
+            }
 
             img.color = color;
             yield return null;
@@ -50,7 +57,7 @@ public class SceneChanger : MonoBehaviour
     IEnumerator Close()
     {
         time = 0;
-        fadeTime = 2f;
+        fadeTime = 1f;
         AudioSource audio = GetComponent<AudioSource>();
 
         while (time <= fadeTime)
@@ -58,14 +65,18 @@ public class SceneChanger : MonoBehaviour
             time += Time.deltaTime / fadeTime;
             color.a = Mathf.Lerp(0, 1, time / fadeTime);
 
+            if (isLobby) audio.volume = Mathf.Lerp(1, 0, time / fadeTime);
 
-            audio.volume = Mathf.Lerp(1, 0, time / fadeTime);
 
             img.color = color;
             yield return null;
         }
-        yield return new WaitForSeconds(2f);
-        GetComponent<Lobby>().load.allowSceneActivation = true;
+        if (isLobby)
+        {
+            yield return new WaitForSeconds(2f);
+            GetComponent<Lobby>().load.allowSceneActivation = true;
+        }
+            
     }
 
     public void ChangeScene()
