@@ -12,14 +12,11 @@ public class SceneChanger : MonoBehaviour
 {
     public UnityEngine.UI.Image img;
 
-    
-    float time = 0f;
-
-    Color color = Color.black; //½ÃÀÛ »ö
-    float fadeTime = 5f; // ¹è°æ »ç¶óÁö´Â ½Ã°£
-    float start = -5f; //½ÃÀÛ½Ã °¢µµ
-    float end = 25f; //Á¾·á °¢µµ
-    float easing = 2f; // x < 1 = ease in , x > 1 ease out x = 1 linear  ///  fadeTimeÀÌ¶û ¹«°üÇÑ ½Ã°£
+    Color color = Color.black; //ì‹œì‘ ìƒ‰
+    float fadeTime = 5f; // ë°°ê²½ ì‚¬ë¼ì§€ëŠ” ì‹œê°„
+    float start = -5f; //ì‹œì‘ì‹œ ê°ë„
+    float end = 25f; //ì¢…ë£Œ ê°ë„
+    float easing = 2f; // x < 1 = ease in , x > 1 ease out x = 1 linear  ///  fadeTimeì´ë‘ ë¬´ê´€í•œ ì‹œê°„
     void Start()
     {
         StartCoroutine(Open());
@@ -32,6 +29,7 @@ public class SceneChanger : MonoBehaviour
 
     IEnumerator Open()
     {
+        float time = 0;
         yield return new WaitForSeconds(4f);
         while (color.a > 0f)
         {
@@ -49,7 +47,7 @@ public class SceneChanger : MonoBehaviour
 
     IEnumerator Close()
     {
-        time = 0;
+        float time = 0;
         fadeTime = 2f;
         AudioSource audio = GetComponent<AudioSource>();
 
@@ -57,8 +55,6 @@ public class SceneChanger : MonoBehaviour
         {
             time += Time.deltaTime / fadeTime;
             color.a = Mathf.Lerp(0, 1, time / fadeTime);
-
-
             audio.volume = Mathf.Lerp(1, 0, time / fadeTime);
 
             img.color = color;

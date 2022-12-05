@@ -31,7 +31,7 @@ public class VFXPlayer : MonoBehaviourPun
 
     [PunRPC] void PlayVFX(int _vfx, Vector3 _pos, Quaternion _rot)
     {
-        ParticleSystem vfx = Instantiate(particlesPool[_vfx], _pos, _rot); //ÀÓ½Ã
+        ParticleSystem vfx = Instantiate(particlesPool[_vfx], _pos, _rot); //ìž„ì‹œ
         StartCoroutine(DestroyObject(vfx));
     }
 

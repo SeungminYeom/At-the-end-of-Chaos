@@ -54,7 +54,7 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
     {
         if (playerName.text.Length == 0)
         {
-            PhotonNetwork.NickName = "unknown";
+            PhotonNetwork.NickName = "uid" + UnityEngine.Random.Range(0, 10) + UnityEngine.Random.Range(0, 10) + UnityEngine.Random.Range(0, 10) + UnityEngine.Random.Range(0, 10);
         }
         else
         {
@@ -212,7 +212,7 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
     {
         if (playerName.text.Length == 0)
         {
-            PhotonNetwork.NickName = "unknown";
+            PhotonNetwork.NickName = "uid" + UnityEngine.Random.Range(0, 10) + UnityEngine.Random.Range(0, 10) + UnityEngine.Random.Range(0, 10) + UnityEngine.Random.Range(0, 10);
         }
         else
         {
