@@ -11,18 +11,15 @@ using Color = UnityEngine.Color;
 public class SceneChanger : MonoBehaviour
 {
     public UnityEngine.UI.Image img;
-
     public bool isLobby;
 
     public GameObject top, bottom;
 
-    float time = 0f;
-
-    Color color = Color.black; //½ÃÀÛ »ö
-    float fadeTime = 5f; // ¹è°æ »ç¶óÁö´Â ½Ã°£
-    float start = -5f; //½ÃÀÛ½Ã °¢µµ
-    float end = 25f; //Á¾·á °¢µµ
-    float easing = 2f; // x < 1 = ease in , x > 1 ease out x = 1 linear  ///  fadeTimeÀÌ¶û ¹«°üÇÑ ½Ã°£
+    Color color = Color.black; //ì‹œì‘ ìƒ‰
+    float fadeTime = 5f; // ë°°ê²½ ì‚¬ë¼ì§€ëŠ” ì‹œê°„
+    float start = -5f; //ì‹œì‘ì‹œ ê°ë„
+    float end = 25f; //ì¢…ë£Œ ê°ë„
+    float easing = 2f; // x < 1 = ease in , x > 1 ease out x = 1 linear  ///  fadeTimeì´ë‘ ë¬´ê´€í•œ ì‹œê°„
     void Start()
     {
         StartCoroutine(Open());
