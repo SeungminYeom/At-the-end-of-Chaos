@@ -34,6 +34,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     Hashtable[] otherPlayerProps;
 
     GameObject damageDisplayer;
+    float returnTimeScale;
     private void OnApplicationFocus(bool focus)
     {
         if (focus)
@@ -320,16 +321,18 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     void PauseGame()
     {
         pauseUI.SetActive(true);
+        returnTimeScale = Time.timeScale;
         Time.timeScale = 0.001f;
-        Time.fixedDeltaTime = 0;
-        
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        //Time.fixedDeltaTime = 0;
     }
 
     [PunRPC]
     void ResumeGame()
     {
         pauseUI.SetActive(false);
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
+        Time.timeScale = returnTimeScale;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
         
     }
