@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 
 public class Gun : MonoBehaviour
 {
-    [SerializeField] GunType _typeOnHand;
+    [SerializeField] GunType typeOnHand;
     [SerializeField] int rounds; //��ź��
     [SerializeField] public static float range;
     [SerializeField] float gunShootingTime = 0.2f;
@@ -42,8 +42,6 @@ public class Gun : MonoBehaviour
     [SerializeField] Gradient dr2b;
 
 
-    GunType typeOnHand;
-
     void Start()
     {
         pv = GetComponent<PhotonView>();
@@ -55,7 +53,7 @@ public class Gun : MonoBehaviour
         sniperRifleFireTransform = transform.Find("SniperRifle").GetChild(0);
         enemyFinder = GetComponent<EnemyFinder>();
         bulletLine = GetComponent<LineRenderer>();
-        typeOnHand = GunType.pistol;
+        typeOnHand = GunType.Pistol;
         range = GunManager.instance.GetGunRange((int)typeOnHand);
         
         testSp = GameObject.Find("Target");
@@ -69,7 +67,7 @@ public class Gun : MonoBehaviour
     {
         if (pv.IsMine && rounds > 0)
         {
-            gun = gameObject.transform.Find("Pistol");
+            gun = gameObject.transform.Find(typeOnHand.ToString());
             gunPos = gun.GetChild(0).position;
             Vector3 linePos = gunPos;
             linePos.y = 0; //좀비는 아래에 있으니깐 아래에서 판정선을 쏜다.
@@ -141,19 +139,19 @@ public class Gun : MonoBehaviour
         knockBack.y = 0;
         switch (typeOnHand)
         {
-            case GunType.pistol:
+            case GunType.Pistol:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
-            case GunType.shotgun:
+            case GunType.Shotgun:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
-            case GunType.sniperRifle:
+            case GunType.SniperRifle:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
-            case GunType.assaultRifle:
+            case GunType.AssaultRifle:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
@@ -243,7 +241,7 @@ public class Gun : MonoBehaviour
         
         switch (typeOnHand)
         {
-            case GunType.pistol:
+            case GunType.Pistol:
                 WaitForSeconds time = new WaitForSeconds(GunManager.instance.gunReloadTime / 3);
                 SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
                 yield return time;
@@ -252,11 +250,11 @@ public class Gun : MonoBehaviour
                 SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolCocking, gunPos);
                 yield return time;
                 break;
-            case GunType.shotgun:
+            case GunType.Shotgun:
                 break;
-            case GunType.sniperRifle:
+            case GunType.SniperRifle:
                 break;
-            case GunType.assaultRifle:
+            case GunType.AssaultRifle:
                 break;
             default:
                 break;

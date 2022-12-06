@@ -7,6 +7,6 @@ public class Pistol : MonoBehaviour
     private void OnEnable()
     {
         if (!gameObject.activeSelf)
-            transform.parent.SendMessage("EquipGun", GunType.pistol);
+            transform.parent.SendMessage("EquipGun", GunType.Pistol);
     }
 }
