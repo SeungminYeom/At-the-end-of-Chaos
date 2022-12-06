@@ -5,6 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Shootable
+  - WoodResource
+  - IronResource
+  - Player_4
+  - Player_3
+  - Player_2
+  - Player_1
+  - Zombie
   layers:
   - Default
   - TransparentFX
@@ -12,7 +19,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Zombie
   - 
   - Lighting
   - Ground

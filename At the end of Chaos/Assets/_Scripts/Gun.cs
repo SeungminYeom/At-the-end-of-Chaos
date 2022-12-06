@@ -113,6 +113,7 @@ public class Gun : MonoBehaviour
 
                 if (CrossPlatformInputManager.GetButtonDown("Shoot"))
                 {
+                    ZombieManager.instance.StartCoroutine(ZombieManager.instance.ExplosionZombies());
                     pv.RPC("Shoot", Photon.Pun.RpcTarget.All, -1);
                     BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, rangeInGround);
                     VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), rangeInGround, Quaternion.Inverse(gun.rotation));

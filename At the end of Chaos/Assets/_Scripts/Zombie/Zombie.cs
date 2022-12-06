@@ -6,6 +6,7 @@ using UnityEngine;
 public class Zombie : MonoBehaviourPun, IPunObservable
 {
     GameObject train;
+    GameObject ground;
     Rigidbody rigid;
 
     //공격할 대상
@@ -20,6 +21,8 @@ public class Zombie : MonoBehaviourPun, IPunObservable
     float attackDelay = 1f;
     //현재 좀비의 대기 시간
     [SerializeField] float attackDelayTime;
+
+    public bool targeting = true;
 
     public PhotonView pv;
 
@@ -42,9 +45,10 @@ public class Zombie : MonoBehaviourPun, IPunObservable
         //Vector3 vec = transform.position;
         //vec.x -= Time.deltaTime * 2f;
         //transform.position = vec;
-        target = train.GetComponent<TrainManager>().GetTrain(GameManager.instance.trainCount);
-        Vector3 zombieToTarget = target.transform.position - transform.position;
-        transform.rotation = Quaternion.Euler(new Vector3(0, Mathf.Atan2(zombieToTarget.x, zombieToTarget.z) * Mathf.Rad2Deg, 0));
+            target = train.GetComponent<TrainManager>().GetTrain(GameManager.instance.trainCount);
+            Vector3 zombieToTarget = target.transform.position - transform.position;
+            transform.rotation = Quaternion.Euler(new Vector3(0, Mathf.Atan2(zombieToTarget.x, zombieToTarget.z) * Mathf.Rad2Deg, 0));
+        
         //if (GameManager.instance.timeState == TimeState.nightStart)
         //{
         //    Debug.Log("STR");
@@ -58,12 +62,15 @@ public class Zombie : MonoBehaviourPun, IPunObservable
 
     private void FixedUpdate()
     {
-        target = train.GetComponent<TrainManager>().GetTrain(GameManager.instance.trainCount);
-        Vector3 zombieToTarget = target.transform.position - transform.position;
-        //transform.position += ((target.transform.position - transform.position).normalized * speed + Vector3.left) * Time.deltaTime;
-        zombieToTarget = zombieToTarget.normalized * speed + Vector3.left;
-        zombieToTarget.y = rigid.velocity.y;
-        rigid.velocity = zombieToTarget;
+        if (targeting)
+        {
+            target = train.GetComponent<TrainManager>().GetTrain(GameManager.instance.trainCount);
+            Vector3 zombieToTarget = target.transform.position - transform.position;
+            //transform.position += ((target.transform.position - transform.position).normalized * speed + Vector3.left) * Time.deltaTime;
+            zombieToTarget = zombieToTarget.normalized * speed + Vector3.left;
+            zombieToTarget.y = rigid.velocity.y;
+            rigid.velocity = zombieToTarget;
+        }
 
         //Vector3 vec = transform.position;
         //vec.x -= Time.deltaTime;

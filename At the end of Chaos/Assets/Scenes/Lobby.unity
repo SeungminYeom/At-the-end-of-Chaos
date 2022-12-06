@@ -5963,8 +5963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   img: {fileID: 1027767368}
   isLobby: 1
-  top: {fileID: 0}
-  bottom: {fileID: 0}
+  cvs: {fileID: 0}
 --- !u!82 &1788013639
 AudioSource:
   m_ObjectHideFlags: 0

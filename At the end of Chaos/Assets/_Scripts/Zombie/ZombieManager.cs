@@ -24,6 +24,9 @@ public class ZombieManager : MonoBehaviour
     [NonSerialized] public float health = 100;
     [NonSerialized] public float def = 1;
 
+    [SerializeField] LayerMask lm;
+    [SerializeField] Collider[] colliders;
+    float a = 50000f, b = 20, c = 0;
     GameObject zombieAnchor;
 
     private void Awake()
@@ -68,6 +71,23 @@ public class ZombieManager : MonoBehaviour
         for (int i = 0; i < zombieAnchor.transform.childCount; i++)
         {
             zombieAnchor.transform.GetChild(i).GetComponent<Zombie>().Die();
+        }
+    }
+
+    public IEnumerator ExplosionZombies()
+    {
+        colliders = Physics.OverlapSphere(Vector3.zero, b, lm);
+        Debug.Log("B");
+        Vector3 vec = new Vector3(0, -5, 0);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            colliders[i].GetComponent<Zombie>().targeting = false;
+            colliders[i].GetComponent<Zombie>().GetComponent<Rigidbody>().AddExplosionForce(a, vec, b, c);
+        }
+        yield return new WaitForSeconds(3f);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            colliders[i].GetComponent<Zombie>().targeting = true;
         }
     }
 
