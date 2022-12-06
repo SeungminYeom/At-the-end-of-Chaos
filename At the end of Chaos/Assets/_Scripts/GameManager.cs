@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] float timeNightValue = 120f;
     [SerializeField] float timeNightStartValue = 3f;
     [SerializeField] float timeNightEndValue = 3;
-    [SerializeField] float timeStartPhase = 1;
+    [SerializeField] float timeStartPhase = 2;
 
     WaitForSeconds wfs_Afternoon;
     WaitForSeconds wfs_Upgrade;

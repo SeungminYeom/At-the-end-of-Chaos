@@ -3,9 +3,11 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 using WebSocketSharp;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -221,22 +223,22 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             case 1:
                 b1.interactable = false;
-                b1.GetComponentInChildren<TMP_Text>().text = _nick + "\nSelected!";
+                StartCoroutine(CloseShutter(b1.gameObject));
                 break;
 
             case 2:
                 b2.interactable = false;
-                b2.GetComponentInChildren<TMP_Text>().text = _nick + "\nSelected!";
+                StartCoroutine(CloseShutter(b2.gameObject));
                 break;
 
             case 3:
                 b3.interactable = false;
-                b3.GetComponentInChildren<TMP_Text>().text = _nick + "\nSelected!";
+                StartCoroutine(CloseShutter(b3.gameObject));
                 break;
 
             case 4:
                 b4.interactable = false;
-                b4.GetComponentInChildren<TMP_Text>().text = _nick + "\nSelected!";
+                StartCoroutine(CloseShutter(b4.gameObject));
                 break;
 
             default:
@@ -258,6 +260,25 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         private set { }
     }
 
+    IEnumerator CloseShutter(GameObject _obj)
+    {
+        Debug.Log("Cor");
+        RectTransform rt = b1.transform.GetChild(0).GetComponent<RectTransform>();
+        Vector2 vec = new Vector2(rt.offsetMax.x, -650);
+        Vector2 vec2 = new Vector2(rt.offsetMax.x, 650);
+        
+        float dtime = 0;
+        float fadeTime = 2f;
+
+        while (dtime <= fadeTime)
+        {
+            dtime += Time.deltaTime / fadeTime;
+            vec.x = vec2.x = rt.offsetMax.x;
+            var a = rt.gameObject.transform.position;
+            rt.gameObject.transform.position = Vector3.down;
+            yield return null;
+        }
+    }
     //접속중인 플레이어들의 목록을 뽑아서 isReady부분만 모아서 확인한다.
     public bool[] WeReady
     {

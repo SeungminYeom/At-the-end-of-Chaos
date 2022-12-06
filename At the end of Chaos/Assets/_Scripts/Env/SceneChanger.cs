@@ -13,6 +13,8 @@ public class SceneChanger : MonoBehaviour
     public UnityEngine.UI.Image img;
     public bool isLobby;
 
+    float time = 0;
+
     public GameObject top, bottom;
 
     Color color = Color.black; //시작 색
@@ -32,6 +34,7 @@ public class SceneChanger : MonoBehaviour
 
     IEnumerator Open()
     {
+        img.color = color;
         yield return new WaitForSeconds(2f);
         if (isLobby) yield return new WaitForSeconds(2f);
         while (color.a > 0f)

@@ -6,12 +6,8 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
-using System.Linq;
-using Photon.Pun.UtilityScripts;
-using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.SceneManagement;
-using System.Security.Cryptography.X509Certificates;
 
 public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
 {
@@ -39,6 +35,7 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
 
     private void Awake()
     {
+        //Screen.SetResolution(1170, 540, true);
         PhotonNetwork.AutomaticallySyncScene = false;
         PhotonNetwork.GameVersion = this.gameVersion;
     }
@@ -106,15 +103,16 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
         {
             if (roomCodeInput.text.Length == 5)
             {
-                connectionInfoText.text = "새 게임을 만드는중...";  
-                PhotonNetwork.CreateRoom(roomCodeInput.text, new RoomOptions {
-                                                                                MaxPlayers = 4,
-                                                                                CustomRoomProperties = new Hashtable {
+                connectionInfoText.text = "새 게임을 만드는중...";
+                PhotonNetwork.CreateRoom(roomCodeInput.text, new RoomOptions
+                {
+                    MaxPlayers = 4,
+                    CustomRoomProperties = new Hashtable {
                                                                                     { "waitToSync", false } //방 상태 Sync용
                                                                                 }
                 });
             }
-            else 
+            else
             {
                 connectionInfoText.text = "게임 코드 5자리를 입력해주세요";
             }
@@ -129,11 +127,12 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
             startBtn.gameObject.SetActive(false);
             photonView.RPC("StartLoadingScene", RpcTarget.AllBuffered, 0);
             //PhotonNetwork.LoadLevel("GameScene");
-        } else
+        }
+        else
         {
             Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount + " <= " + requiredPlayer);
         }
-        
+
     }
 
     public void Cancel()
@@ -152,7 +151,7 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
         {
             players[i].SetActive(false);
         }
-        
+
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LeaveRoom();
@@ -164,7 +163,7 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
             PhotonNetwork.LeaveRoom();
 
         }
-        
+
     }
 
     public override void OnConnectedToMaster()
@@ -259,15 +258,18 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
         }
     }
 
-    [PunRPC] void StartLoadingScene(int _info, PhotonMessageInfo _minfo)
+    [PunRPC]
+    void StartLoadingScene(int _info, PhotonMessageInfo _minfo)
     {
-        if(_info == 0)
+        if (_info == 0)
         {
             StartCoroutine(LoadingScene());
-        } else if (_info == 1)
+        }
+        else if (_info == 1)
         {
             GetComponent<SceneChanger>().ChangeScene();
-        } else if (_info == 2)
+        }
+        else if (_info == 2)
         {
             loaded++;
             if (loaded >= PhotonNetwork.CurrentRoom.PlayerCount)
