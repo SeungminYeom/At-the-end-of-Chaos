@@ -34,6 +34,7 @@ public class Train : MonoBehaviour
     IEnumerator trainTimeEffect()
     {
         float sTime = Time.time;
+        StartCoroutine(gameObject.GetComponent<TraumaInducer>().ExplosionShake());
         gameObject.transform.parent.Find("TrainExplosion_A").GetComponent<ParticleSystem>().Play();
         gameObject.transform.parent.Find("TrainExplosion_B").GetComponent<ParticleSystem>().Play();
         gameObject.transform.parent.Find("TrainExplosion_A").GetComponent<AudioSource>().Play();
