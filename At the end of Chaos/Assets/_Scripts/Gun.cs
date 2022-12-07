@@ -55,7 +55,7 @@ public class Gun : MonoBehaviour
         sniperRifleFireTransform = transform.Find("SniperRifle").GetChild(0);
         enemyFinder = GetComponent<EnemyFinder>();
         bulletLine = GetComponent<LineRenderer>();
-        typeOnHand = GunType.pistol;
+        typeOnHand = GunType.Pistol;
         range = GunManager.instance.GetGunRange((int)typeOnHand);
         
         testSp = GameObject.Find("Target");
@@ -141,19 +141,19 @@ public class Gun : MonoBehaviour
         knockBack.y = 0;
         switch (typeOnHand)
         {
-            case GunType.pistol:
+            case GunType.Pistol:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
-            case GunType.shotgun:
+            case GunType.Shotgun:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
-            case GunType.sniperRifle:
+            case GunType.SniperRifle:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
-            case GunType.assaultRifle:
+            case GunType.AssaultRifle:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
@@ -243,7 +243,7 @@ public class Gun : MonoBehaviour
         
         switch (typeOnHand)
         {
-            case GunType.pistol:
+            case GunType.Pistol:
                 WaitForSeconds time = new WaitForSeconds(GunManager.instance.gunReloadTime / 3);
                 SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
                 yield return time;
@@ -252,11 +252,11 @@ public class Gun : MonoBehaviour
                 SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolCocking, gunPos);
                 yield return time;
                 break;
-            case GunType.shotgun:
+            case GunType.Shotgun:
                 break;
-            case GunType.sniperRifle:
+            case GunType.SniperRifle:
                 break;
-            case GunType.assaultRifle:
+            case GunType.AssaultRifle:
                 break;
             default:
                 break;
