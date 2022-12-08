@@ -41,16 +41,15 @@ public class Gun : MonoBehaviour
     [SerializeField] Gradient r2b;
     [SerializeField] Gradient dr2b;
 
-
     void Start()
     {
         pv = GetComponent<PhotonView>();
 
         fireLight = transform.Find("FireLight").gameObject;
-        pistolFireTransform = transform.Find("Pistol").GetChild(0);
-        shotgunFireTransform = transform.Find("Shotgun").GetChild(0);
-        assaultRifleFireTransform = transform.Find("AssaultRifle").GetChild(0);
-        sniperRifleFireTransform = transform.Find("SniperRifle").GetChild(0);
+        // pistolFireTransform = transform.Find("Pistol").GetChild(0);
+        // shotgunFireTransform = transform.Find("Shotgun").GetChild(0);
+        // assaultRifleFireTransform = transform.Find("AssaultRifle").GetChild(0);
+        // sniperRifleFireTransform = transform.Find("SniperRifle").GetChild(0);
         enemyFinder = GetComponent<EnemyFinder>();
         bulletLine = GetComponent<LineRenderer>();
         typeOnHand = GunType.Pistol;
@@ -166,6 +165,53 @@ public class Gun : MonoBehaviour
             StartCoroutine(Reload());
         }
     }
+
+    IEnumerator Reload()
+    {
+        if (pv.IsMine)
+        {
+            targetingLazer.enabled = false;
+            testSp.SetActive(false);
+        }
+        
+        switch (typeOnHand)
+        {
+            case GunType.Pistol:
+                WaitForSeconds time = new WaitForSeconds(GunManager.instance.gunReloadTime / 3);
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
+                yield return time;
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolIM, gunPos);
+                yield return time;
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolCocking, gunPos);
+                yield return time;
+                break;
+            case GunType.Shotgun:
+                break;
+            case GunType.SniperRifle:
+                break;
+            case GunType.AssaultRifle:
+                break;
+            default:
+                break;
+        }
+        rounds = GunManager.instance.GetGunRounds(typeOnHand);
+        targetingLazer.enabled = true;
+        testSp.SetActive(true);
+    }
+
+    public void Armoury(bool _armoury)
+    {
+        if (!_armoury)
+        {
+            testSp.SetActive(false);
+            targetingLazer.enabled = false;
+        } else
+        {
+            Reload();
+        }
+    }
+
+    
     //}public void Shoot()
     //{
     //    switch (typeOnHand)
@@ -231,39 +277,6 @@ public class Gun : MonoBehaviour
     //    range = GunManager.instance.GetGunRange((int)typeOnHand);
     //}
 
-    IEnumerator Reload()
-    {
-        if (pv.IsMine)
-        {
-            targetingLazer.enabled = false;
-            testSp.SetActive(false);
-        }
-        
-        switch (typeOnHand)
-        {
-            case GunType.Pistol:
-                WaitForSeconds time = new WaitForSeconds(GunManager.instance.gunReloadTime / 3);
-                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
-                yield return time;
-                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolIM, gunPos);
-                yield return time;
-                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolCocking, gunPos);
-                yield return time;
-                break;
-            case GunType.Shotgun:
-                break;
-            case GunType.SniperRifle:
-                break;
-            case GunType.AssaultRifle:
-                break;
-            default:
-                break;
-        }
-        rounds = GunManager.instance.GetGunRounds(typeOnHand);
-        targetingLazer.enabled = true;
-        testSp.SetActive(true);
-    }
-
     //IEnumerator FireVFX(Vector3 firePos, float damage, bool isEnemy)
     //{
     //    fireLight.SetActive(true);
@@ -283,16 +296,4 @@ public class Gun : MonoBehaviour
     //    bulletLine.enabled = false;
     //    fireLight.SetActive(false);
     //}
-
-    public void Armoury(bool _armoury)
-    {
-        if (!_armoury)
-        {
-            testSp.SetActive(false);
-            targetingLazer.enabled = false;
-        } else
-        {
-            Reload();
-        }
-    }
 }
