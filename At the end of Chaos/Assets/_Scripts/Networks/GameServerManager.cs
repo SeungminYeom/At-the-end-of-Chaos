@@ -292,7 +292,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
             rt.offsetMin = new Vector2(rt.offsetMin.x, a2); //bottom
             yield return null;
         }
-        _obj.transform.GetChild(1).gameObject.SetActive(true);
+        _obj.transform.GetChild(1).gameObject.SetActive(true); 
     }
     //접속중인 플레이어들의 목록을 뽑아서 isReady부분만 모아서 확인한다.
     public bool[] WeReady
