@@ -275,6 +275,8 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.upgrade:
+                CardManager.instance.ResetCard();
+                CardManager.instance.EnableCard();
                 joystick.SetActive(false);
                 shootBtn.SetActive(false);
                 timeUI_night.transform.SetAsLastSibling();
@@ -285,9 +287,10 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.nightStart:
+                yield return new WaitForSeconds(2f);
+                select_UI.SetActive(false);
                 timeUI_night.SetActive(true);
                 timeUI_afternoon.SetActive(true);
-                select_UI.SetActive(false);
                 for (int i = 0; i < resourcePool.Count; i++)
                 {
                     Destroy(resourcePool[i]);

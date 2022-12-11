@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 5014662138257448433}
   - component: {fileID: 6785039756096863993}
   m_Layer: 5
-  m_Name: Iron
+  m_Name: rIron
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -467,19 +467,19 @@ MonoBehaviour:
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 10
   m_fontSizeMax: 30
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -5
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -593,7 +593,7 @@ GameObject:
   - component: {fileID: 5310253863071068989}
   - component: {fileID: 1243714989426981113}
   m_Layer: 5
-  m_Name: Wood
+  m_Name: rWood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -785,7 +785,7 @@ GameObject:
   - component: {fileID: 8851072652001038604}
   - component: {fileID: 7158841227363509110}
   m_Layer: 5
-  m_Name: Image
+  m_Name: MainSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1228,6 +1228,7 @@ MonoBehaviour:
     reuseable: 0
     rank: 0
     type: 0
+  rank: {fileID: 0}
 --- !u!212 &7292952838273926303
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -20,6 +20,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     GameObject mainCamera;
     public GameObject player;
     public int character;
+    public bool[] whatCharacterIsActive = new bool[4];
 
     public GameObject players;
 
@@ -36,6 +37,8 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     GameObject damageDisplayer;
     float returnTimeScale;
+
+    [NonSerialized] public int resolutionMode = 0; //0이 기본, 1은 half
 
     private void OnApplicationFocus(bool focus)
     {
@@ -171,6 +174,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
                         pGO[i].GetComponentInChildren<TMP_Text>().text = pGO[i].GetComponent<PhotonView>().Owner.NickName;
                     }
                     PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "isReady", false } });
+                    CardManager.instance.PlayerInit();
                     characterSelectUI.SetActive(false);
                     GameManager.instance.timeState = TimeState.nightStart;
                     break;
@@ -228,21 +232,25 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
             case 1:
                 b1.interactable = false;
                 StartCoroutine(CloseShutter(b1.gameObject));
+                whatCharacterIsActive[0] = true;
                 break;
 
             case 2:
                 b2.interactable = false;
                 StartCoroutine(CloseShutter(b2.gameObject));
+                whatCharacterIsActive[1] = true;
                 break;
 
             case 3:
                 b3.interactable = false;
                 StartCoroutine(CloseShutter(b3.gameObject));
+                whatCharacterIsActive[2] = true;
                 break;
 
             case 4:
                 b4.interactable = false;
                 StartCoroutine(CloseShutter(b4.gameObject));
+                whatCharacterIsActive[3] = true;
                 break;
 
             default:
@@ -266,21 +274,25 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     IEnumerator CloseShutter(GameObject _obj)
     {
-        RectTransform rt = b1.transform.GetChild(0).GetComponent<RectTransform>();
-        Vector2 vec = new Vector2(rt.offsetMax.x, -650);
-        Vector2 vec2 = new Vector2(rt.offsetMax.x, 650);
+        RectTransform rt = _obj.transform.GetChild(0).GetComponent<RectTransform>();
+        Vector2 vec = new Vector2(rt.offsetMax.x, 0);
+        Vector2 vec2 = new Vector2(rt.offsetMax.x, 0);
         
         float dtime = 0;
-        float fadeTime = 2f;
+        float fadeTime = 0.5f;
 
-        while (dtime <= fadeTime)
+        float a1, a2;
+
+        while (dtime < fadeTime)
         {
             dtime += Time.deltaTime / fadeTime;
-            vec.x = vec2.x = rt.offsetMax.x;
-            var a = rt.gameObject.transform.position;
-            rt.gameObject.transform.position = Vector3.down;
+            a1 = Mathf.Lerp(-650, 0, dtime / fadeTime);
+            a2 = Mathf.Lerp(650, 0, dtime / fadeTime);
+            rt.offsetMax = new Vector2(rt.offsetMax.x, -a1); //top
+            rt.offsetMin = new Vector2(rt.offsetMin.x, a2); //bottom
             yield return null;
         }
+        _obj.transform.GetChild(1).gameObject.SetActive(true);
     }
     //접속중인 플레이어들의 목록을 뽑아서 isReady부분만 모아서 확인한다.
     public bool[] WeReady
@@ -337,5 +349,19 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         Time.timeScale = returnTimeScale;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
         
+    }
+
+    [PunRPC]
+    public void CardReady(int _num)
+    {
+        CardManager.instance.playersGO[_num].transform.GetChild(0).GetComponent<TMP_Text>().text = "<color=white>I'm Ready!</color>";
+        CardManager.instance.playersGO[_num].GetComponent<Image>().color = UnityEngine.Color.gray;
+        //playersGO[GameServerManager.instance.character - 1].transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=green>" + _cNum.ToString() + ". " + cards[_cNum - 1].def.title + "</color>";
+    }
+
+    private IEnumerator waitCall(float _time, Action _callback)
+    {
+        yield return new WaitForSeconds(_time);
+        _callback();
     }
 }
