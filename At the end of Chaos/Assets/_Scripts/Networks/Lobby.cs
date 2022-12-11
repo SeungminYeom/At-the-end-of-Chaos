@@ -274,7 +274,6 @@ public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
             loaded++;
             if (loaded >= PhotonNetwork.CurrentRoom.PlayerCount)
             {
-                Debug.Log(_minfo.Sender.NickName + "Ready");
                 photonView.RPC("StartLoadingScene", RpcTarget.AllBuffered, 1);
             }
         }
