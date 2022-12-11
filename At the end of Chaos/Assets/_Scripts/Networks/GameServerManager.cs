@@ -19,6 +19,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     public PhotonView pv;
     GameObject mainCamera;
     public GameObject player;
+    public int character;
 
     public GameObject players;
 
@@ -35,6 +36,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     GameObject damageDisplayer;
     float returnTimeScale;
+
     private void OnApplicationFocus(bool focus)
     {
         if (focus)
@@ -62,7 +64,8 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     void Start()
     {
-        PhotonNetwork.UseRpcMonoBehaviourCache = true;
+
+        PhotonNetwork.UseRpcMonoBehaviourCache = false;
         //필요한 오브젝트를 찾는다.
         mainCamera = GameObject.Find("Main Camera");
 
@@ -126,6 +129,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
     //플레이어 생성
     public void initPlayer(short _num)
     {
+        character = _num;
         characterSelected = true;
         player = PhotonNetwork.Instantiate("Player_" + _num, Vector3.zero, Quaternion.identity);
         //카메라는 current player를 따라가도록 설정
@@ -165,7 +169,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
                         pGO[i].transform.SetParent(players.transform);
                         //그리고 주인의 이름을 달아준다.
                         pGO[i].GetComponentInChildren<TMP_Text>().text = pGO[i].GetComponent<PhotonView>().Owner.NickName;
-                        Debug.Log(pGO[i].GetComponent<PhotonView>().Owner.NickName);
                     }
                     PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "isReady", false } });
                     characterSelectUI.SetActive(false);
@@ -263,7 +266,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     IEnumerator CloseShutter(GameObject _obj)
     {
-        Debug.Log("Cor");
         RectTransform rt = b1.transform.GetChild(0).GetComponent<RectTransform>();
         Vector2 vec = new Vector2(rt.offsetMax.x, -650);
         Vector2 vec2 = new Vector2(rt.offsetMax.x, 650);

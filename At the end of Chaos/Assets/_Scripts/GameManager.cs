@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         dirLight = GameObject.Find("DirectionalLight").GetComponent<Light>();
-        select_UI = GameObject.Find("Canvas").transform.Find("Select_UI").gameObject;
+        select_UI = GameObject.Find("StaticCanvas").transform.Find("Select_UI").gameObject;
         timeUI_afternoon = GameObject.Find("Canvas").transform.Find("Afternoon").gameObject;
         timeUI_night = GameObject.Find("Canvas").transform.Find("Night").gameObject;
         joystick = GameObject.Find("Canvas").transform.Find("Joystick").gameObject;
@@ -282,9 +282,6 @@ public class GameManager : MonoBehaviour
                 timeUI_night.SetActive(false);
                 timeUI_afternoon.SetActive(false);
                 select_UI.SetActive(true);
-
-                yield return wfs_Upgrade; //없애고 다른 조건으로 바꿔야함
-                GameServerManager.instance.IReady = true; //없애고 다른 조건으로 바꿔야함
                 break;
 
             case TimeState.nightStart:
