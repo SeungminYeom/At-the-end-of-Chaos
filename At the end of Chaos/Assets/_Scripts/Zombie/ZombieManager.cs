@@ -21,12 +21,12 @@ public class ZombieManager : MonoBehaviour
     [SerializeField] float spawnDistance;
     [SerializeField] float spawnTimeInterval = 1f;
 
-    [NonSerialized] public float health = 100;
+    [NonSerialized] public float health = 500;
     [NonSerialized] public float def = 1;
 
     [SerializeField] LayerMask lm;
     [SerializeField] Collider[] colliders;
-    float a = 50000f, b = 20, c = 0;
+    float a = 80000f, b = 20, c = 0;
     GameObject zombieAnchor;
 
     private void Awake()
@@ -83,6 +83,10 @@ public class ZombieManager : MonoBehaviour
         {
             colliders[i].GetComponent<Zombie>().targeting = false;
             colliders[i].GetComponent<Zombie>().GetComponent<Rigidbody>().AddExplosionForce(a, vec, b, c);
+            int explosionDamage = colliders[i].GetComponent<Zombie>().health / 2;
+            explosionDamage--;
+            DamageDisplayManager.instance.Display(explosionDamage, colliders[i].transform.position);
+            colliders[i].GetComponent<Zombie>().health -= explosionDamage;
         }
         yield return new WaitForSeconds(3f);
         for (int i = 0; i < colliders.Length; i++)

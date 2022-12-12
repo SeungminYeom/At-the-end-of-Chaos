@@ -259,6 +259,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.startPhase:
+                select_UI.SetActive(false);
                 yield return wfs_StartPhase;
                 GameServerManager.instance.IReady = true;
                 break;
@@ -275,6 +276,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.upgrade:
+                Debug.Log("A");
                 CardManager.instance.ResetCard();
                 CardManager.instance.EnableCard();
                 joystick.SetActive(false);

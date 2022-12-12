@@ -58,7 +58,7 @@ public class CardManager : MonoBehaviour
             cards[i].desc = cardsGO[i].transform.Find("Desc").GetChild(0).GetComponent<TMP_Text>();
             cards[i].resWood = cards[i].img.transform.GetChild(0).Find("rWood").GetChild(0).GetComponent<TMP_Text>();
             cards[i].resIron = cards[i].img.transform.GetChild(0).Find("rIron").GetChild(0).GetComponent<TMP_Text>();
-            cards[i].rank = cardsGO[i].GetComponent<Image>();
+            cards[i].rank = cardsGO[i].transform.Find("Shield").GetComponent<Image>();
 
             switch (GameServerManager.instance.resolutionMode)
             { //카드의 설명이 낮은 해상도에서 너무 커지는 문제 수정용
