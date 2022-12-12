@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 
 public class Gun : MonoBehaviour
 {
-    [SerializeField] GunType typeOnHand;
+    [SerializeField] GunType _typeOnHand;
     [SerializeField] int rounds; //��ź��
     [SerializeField] public static float range;
     [SerializeField] float gunShootingTime = 0.2f;
@@ -41,24 +41,23 @@ public class Gun : MonoBehaviour
     [SerializeField] Gradient r2b;
     [SerializeField] Gradient dr2b;
 
-    AudioClip[] gunFireSFX;
+
+    GunType typeOnHand;
 
     void Start()
     {
         pv = GetComponent<PhotonView>();
 
         fireLight = transform.Find("FireLight").gameObject;
-        // pistolFireTransform = transform.Find("Pistol").GetChild(0);
-        // shotgunFireTransform = transform.Find("Shotgun").GetChild(0);
-        // assaultRifleFireTransform = transform.Find("AssaultRifle").GetChild(0);
-        // sniperRifleFireTransform = transform.Find("SniperRifle").GetChild(0);
+        pistolFireTransform = transform.Find("Pistol").GetChild(0);
+        shotgunFireTransform = transform.Find("Shotgun").GetChild(0);
+        assaultRifleFireTransform = transform.Find("AssaultRifle").GetChild(0);
+        sniperRifleFireTransform = transform.Find("SniperRifle").GetChild(0);
         enemyFinder = GetComponent<EnemyFinder>();
         bulletLine = GetComponent<LineRenderer>();
-        typeOnHand = GunType.Pistol;
+        typeOnHand = GunType.pistol;
         range = GunManager.instance.GetGunRange((int)typeOnHand);
-        gunFireSFX = SoundPlayer.instance.pistolFire;
-
-
+        
         testSp = GameObject.Find("Target");
 
         targetingLazer = GetComponent<LineRenderer>();
@@ -70,90 +69,63 @@ public class Gun : MonoBehaviour
     {
         if (pv.IsMine && rounds > 0)
         {
-            gun = gameObject.transform.Find(typeOnHand.ToString());
+            gun = gameObject.transform.Find("Pistol");
             gunPos = gun.GetChild(0).position;
             Vector3 linePos = gunPos;
-            linePos.y = 0.5f; //좀비는 아래에 있으니깐 아래에서 판정선을 쏜다.
+            linePos.y = 0; //좀비는 아래에 있으니깐 아래에서 판정선을 쏜다.
             targetingLazer.SetPosition(0, gunPos);
             r.origin = transform.position;
-            if (GameManager.instance.timeState == TimeState.night)
+            if (
+                GameManager.instance.timeState == TimeState.night &&
+                rounds > 0 &&
+                Physics.Raycast(linePos, transform.forward, out hit, range, layerMask)
+                )
             {
-                for (int i = 0; i < 5; i++)
+                r.direction = hit.point;
+                hitOffsetPos = hit.collider.transform.position + Vector3.up * hitOffset;
+                targetingLazer.colorGradient = r2b;
+                targetingLazer.SetPosition(1, hitOffsetPos);
+                //Debug.DrawRay(gunPos, hitOffsetPos - gunPos, Color.red);
+                //타겟이 있으면 좀비를 타겟으로 하여 표시해준다.
+                testSp.transform.position = hitOffsetPos;
+                gun.LookAt(hitOffsetPos);
+                //총도 대상을 바라본다.
+
+                if (CrossPlatformInputManager.GetButtonDown("Shoot"))
                 {
-
-
-                    if (typeOnHand == GunType.Shotgun)
-                    {
-
-                        break;
-                    }
+                    BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
+                    VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, Quaternion.Euler(r.direction));
+                    pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit.collider.gameObject.GetPhotonView().ViewID);
                 }
-                if (rounds > 0 && Physics.Raycast(linePos, transform.forward, out hit, range, layerMask))
+            }
+            else
+            {
+                r.direction = transform.forward;
+                Vector3 rangeInGround = r.GetPoint(range);
+                rangeInGround.y = 0;
+
+                testSp.transform.position = rangeInGround;
+                //Debug.DrawRay(gunPos, rangeInGround - gunPos, new Color(1, 0.2f, 0.2f, 0.5f));
+                targetingLazer.colorGradient = dr2b;
+                targetingLazer.SetPosition(1, rangeInGround);
+
+                gun.LookAt(rangeInGround);
+
+                if (CrossPlatformInputManager.GetButtonDown("Shoot"))
                 {
-                    r.direction = hit.point;
-                    hitOffsetPos = hit.collider.transform.position + Vector3.up * hitOffset;
-                    targetingLazer.colorGradient = r2b;
-                    targetingLazer.SetPosition(1, hitOffsetPos);
-                    //Debug.DrawRay(gunPos, hitOffsetPos - gunPos, Color.red);
-                    //타겟이 있으면 좀비를 타겟으로 하여 표시해준다.
-                    testSp.transform.position = hitOffsetPos;
-                    gun.LookAt(hitOffsetPos);
-                    //총도 대상을 바라본다.
+                    pv.RPC("Shoot", Photon.Pun.RpcTarget.All, -1);
+                    BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, rangeInGround);
+                    VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), rangeInGround, Quaternion.Inverse(gun.rotation));
+                    VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, gun.rotation);
 
-                    if (CrossPlatformInputManager.GetButtonDown("Shoot"))
-                    {
-                        if (typeOnHand == GunType.Shotgun)
-                        {
-                            hitOffsetPos.y = 0;
-                            for (int i = 0; i < 4; i++)
-                            {
-                                 new Vector3(Random.insideUnitCircle.x, 0, Random.insideUnitCircle.y) + hitOffsetPos;
-                            }
-                        }
-                        else
-                        {
-                            //BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
-                            VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, Quaternion.Euler(r.direction));
-                            pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit.collider.gameObject.GetPhotonView().ViewID);
-                        }
-                    }
                 }
-                else
-                {
-                    r.direction = transform.forward;
-                    //Vector3 rangeInGround = r.GetPoint(range);
-                    //rangeInGround.y = 0;
-                    hitOffsetPos = r.GetPoint(range);
-                    hitOffsetPos.y = 0;
-
-                    testSp.transform.position = hitOffsetPos;
-                    //Debug.DrawRay(gunPos, rangeInGround - gunPos, new Color(1, 0.2f, 0.2f, 0.5f));
-                    targetingLazer.colorGradient = dr2b;
-                    targetingLazer.SetPosition(1, hitOffsetPos);
-
-                    gun.LookAt(hitOffsetPos);
-
-                    if (CrossPlatformInputManager.GetButtonDown("Shoot"))
-                    {
-                        pv.RPC("Shoot", Photon.Pun.RpcTarget.All, -1);
-                        //BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, rangeInGround);
-                        VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), hitOffsetPos, Quaternion.Inverse(gun.rotation));
-                        VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, gun.rotation);
-                    }
-                }
-                SoundPlayer.instance.PlaySound(gunFireSFX, gunPos);
             }
         }
     }
 
     [PunRPC] public void Shoot(int _target)
     {
-        if (typeOnHand == GunType.Shotgun)
-            for (int i = 0; i < 5; i++)
-                BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
-        else
-            BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
-
+        SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolFire, gunPos);
         if (_target == -1) { //아무도 못맞췄을떄
             if (--rounds <= 0)
             {
@@ -169,19 +141,19 @@ public class Gun : MonoBehaviour
         knockBack.y = 0;
         switch (typeOnHand)
         {
-            case GunType.Pistol:
+            case GunType.pistol:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
-            case GunType.Shotgun:
+            case GunType.shotgun:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
-            case GunType.SniperRifle:
+            case GunType.sniperRifle:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
-            case GunType.AssaultRifle:
+            case GunType.assaultRifle:
                 damage = 30f;
                 knockbackMul = 1f;
                 break;
@@ -196,53 +168,6 @@ public class Gun : MonoBehaviour
             StartCoroutine(Reload());
         }
     }
-
-    IEnumerator Reload()
-    {
-        if (pv.IsMine)
-        {
-            targetingLazer.enabled = false;
-            testSp.SetActive(false);
-        }
-        
-        switch (typeOnHand)
-        {
-            case GunType.Pistol:
-                WaitForSeconds time = new WaitForSeconds(GunManager.instance.gunReloadTime / 3);
-                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
-                yield return time;
-                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolIM, gunPos);
-                yield return time;
-                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolCocking, gunPos);
-                yield return time;
-                break;
-            case GunType.Shotgun:
-                break;
-            case GunType.SniperRifle:
-                break;
-            case GunType.AssaultRifle:
-                break;
-            default:
-                break;
-        }
-        rounds = GunManager.instance.GetGunRounds(typeOnHand);
-        targetingLazer.enabled = true;
-        testSp.SetActive(true);
-    }
-
-    public void Armoury(bool _armoury)
-    {
-        if (!_armoury)
-        {
-            testSp.SetActive(false);
-            targetingLazer.enabled = false;
-        } else
-        {
-            Reload();
-        }
-    }
-
-
     //}public void Shoot()
     //{
     //    switch (typeOnHand)
@@ -301,29 +226,44 @@ public class Gun : MonoBehaviour
 
     //���� Ȱ��ȭ�� �� �� �Լ��� ȣ����
 
-    public void EquipGun(GunType t)
-    {
-        typeOnHand = t;
-        rounds = GunManager.instance.GetGunRounds(typeOnHand);
-        range = GunManager.instance.GetGunRange((int)typeOnHand);
+    //public void EquipGun(GunType t)
+    //{
+    //    typeOnHand = t;
+    //    rounds = GunManager.instance.GetGunRounds((int)typeOnHand);
+    //    range = GunManager.instance.GetGunRange((int)typeOnHand);
+    //}
 
+    IEnumerator Reload()
+    {
+        if (pv.IsMine)
+        {
+            targetingLazer.enabled = false;
+            testSp.SetActive(false);
+        }
+        
         switch (typeOnHand)
         {
-            case GunType.Pistol:
-                gunFireSFX = SoundPlayer.instance.pistolFire;
+            case GunType.pistol:
+                WaitForSeconds time = new WaitForSeconds(GunManager.instance.gunReloadTime / 3);
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
+                yield return time;
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolIM, gunPos);
+                yield return time;
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolCocking, gunPos);
+                yield return time;
                 break;
-            case GunType.Shotgun:
-                gunFireSFX = SoundPlayer.instance.shotgunFire;
+            case GunType.shotgun:
                 break;
-            case GunType.SniperRifle:
-                gunFireSFX = SoundPlayer.instance.sniperFire;
+            case GunType.sniperRifle:
                 break;
-            case GunType.AssaultRifle:
-                gunFireSFX = SoundPlayer.instance.assaultFire;
+            case GunType.assaultRifle:
                 break;
             default:
                 break;
         }
+        rounds = GunManager.instance.GetGunRounds(typeOnHand);
+        targetingLazer.enabled = true;
+        testSp.SetActive(true);
     }
 
     //IEnumerator FireVFX(Vector3 firePos, float damage, bool isEnemy)
@@ -345,4 +285,16 @@ public class Gun : MonoBehaviour
     //    bulletLine.enabled = false;
     //    fireLight.SetActive(false);
     //}
+
+    public void Armoury(bool _armoury)
+    {
+        if (!_armoury)
+        {
+            testSp.SetActive(false);
+            targetingLazer.enabled = false;
+        } else
+        {
+            Reload();
+        }
+    }
 }

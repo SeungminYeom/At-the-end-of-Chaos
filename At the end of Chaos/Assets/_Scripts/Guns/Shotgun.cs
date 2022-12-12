@@ -6,6 +6,6 @@ public class Shotgun : MonoBehaviour
 {
     private void OnEnable()
     {
-        transform.parent.SendMessage("EquipGun", GunType.Shotgun);
+        transform.parent.SendMessage("EquipGun", GunType.shotgun);
     }
 }
