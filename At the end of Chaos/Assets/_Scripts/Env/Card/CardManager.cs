@@ -93,7 +93,15 @@ public class CardManager : MonoBehaviour
         {
             rand = UnityEngine.Random.Range(1, tmpDeck.Count);
             tmpCardDef = tmpDeck[rand];
-            cards[i].img.sprite = images[0];
+            try
+            { //있으면 가져다 쓰고
+                cards[i].img.sprite = images[tmpCardDef.cardCode];
+            }
+            catch
+            { //없으면 기본 이미지로
+                cards[i].img.sprite = images[2];
+            }
+            
             cards[i].title.text = tmpCardDef.title;
             cards[i].desc.text = tmpCardDef.desc.Replace("\\n", "\n");
             cards[i].def = tmpCardDef;
