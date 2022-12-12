@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef53f20474001cd449feba08c120b0c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _typeOnHand: 0
+  typeOnHand: 0
   rounds: 0
   gunShootingTime: 0.1
   layerMask:
