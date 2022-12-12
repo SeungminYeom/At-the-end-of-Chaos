@@ -6,6 +6,6 @@ public class SniperRifle : MonoBehaviour
 {
     private void OnEnable()
     {
-        transform.parent.SendMessage("EquipGun", GunType.sniperRifle);
+        transform.parent.SendMessage("EquipGun", GunType.SniperRifle);
     }
 }
