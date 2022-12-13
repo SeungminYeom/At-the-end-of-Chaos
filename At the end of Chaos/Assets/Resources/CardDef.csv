@@ -17,7 +17,7 @@
 전술 재장전,15,장탄수 <color=red>-10%</color>\n재장전속도 <color=green>+15%</color>,6,4,TRUE,2,1
 빠른 재장전,16,재장전속도 <color=green>+5%</color>,2,2,TRUE,1,1
 계획적인 움직임,17,낮시간 <color=green>+5초</color>,10,10,TRUE,3,1
-이거 스릴있는데!,18,열차의 최대 체력 <b><color=red>-50%</color></b>\n좀비의 속도 <b><color=red>+25%</color></b>\n재장전속도 <color=yellow>+300%</color>,15,15,FALSE,5,1
-장비:저격소총,101,높은 공격력과  관통력의\n<color=#008080ff>저격소총</color>을 얻습니다.,5,5,FALSE,3,3
-장비:산탄총,102,넓은 범위와\n방어파괴를 가진\n<color=#008080ff>산탄총</color>을 얻습니다.,5,5,FALSE,3,3
-장비:자동소총,103,높은 공격속도를 가진\n<color=#008080ff>자동소총</color>을 얻습니다.,5,5,FALSE,3,3
+영웅 난이도,18,열차의 최대 체력 <b><color=red>-50%</color></b>\n좀비의 속도 <b><color=red>+25%</color></b>\n재장전속도 <color=yellow>+300%</color>,15,15,FALSE,5,1
+장비:저격소총,19,높은 공격력과  관통력의\n<color=#008080ff>저격소총</color>을 얻습니다.,5,5,FALSE,3,3
+장비:산탄총,20,넓은 범위와\n방어파괴를 가진\n<color=#008080ff>산탄총</color>을 얻습니다.,5,5,FALSE,3,3
+장비:자동소총,21,높은 공격속도를 가진\n<color=#008080ff>자동소총</color>을 얻습니다.,5,5,FALSE,3,3

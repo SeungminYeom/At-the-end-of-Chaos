@@ -53,11 +53,11 @@ public class CardManager : MonoBehaviour
             playersGO[i] = UIAnchor.transform.Find("Other UI").GetChild(i).gameObject;
 
             cards[i] = cardsGO[i].GetComponent<Card>();
-            cards[i].img = cardsGO[i].transform.Find("MainSprite").GetComponent<Image>();
+            cards[i].img = cardsGO[i].transform.Find("CardPanel").Find("MainImage").GetComponent<Image>();
             cards[i].title = cardsGO[i].transform.Find("Title").GetChild(0).GetComponent<TMP_Text>();
             cards[i].desc = cardsGO[i].transform.Find("Desc").GetChild(0).GetComponent<TMP_Text>();
-            cards[i].resWood = cards[i].img.transform.GetChild(0).Find("rWood").GetChild(0).GetComponent<TMP_Text>();
-            cards[i].resIron = cards[i].img.transform.GetChild(0).Find("rIron").GetChild(0).GetComponent<TMP_Text>();
+            cards[i].resWood = cardsGO[i].transform.Find("CardPanel").Find("Resources").Find("rWood").GetChild(1).GetComponent<TMP_Text>();
+            cards[i].resIron = cardsGO[i].transform.Find("CardPanel").Find("Resources").Find("rIron").GetChild(1).GetComponent<TMP_Text>();
             cards[i].rank = cardsGO[i].transform.Find("Shield").GetComponent<Image>();
 
             switch (GameServerManager.instance.resolutionMode)
@@ -106,8 +106,30 @@ public class CardManager : MonoBehaviour
             cards[i].title.text = tmpCardDef.title;
             cards[i].desc.text = tmpCardDef.desc.Replace("\\n", "\n");
             cards[i].def = tmpCardDef;
-            cards[i].resWood.text = tmpCardDef.resWood.ToString();
-            cards[i].resIron.text = tmpCardDef.resIron.ToString();
+            if (tmpCardDef.resWood > 10)
+            {
+                cards[i].resWood.text = "<b><color=red>"+tmpCardDef.resWood.ToString()+"</color></b>";
+            } else if(tmpCardDef.resWood == 0)
+            {
+                cards[i].resWood.text = "<color=#7d7d7d>" + tmpCardDef.resWood.ToString() + "</color>";
+            } else
+            {
+                cards[i].resWood.text = tmpCardDef.resWood.ToString();
+            }
+
+            if (tmpCardDef.resIron > 10)
+            {
+                cards[i].resIron.text = "<b><color=red>" + tmpCardDef.resIron.ToString() + "</color></b>";
+            }
+            else if (tmpCardDef.resIron == 0)
+            {
+                cards[i].resIron.text = "<color=#7d7d7d>" + tmpCardDef.resIron.ToString() + "</color>";
+            }
+            else
+            {
+                cards[i].resIron.text = tmpCardDef.resIron.ToString();
+            }
+
             cards[i].resWoodI = tmpCardDef.resWood;
             cards[i].resIronI = tmpCardDef.resIron;
             cards[i].rank.sprite = rank[tmpCardDef.rank-1];
