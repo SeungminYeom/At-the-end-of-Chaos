@@ -67,7 +67,10 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     void Start()
     {
-
+        if (Screen.width < 2000)
+        {
+            resolutionMode = 1;
+        }
         PhotonNetwork.UseRpcMonoBehaviourCache = false;
         //필요한 오브젝트를 찾는다.
         mainCamera = GameObject.Find("Main Camera");
