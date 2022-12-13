@@ -95,11 +95,12 @@ public class CardManager : MonoBehaviour
             tmpCardDef = tmpDeck[rand];
             try
             { //있으면 가져다 쓰고
+                Debug.Log(tmpCardDef.title + " : " + tmpCardDef.cardCode);
                 cards[i].img.sprite = images[tmpCardDef.cardCode];
             }
             catch
             { //없으면 기본 이미지로
-                cards[i].img.sprite = images[2];
+                cards[i].img.sprite = images[images.Length - 1];
             }
             
             cards[i].title.text = tmpCardDef.title;
