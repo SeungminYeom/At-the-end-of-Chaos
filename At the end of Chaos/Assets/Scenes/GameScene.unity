@@ -975,6 +975,36 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1473739986}
     m_Modifications:
+    - target: {fileID: 6356463962816663089, guid: 9cef408a5982c994d8b6442250535973,
+        type: 3}
+      propertyPath: m_text
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356463962816663089, guid: 9cef408a5982c994d8b6442250535973,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 28.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356463962816663089, guid: 9cef408a5982c994d8b6442250535973,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356463962816663089, guid: 9cef408a5982c994d8b6442250535973,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356463962816663089, guid: 9cef408a5982c994d8b6442250535973,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356463962816663089, guid: 9cef408a5982c994d8b6442250535973,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 7885606630587085617, guid: 9cef408a5982c994d8b6442250535973,
         type: 3}
       propertyPath: m_Name
@@ -2150,6 +2180,11 @@ MonoBehaviour:
   _gunDamage: 2
   _gunRange: 3
   _gunReloadTime: 1
+  damageMultiplier: 100
+  attackSpeedMultiplier: 100
+  ammoMultiplier: 100
+  reloadMultiplier: 100
+  pierceAdd: 0
 --- !u!4 &220065104
 Transform:
   m_ObjectHideFlags: 0

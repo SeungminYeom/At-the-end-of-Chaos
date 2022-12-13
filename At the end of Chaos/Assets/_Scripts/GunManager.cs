@@ -22,6 +22,12 @@ public class GunManager : MonoBehaviour
     [SerializeField] float _gunRange = 4;
     [SerializeField] float _gunReloadTime = 2;
 
+    public float damageMultiplier = 100;
+    public float attackSpeedMultiplier = 100;
+    public float ammoMultiplier = 100;
+    public float reloadMultiplier = 100;
+    public float pierceAdd = 0;
+
 
     public float gunDamage
     {

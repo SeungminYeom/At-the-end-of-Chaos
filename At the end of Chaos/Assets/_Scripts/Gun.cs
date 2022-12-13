@@ -162,7 +162,8 @@ public class Gun : MonoBehaviour
                 knockbackMul = 0;
                 break;
         }
-        target.GetComponent<Zombie>().AttackFromPlayer(damage, 0f, knockBack * knockbackMul);
+
+        target.GetComponent<Zombie>().AttackFromPlayer(damage * (GunManager.instance.damageMultiplier / 100), GunManager.instance.pierceAdd, knockBack * knockbackMul);
         if (--rounds <= 0)
         {
             StartCoroutine(Reload());
@@ -240,11 +241,14 @@ public class Gun : MonoBehaviour
             targetingLazer.enabled = false;
             testSp.SetActive(false);
         }
-        
+
+        float reloadTime = GunManager.instance.gunReloadTime * (1 - GunManager.instance.reloadMultiplier / 100);
+
+
         switch (typeOnHand)
         {
             case GunType.pistol:
-                WaitForSeconds time = new WaitForSeconds(GunManager.instance.gunReloadTime / 3);
+                WaitForSeconds time = new WaitForSeconds(reloadTime / 3);
                 SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
                 yield return time;
                 SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolIM, gunPos);
@@ -261,7 +265,7 @@ public class Gun : MonoBehaviour
             default:
                 break;
         }
-        rounds = GunManager.instance.GetGunRounds(typeOnHand);
+        rounds = (int)(GunManager.instance.GetGunRounds(typeOnHand) * (GunManager.instance.ammoMultiplier / 100));
         targetingLazer.enabled = true;
         testSp.SetActive(true);
     }

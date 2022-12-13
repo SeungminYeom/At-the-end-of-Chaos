@@ -33,6 +33,7 @@ public class Zombie : MonoBehaviourPun, IPunObservable
     {
         health = ((int)ZombieManager.instance.health);
         def = ZombieManager.instance.def;
+        speed *= ZombieManager.instance.speedMultiplier;
         train = GameObject.Find("TrainManager");
         rigid = GetComponent<Rigidbody>();
         pv = GetComponent<PhotonView>();

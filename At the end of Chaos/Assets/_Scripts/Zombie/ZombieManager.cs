@@ -21,8 +21,10 @@ public class ZombieManager : MonoBehaviour
     [SerializeField] float spawnDistance;
     [SerializeField] float spawnTimeInterval = 1f;
 
-    [NonSerialized] public float health = 500;
+    [NonSerialized] public float health = 100;
     [NonSerialized] public float def = 1;
+
+    [NonSerialized] public float speedMultiplier = 1;
 
     [SerializeField] LayerMask lm;
     [SerializeField] Collider[] colliders;

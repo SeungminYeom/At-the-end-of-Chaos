@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TrainManager : MonoBehaviour
 {
+    public static TrainManager instance;
+
     public GameObject[] trains = new GameObject[5];
     //value = { 0f, 6.34f, 6.05f, 5.6f, 6.975f }
     float[] train_1_Pos = { 0f, 6.34f, 12.39f, 17.99f, 24.965f};
@@ -15,7 +17,7 @@ public class TrainManager : MonoBehaviour
 
     void Start()
     {
-
+        instance = this;
     }
 
     void Update()

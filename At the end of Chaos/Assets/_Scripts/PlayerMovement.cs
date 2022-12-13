@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody playerRigid;
     Vector3 playerRotation;
 
-    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] public float moveSpeed = 5f;
 
     [SerializeField] GameObject targetResource;
     [SerializeField] bool isFarming;

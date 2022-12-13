@@ -47,14 +47,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] double stateStartTime;
 
     [Header("TimeStateValue")]
-    [SerializeField] float timeAfternoonValue = 60f;
+    [SerializeField] public float timeAfternoonValue = 60f;
     [SerializeField] float timeUpgradeValue = 30f;
     [SerializeField] float timeNightValue = 120f;
     [SerializeField] float timeNightStartValue = 3f;
     [SerializeField] float timeNightEndValue = 3;
     [SerializeField] float timeStartPhase = 2;
 
-    WaitForSeconds wfs_Afternoon;
+    public WaitForSeconds wfs_Afternoon;
     WaitForSeconds wfs_Upgrade;
     WaitForSeconds wfs_Night;
     WaitForSeconds wfs_NightStart;
