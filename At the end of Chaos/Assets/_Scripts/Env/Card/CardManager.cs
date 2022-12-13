@@ -95,7 +95,7 @@ public class CardManager : MonoBehaviour
             tmpCardDef = tmpDeck[rand];
             try
             { //있으면 가져다 쓰고
-                Debug.Log(tmpCardDef.title + " : " + tmpCardDef.cardCode);
+                //Debug.Log(tmpCardDef.title + " : " + tmpCardDef.cardCode);
                 cards[i].img.sprite = images[tmpCardDef.cardCode];
             }
             catch
@@ -113,10 +113,6 @@ public class CardManager : MonoBehaviour
             cards[i].rank.sprite = rank[tmpCardDef.rank-1];
             cards[i].rank.color = Color.white;
             tmpDeck.RemoveAt(rand);
-            if (!tmpCardDef.reuseable)
-            {
-                deck.Remove(tmpCardDef);
-            }
         }
         remainIron.text = remainIronI.ToString();
         remainWood.text = remainWoodI.ToString();
@@ -124,6 +120,7 @@ public class CardManager : MonoBehaviour
 
     public void CardSelect(int _cNum)
     {
+        //_cNum은 -1 쓰는것 주의
         if (remainIronI >= cards[_cNum - 1].resIronI && remainWoodI >= cards[_cNum - 1].resWoodI)
         {
             remainIronI -= cards[_cNum - 1].resIronI;
@@ -131,6 +128,12 @@ public class CardManager : MonoBehaviour
 
             remainIron.text = remainIronI.ToString();
             remainWood.text = remainWoodI.ToString();
+
+            if (!cards[_cNum-1].def.reuseable)
+            {
+                Debug.Log(cards[_cNum-1].title +" :: "+ cards[_cNum - 1].def.title + " : " + cards[_cNum - 1].def.reuseable);
+                deck.Remove(cards[_cNum - 1].def);
+            }
 
             ResetCard();
         } else
