@@ -131,7 +131,6 @@ public class CardManager : MonoBehaviour
 
             if (!cards[_cNum-1].def.reuseable)
             {
-                Debug.Log(cards[_cNum-1].title +" :: "+ cards[_cNum - 1].def.title + " : " + cards[_cNum - 1].def.reuseable);
                 deck.Remove(cards[_cNum - 1].def);
             }
 

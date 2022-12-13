@@ -20621,6 +20621,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1473739986}
     m_Modifications:
+    - target: {fileID: 7158841227363509110, guid: 9cef408a5982c994d8b6442250535973,
+        type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7885606630587085617, guid: 9cef408a5982c994d8b6442250535973,
         type: 3}
       propertyPath: m_Name
@@ -20654,7 +20659,7 @@ PrefabInstance:
     - target: {fileID: 7885606630587085630, guid: 9cef408a5982c994d8b6442250535973,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.21
+      value: 0.22
       objectReference: {fileID: 0}
     - target: {fileID: 7885606630587085630, guid: 9cef408a5982c994d8b6442250535973,
         type: 3}
