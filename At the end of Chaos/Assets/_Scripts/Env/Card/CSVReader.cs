@@ -50,7 +50,7 @@ public class CSVReader : MonoBehaviour
             tmpCard = new CardDef();
             for (int i = 0; i < data_value.Length; i++)
             {
-                if (data_value[i] == "Ç¥½ÃÀÌ¸§") break;
+                if (data_value[i] == "í‘œì‹œì´ë¦„") break;
                 switch (i)
                 {
                     case 0:
@@ -92,7 +92,7 @@ public class CSVReader : MonoBehaviour
             }
             if (tmpCard.type == 1)
             {
-                MatchCollection m = Regex.Matches(tmpCard.desc, "([°¡-ÆR ]+) .{0,4}?<color=.+?>([+-x]?[0-9]{1,3})");
+                MatchCollection m = Regex.Matches(tmpCard.desc, "([ ê°€-?]+) +.{0,4}?<color=.+?>[+]{0,}([-]{0,}[0-9]{1,3})");
 
                 for (int j = 0; j < m.Count; j++)
                 {
@@ -104,7 +104,7 @@ public class CSVReader : MonoBehaviour
                         //{
 
                         //};
-                        case "°ø°Ý·Â":
+                        case "ê³µê²©ë ¥":
                             tmpCard.Selected += () =>
                             {
                                 GunManager.instance.damageMultiplier += _input;
@@ -112,7 +112,7 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
-                        case "°ø°Ý¼Óµµ":
+                        case "ê³µê²©ì†ë„":
                             tmpCard.Selected += () =>
                             {
                                 GunManager.instance.attackSpeedMultiplier += _input;
@@ -120,7 +120,7 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
-                        case "ÀçÀåÀü¼Óµµ":
+                        case "ìž¬ìž¥ì „ì†ë„":
                             tmpCard.Selected += () =>
                             {
                                 GunManager.instance.reloadMultiplier += _input;
@@ -128,7 +128,7 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
-                        case "ÀåÅº¼ö":
+                        case "ìž¥íƒ„ìˆ˜":
                             tmpCard.Selected += () =>
                             {
                                 GunManager.instance.ammoMultiplier += _input;
@@ -136,19 +136,19 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
-                        case "¿­Â÷ÀÇ ¼ö":
+                        case "ì—´ì°¨ì˜ ìˆ˜":
                             tmpCard.Selected += () =>
                             {
                                 GameManager.instance.trainCount += _input;
                                 if (GameManager.instance.trainCount < 1)
                                 {
-                                    Debug.Log("¿­Â÷°¡ ÇÏ³ªµµ ¾ø¾î¿ä!");
+                                    Debug.Log("ì—´ì°¨ê°€ í•˜ë‚˜ë„ ì—†ì–´ìš”!");
                                 }
                                 Debug.Log(_name + " : " + _input);
                             };
                             break;
 
-                        case "ÃÖ´ë Ã¼·Â":
+                        case "ìµœëŒ€ ì²´ë ¥":
                             tmpCard.Selected += () =>
                             {
                                 TrainManager.instance.healthMultiplier += _input;
@@ -166,7 +166,7 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
-                        case "¹æ¾î±¸ °üÅë·Â":
+                        case "ë°©ì–´êµ¬ ê´€í†µë ¥":
                             tmpCard.Selected += () =>
                             {
                                 GunManager.instance.pierceAdd += _input;
@@ -174,7 +174,7 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
-                        case "ÀÌµ¿¼Óµµ":
+                        case "ì´ë™ì†ë„":
                             tmpCard.Selected += () =>
                             {
                                 GameServerManager.instance.player.GetComponent<PlayerMovement>().moveSpeed *= _input;
@@ -182,14 +182,14 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
-                        case "ÀÚ¿øÃ¤Áý¹èÀ²":
+                        case "ìžì›ì±„ì§‘ë°°ìœ¨":
                             tmpCard.Selected += () =>
                             {
                                 Debug.Log(_name + " : " + _input);
                             };
                             break;
 
-                        case "³·½Ã°£":
+                        case "ë‚®ì‹œê°„":
                             tmpCard.Selected += () =>
                             {
                                 GameManager.instance.timeAfternoonValue += _input;
@@ -198,7 +198,7 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
-                        case "Á»ºñÀÇ ¼Óµµ":
+                        case "ì¢€ë¹„ì˜ ì†ë„":
                             tmpCard.Selected += () =>
                             {
                                 ZombieManager.instance.speedMultiplier *= 1.25f;
@@ -206,7 +206,7 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
-                        case "³ª¹«":
+                        case "ë‚˜ë¬´":
                             tmpCard.Selected += () =>
                             {
                                 CardManager.instance.remainWoodI += 10;
@@ -215,7 +215,7 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
-                        case "°íÃ¶":
+                        case "ê³ ì² ":
                             tmpCard.Selected += () =>
                             {
                                 CardManager.instance.remainIronI += 10;
@@ -232,7 +232,7 @@ public class CSVReader : MonoBehaviour
             {
                 tmpCard.Selected += () =>
                 {
-                    Debug.Log("¹ÌÇÒ´ç");
+                    Debug.Log("ë¯¸í• ë‹¹");
                 };
             }
             

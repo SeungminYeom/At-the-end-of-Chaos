@@ -63,7 +63,7 @@ public class CardManager : MonoBehaviour
             cards[i].rank = cardsGO[i].transform.Find("Shield").GetComponent<Image>();
 
             switch (GameServerManager.instance.resolutionMode)
-            { //Ä«µåÀÇ ¼³¸íÀÌ ³·Àº ÇØ»óµµ¿¡¼­ ³Ê¹« Ä¿Áö´Â ¹®Á¦ ¼öÁ¤¿ë
+            { //ì¹´ë“œì˜ ì„¤ëª…ì´ ë‚®ì€ í•´ìƒë„ì—ì„œ ë„ˆë¬´ ì»¤ì§€ëŠ” ë¬¸ì œ ìˆ˜ì •ìš©
                 case 0:
                     cards[i].desc.fontSizeMax = 35;
                     cards[i].title.fontSizeMax = 45;
@@ -96,12 +96,12 @@ public class CardManager : MonoBehaviour
             rand = UnityEngine.Random.Range(1, tmpDeck.Count);
             tmpCardDef = tmpDeck[rand];
             try
-            { //ÀÖÀ¸¸é °¡Á®´Ù ¾²°í
+            { //ìžˆìœ¼ë©´ ê°€ì ¸ë‹¤ ì“°ê³ 
                 //Debug.Log(tmpCardDef.title + " : " + tmpCardDef.cardCode);
                 cards[i].img.sprite = images[tmpCardDef.cardCode];
             }
             catch
-            { //¾øÀ¸¸é ±âº» ÀÌ¹ÌÁö·Î
+            { //ì—†ìœ¼ë©´ ê¸°ë³¸ ì´ë¯¸ì§€ë¡œ
                 cards[i].img.sprite = images[images.Length - 1];
             }
             
@@ -144,10 +144,10 @@ public class CardManager : MonoBehaviour
 
     public void CardSelect(int _cNum)
     {
-        //_cNumÀº -1 ¾²´Â°Í ÁÖÀÇ
+        //_cNumì€ -1 ì“°ëŠ”ê²ƒ ì£¼ì˜
         if (remainIronI >= cards[_cNum - 1].resIronI && remainWoodI >= cards[_cNum - 1].resWoodI)
         {
-            if (cards[_cNum - 1].def.title == "ÀçÈ°¿ë" && GameManager.instance.trainCount <= 1)
+            if (cards[_cNum - 1].def.title == "ìž¬í™œìš©" && GameManager.instance.trainCount <= 1)
             {
                 cards[_cNum - 1].rank.color = Color.blue;
                 return;
