@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+public delegate void Dele(int _input);
+
 [Serializable] public class CardDef
 {
     public Sprite img;
@@ -15,6 +17,7 @@ using UnityEngine;
     public bool reuseable;
     public int rank;
     public int type;
+    public Dele Selected;
 }
 
 public class CSVReader : MonoBehaviour
@@ -78,9 +81,10 @@ public class CSVReader : MonoBehaviour
                         tmpCard.type = int.Parse(data_value[i]);
                         break;
 
-                    default:
+                    default:    
                         break;
                 }
+                Dele Run = 
             }
             cMgr.deck.Add(tmpCard);
         }

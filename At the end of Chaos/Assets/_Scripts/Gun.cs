@@ -85,7 +85,6 @@ public class Gun : MonoBehaviour
                 hitOffsetPos = hit.collider.transform.position + Vector3.up * hitOffset;
                 targetingLazer.colorGradient = r2b;
                 targetingLazer.SetPosition(1, hitOffsetPos);
-                //Debug.DrawRay(gunPos, hitOffsetPos - gunPos, Color.red);
                 //타겟이 있으면 좀비를 타겟으로 하여 표시해준다.
                 testSp.transform.position = hitOffsetPos;
                 gun.LookAt(hitOffsetPos);

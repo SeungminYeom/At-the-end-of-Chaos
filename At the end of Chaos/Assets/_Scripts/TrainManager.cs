@@ -15,6 +15,8 @@ public class TrainManager : MonoBehaviour
     float[] train_5_Pos = { 0f, 0f, 0f, 0f, 0f};
     [SerializeField] SerializableDictionary<int, GameObject> _trains = new SerializableDictionary<int, GameObject>();
 
+    public int healthMultiplier = 100;
+
     void Start()
     {
         instance = this;

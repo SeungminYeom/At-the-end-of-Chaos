@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -142,6 +143,7 @@ public class CardManager : MonoBehaviour
 
     public void CardSelect(int _cNum)
     {
+        Debug.Log(cards[_cNum-1].desc.text);
         //_cNum은 -1 쓰는것 주의
         if (remainIronI >= cards[_cNum - 1].resIronI && remainWoodI >= cards[_cNum - 1].resWoodI)
         {
@@ -180,12 +182,11 @@ public class CardManager : MonoBehaviour
                     break;
 
                 case 5:
-                    //TrainManager.instance.GetTrain(GameManager.instance.trainCount).GetComponent<Train>().RestoreHealth();
+                    TrainManager.instance.GetTrain(GameManager.instance.trainCount).GetComponent<Train>().RestoreHealth();
                     break;
 
                 case 6:
-                    //TrainManager.instance.GetTrain(GameManager.instance.trainCount).GetComponent<Train>().maxHealth =
-                    //    (int)(TrainManager.instance.GetTrain(GameManager.instance.trainCount).GetComponent<Train>().maxHealth * 1.07f);
+                    TrainManager.instance.healthMultiplier += 7;
                     break;
 
                 case 7:
@@ -239,10 +240,10 @@ public class CardManager : MonoBehaviour
                     break;
 
                 case 18:
-                    //for (int i = 0; i < 5; i++)
-                    //{
-                    //    TrainManager.instance.GetTrain(i).GetComponent<Train>().maxHealth /= 2;
-                    //}
+                    for (int i = 0; i < 5; i++)
+                    {
+                        TrainManager.instance.GetTrain(i).GetComponent<Train>().maxHealth /= 2;
+                    }
                     ZombieManager.instance.speedMultiplier *= 1.25f;
                     GunManager.instance.reloadMultiplier *= (100 + (300)) / 100;
                     break;
