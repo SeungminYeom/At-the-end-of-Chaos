@@ -16,6 +16,7 @@ public class TrainManager : MonoBehaviour
     [SerializeField] SerializableDictionary<int, GameObject> _trains = new SerializableDictionary<int, GameObject>();
 
     public int healthMultiplier = 100;
+    public int maxHealth = 20;
 
     void Start()
     {
@@ -50,13 +51,13 @@ public class TrainManager : MonoBehaviour
     {
         //for (int i = 0; i <= n; i++)
         //{
-            //trains[n - i].transform.localPosition = new Vector3(i * 6f, 0, 0);
-        //}
-        trains[0].transform.localPosition = new Vector3(train_1_Pos[n], 0, 0);
-        trains[1].transform.localPosition = new Vector3(train_2_Pos[n], 0, 0);
-        trains[2].transform.localPosition = new Vector3(train_3_Pos[n], 0, 0);
-        trains[3].transform.localPosition = new Vector3(train_4_Pos[n], 0, 0);
-        trains[4].transform.localPosition = new Vector3(train_5_Pos[n], 0, 0);
+        //trains[n - i].transform.localPosition = new Vector3(i * 6f, 0, 0);
+        //}'
+            trains[0].transform.localPosition = new Vector3(train_1_Pos[n], 0, 0);
+            trains[1].transform.localPosition = new Vector3(train_2_Pos[n], 0, 0);
+            trains[2].transform.localPosition = new Vector3(train_3_Pos[n], 0, 0);
+            trains[3].transform.localPosition = new Vector3(train_4_Pos[n], 0, 0);
+            trains[4].transform.localPosition = new Vector3(train_5_Pos[n], 0, 0);
     }
 
     public GameObject GetTrain(int n)

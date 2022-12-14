@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -31,10 +32,10 @@ public class CardManager : MonoBehaviour
     [SerializeField] Sprite[] images;
     [SerializeField] Sprite[] rank;
 
-    TMP_Text remainWood;
-    TMP_Text remainIron;
-    int remainWoodI = 100;
-    int remainIronI = 100;
+    public TMP_Text remainWood;
+    public TMP_Text remainIron;
+    public int remainWoodI = 100;
+    public int remainIronI = 100;
 
     Button ready;
     Button reload;
@@ -146,6 +147,11 @@ public class CardManager : MonoBehaviour
         //_cNum은 -1 쓰는것 주의
         if (remainIronI >= cards[_cNum - 1].resIronI && remainWoodI >= cards[_cNum - 1].resWoodI)
         {
+            if (cards[_cNum - 1].def.title == "재활용" && GameManager.instance.trainCount <= 1)
+            {
+                cards[_cNum - 1].rank.color = Color.blue;
+                return;
+            }
             remainIronI -= cards[_cNum - 1].resIronI;
             remainWoodI -= cards[_cNum - 1].resWoodI;
 

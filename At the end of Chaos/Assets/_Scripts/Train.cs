@@ -122,6 +122,6 @@ public class Train : MonoBehaviour
 
     public void RestoreHealth()
     {
-        health = maxHealth * TrainManager.instance.healthMultiplier / 100;
+        health = maxHealth;
     }
 }

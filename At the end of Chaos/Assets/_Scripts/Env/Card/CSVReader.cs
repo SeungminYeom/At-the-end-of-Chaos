@@ -140,6 +140,10 @@ public class CSVReader : MonoBehaviour
                             tmpCard.Selected += () =>
                             {
                                 GameManager.instance.trainCount += _input;
+                                if (GameManager.instance.trainCount < 1)
+                                {
+                                    Debug.Log("열차가 하나도 없어요!");
+                                }
                                 Debug.Log(_name + " : " + _input);
                             };
                             break;
@@ -148,6 +152,16 @@ public class CSVReader : MonoBehaviour
                             tmpCard.Selected += () =>
                             {
                                 TrainManager.instance.healthMultiplier += _input;
+                                for (int i = 1; i <= 5; i++)
+                                {
+                                    TrainManager.instance.GetTrain(i).GetComponent<Train>().maxHealth =
+                                    TrainManager.instance.maxHealth * TrainManager.instance.healthMultiplier / 100;
+
+                                    TrainManager.instance.GetTrain(i).GetComponent<Train>().Hp =
+                                    Math.Clamp(TrainManager.instance.GetTrain(i).GetComponent<Train>().Hp,
+                                    0,
+                                    TrainManager.instance.GetTrain(i).GetComponent<Train>().maxHealth);
+                                }
                                 Debug.Log(_name + " : " + _input);
                             };
                             break;
@@ -190,7 +204,25 @@ public class CSVReader : MonoBehaviour
                                 ZombieManager.instance.speedMultiplier *= 1.25f;
                                 Debug.Log(_name + " : " + _input);
                             };
-                                break;
+                            break;
+
+                        case "나무":
+                            tmpCard.Selected += () =>
+                            {
+                                CardManager.instance.remainWoodI += 10;
+                                CardManager.instance.remainWood.text = CardManager.instance.remainWoodI.ToString();
+                                Debug.Log(_name + " : " + _input);
+                            };
+                            break;
+
+                        case "고철":
+                            tmpCard.Selected += () =>
+                            {
+                                CardManager.instance.remainIronI += 10;
+                                CardManager.instance.remainIron.text = CardManager.instance.remainIronI.ToString();
+                                Debug.Log(_name + " : " + _input);
+                            };
+                            break;
 
                         default:
                             break;
