@@ -4484,6 +4484,7 @@ MonoBehaviour:
       Value: {fileID: 919132149549399858}
     - Key: 5
       Value: {fileID: 919132148363122043}
+  healthMultiplier: 100
 --- !u!4 &414468489
 Transform:
   m_ObjectHideFlags: 0
@@ -15823,6 +15824,18 @@ MonoBehaviour:
   pistolCocking: []
   pistolRM: []
   pistolIM: []
+  shotgunFire: []
+  shotgunCocking: []
+  shotgunRM: []
+  shotgunIM: []
+  assaultFire: []
+  assaultCocking: []
+  assaultRM: []
+  assaultIM: []
+  sniperFire: []
+  sniperCocking: []
+  sniperRM: []
+  sniperIM: []
   TrainAttacked: []
 --- !u!114 &1557604952
 MonoBehaviour:

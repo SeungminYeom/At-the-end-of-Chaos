@@ -143,7 +143,6 @@ public class CardManager : MonoBehaviour
 
     public void CardSelect(int _cNum)
     {
-        Debug.Log(cards[_cNum-1].desc.text);
         //_cNum은 -1 쓰는것 주의
         if (remainIronI >= cards[_cNum - 1].resIronI && remainWoodI >= cards[_cNum - 1].resWoodI)
         {
@@ -153,111 +152,7 @@ public class CardManager : MonoBehaviour
             remainIron.text = remainIronI.ToString();
             remainWood.text = remainWoodI.ToString();
 
-            switch (cards[_cNum - 1].def.cardCode) //임시로 사용
-            {
-                case 0:
-                    GunManager.instance.attackSpeedMultiplier += 15;
-                    GunManager.instance.reloadMultiplier *= (100 + (-5)) / 100;
-                break;
-
-                case 1:
-                    GunManager.instance.damageMultiplier += 75;
-                    GunManager.instance.attackSpeedMultiplier *= (100 + (-15)) / 100;
-                    GunManager.instance.reloadMultiplier *= (100 + (-15)) / 100;
-                    break;
-
-                case 2:
-                    GunManager.instance.ammoMultiplier += 15;
-                    break;
-
-                case 3:
-                    remainIronI += UnityEngine.Random.Range(0, 11);
-                    remainWoodI += UnityEngine.Random.Range(0, 11);
-                    remainIron.text = remainIronI.ToString();
-                    remainWood.text = remainWoodI.ToString();
-                    break;
-
-                case 4:
-                    GameManager.instance.trainCount++;
-                    break;
-
-                case 5:
-                    TrainManager.instance.GetTrain(GameManager.instance.trainCount).GetComponent<Train>().RestoreHealth();
-                    break;
-
-                case 6:
-                    TrainManager.instance.healthMultiplier += 7;
-                    break;
-
-                case 7:
-                    break;
-
-                case 8:
-                    GameServerManager.instance.player.GetComponent<PlayerMovement>().moveSpeed *= 1.1f;
-                    break;
-
-                case 9:
-                    GameManager.instance.trainCount++;
-                    remainIronI += 10;
-                    remainWoodI += 10;
-                    remainIron.text = remainIronI.ToString();
-                    remainWood.text = remainWoodI.ToString();
-                    break;
-
-                case 10:
-                    break;
-
-                case 11:
-                    GunManager.instance.damageMultiplier += 8;
-                    break;
-
-                case 12:
-                    GunManager.instance.attackSpeedMultiplier *= (100 + (50)) / 100;
-                    GunManager.instance.ammoMultiplier += 100;
-                    GunManager.instance.reloadMultiplier *= (100 + (-30)) / 100;
-                    break;
-
-                case 13:
-                    GunManager.instance.pierceAdd += 5;
-                    break;
-
-                case 14:
-                    GunManager.instance.attackSpeedMultiplier *= (100 + (10)) / 100;
-                    break;
-
-                case 15:
-                    GunManager.instance.ammoMultiplier += -10;
-                    GunManager.instance.reloadMultiplier *= (100 + (15)) / 100;
-                    break;
-
-                case 16:
-                    GunManager.instance.reloadMultiplier *= (100 + (15)) / 100;
-                    break;
-
-                case 17:
-                    GameManager.instance.timeAfternoonValue += 5;
-                    GameManager.instance.wfs_Afternoon = new WaitForSeconds(GameManager.instance.timeAfternoonValue);
-                    break;
-
-                case 18:
-                    for (int i = 0; i < 5; i++)
-                    {
-                        TrainManager.instance.GetTrain(i).GetComponent<Train>().maxHealth /= 2;
-                    }
-                    ZombieManager.instance.speedMultiplier *= 1.25f;
-                    GunManager.instance.reloadMultiplier *= (100 + (300)) / 100;
-                    break;
-
-                case 19:
-                    break;
-
-                case 20:
-                    break;
-
-                case 21:
-                    break;
-
-            }
+            cards[_cNum - 1].def.Selected();
 
             if (!cards[_cNum-1].def.reuseable)
             {

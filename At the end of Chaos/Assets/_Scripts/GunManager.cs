@@ -4,10 +4,10 @@ using UnityEngine;
 
 public enum GunType
 {
-    pistol, //0
-    shotgun, //1
-    sniperRifle, //2
-    assaultRifle //3
+    Pistol, //0
+    Shotgun, //1
+    SniperRifle, //2
+    AssaultRifle //3
 }
 
 public class GunManager : MonoBehaviour

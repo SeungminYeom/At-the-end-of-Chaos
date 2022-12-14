@@ -10,6 +10,21 @@ public class SoundPlayer : MonoBehaviour
     public AudioClip[] pistolCocking;
     public AudioClip[] pistolRM;
     public AudioClip[] pistolIM;
+
+    public AudioClip[] shotgunFire;
+    public AudioClip[] shotgunCocking;
+    public AudioClip[] shotgunRM;
+    public AudioClip[] shotgunIM;
+
+    public AudioClip[] assaultFire;
+    public AudioClip[] assaultCocking;
+    public AudioClip[] assaultRM;
+    public AudioClip[] assaultIM;
+
+    public AudioClip[] sniperFire;
+    public AudioClip[] sniperCocking;
+    public AudioClip[] sniperRM;
+    public AudioClip[] sniperIM;
     
     public AudioClip[] TrainAttacked;
     void Awake()

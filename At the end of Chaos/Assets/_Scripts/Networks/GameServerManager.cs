@@ -341,7 +341,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         returnTimeScale = Time.timeScale;
         Time.timeScale = 0.001f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
-        //Time.fixedDeltaTime = 0;
     }
 
     [PunRPC]
@@ -351,7 +350,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
         //Time.timeScale = 1;
         Time.timeScale = returnTimeScale;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
-        
     }
 
     [PunRPC]
