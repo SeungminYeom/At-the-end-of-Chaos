@@ -276,7 +276,6 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.upgrade:
-                Debug.Log("A");
                 CardManager.instance.ResetCard();
                 CardManager.instance.EnableCard();
                 joystick.SetActive(false);
@@ -289,6 +288,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.nightStart:
+                stateStartTime = Time.time;
                 yield return new WaitForSeconds(2f);
                 select_UI.SetActive(false);
                 timeUI_night.SetActive(true);
@@ -300,7 +300,6 @@ public class GameManager : MonoBehaviour
                 resourcePool.Clear();
 
                 TrainStart();
-                stateStartTime = Time.time;
                 yield return wfs_NightStart;
                 GameServerManager.instance.IReady = true;
                 break;

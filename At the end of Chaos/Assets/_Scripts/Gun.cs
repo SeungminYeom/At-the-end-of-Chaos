@@ -242,7 +242,7 @@ public class Gun : MonoBehaviour
             testSp.SetActive(false);
         }
 
-        float reloadTime = GunManager.instance.gunReloadTime * (1 - GunManager.instance.reloadMultiplier / 100);
+        float reloadTime = GunManager.instance.gunReloadTime * (2 - GunManager.instance.reloadMultiplier / 100);
 
 
         switch (typeOnHand)
