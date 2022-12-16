@@ -7,12 +7,14 @@ using UnityEngine;
 
 public class Train : MonoBehaviour
 {
-    [SerializeField] int health = 10;
+    [SerializeField] int health = 20;
     [SerializeField] bool invincible;
+
+    public int maxHealth = 20;
 
     void Start()
     {
-        
+        health = maxHealth;
     }
 
     void Update()
@@ -105,5 +107,21 @@ public class Train : MonoBehaviour
 
 
         yield break;
+    }
+
+    public int Hp
+    {
+        get {
+            return health;
+        }
+
+        set {
+            health = value;
+        }
+    }
+
+    public void RestoreHealth()
+    {
+        health = maxHealth;
     }
 }

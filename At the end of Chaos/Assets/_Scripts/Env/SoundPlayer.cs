@@ -12,10 +12,19 @@ public class SoundPlayer : MonoBehaviour
     public AudioClip[] pistolIM;
 
     public AudioClip[] shotgunFire;
-
-    public AudioClip[] sniperFire;
+    public AudioClip[] shotgunCocking;
+    public AudioClip[] shotgunRM;
+    public AudioClip[] shotgunIM;
 
     public AudioClip[] assaultFire;
+    public AudioClip[] assaultCocking;
+    public AudioClip[] assaultRM;
+    public AudioClip[] assaultIM;
+
+    public AudioClip[] sniperFire;
+    public AudioClip[] sniperCocking;
+    public AudioClip[] sniperRM;
+    public AudioClip[] sniperIM;
     
     public AudioClip[] TrainAttacked;
     void Awake()
@@ -25,7 +34,6 @@ public class SoundPlayer : MonoBehaviour
         pistolCocking = Resources.LoadAll<AudioClip>("Sounds/GunSound/Pistol/Cocking");
         pistolRM = Resources.LoadAll<AudioClip>("Sounds/GunSound/Pistol/RemoveMag");
         pistolIM = Resources.LoadAll<AudioClip>("Sounds/GunSound/Pistol/InsertMag");
-        shotgunFire = Resources.LoadAll<AudioClip>("Sounds/GunSound/Shotgun/Fire");
         TrainAttacked = Resources.LoadAll<AudioClip>("Sounds/TrainSound/Attacked");
     }
 

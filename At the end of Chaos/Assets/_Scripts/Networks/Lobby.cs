@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 public class Lobby : MonoBehaviourPunCallbacks/*, IPunObservable*/
 {
-    private string gameVersion = "1.0";
+    private string gameVersion = "1.1";
     private bool createGameEnabled = false;
 
     private byte requiredPlayer = 1;

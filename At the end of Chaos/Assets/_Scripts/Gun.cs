@@ -125,7 +125,8 @@ public class Gun : MonoBehaviour
         }
     }
 
-    [PunRPC] public void Shoot(int _target)
+    [PunRPC]
+    public void Shoot(int _target)
     {
         SoundPlayer.instance.PlaySound(gunFireSFX, gunPos);
 
@@ -135,7 +136,8 @@ public class Gun : MonoBehaviour
         else
             BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
 
-        if (_target == -1) { //아무도 못맞췄을떄
+        if (_target == -1)
+        { //아무도 못맞췄을떄
             if (--rounds <= 0)
             {
                 StartCoroutine(Reload());
@@ -185,11 +187,14 @@ public class Gun : MonoBehaviour
             targetingLazer.enabled = false;
             testSp.SetActive(false);
         }
-        
+
+        WaitForSeconds time = new WaitForSeconds(
+            GunManager.instance.gunReloadTime / (GunManager.instance.reloadMultiplier / 100) / 3
+            );
+
         switch (typeOnHand)
         {
             case GunType.Pistol:
-                WaitForSeconds time = new WaitForSeconds(GunManager.instance.gunReloadTime / 3);
                 SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
                 yield return time;
                 SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolIM, gunPos);
@@ -206,7 +211,7 @@ public class Gun : MonoBehaviour
             default:
                 break;
         }
-        rounds = GunManager.instance.GetGunRounds(typeOnHand);
+        rounds = (int)(GunManager.instance.GetGunRounds(typeOnHand) * GunManager.instance.ammoMultiplier / 100);
         targetingLazer.enabled = true;
         testSp.SetActive(true);
     }
@@ -217,7 +222,8 @@ public class Gun : MonoBehaviour
         {
             testSp.SetActive(false);
             targetingLazer.enabled = false;
-        } else
+        }
+        else
         {
             Reload();
         }
