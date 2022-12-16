@@ -92,7 +92,7 @@ public class CSVReader : MonoBehaviour
             }
             if (tmpCard.type == 1)
             {
-                MatchCollection m = Regex.Matches(tmpCard.desc, "([ 가-?]+) +.{0,4}?<color=.+?>[+]{0,}([-]{0,}[0-9]{1,3})");
+                MatchCollection m = Regex.Matches(tmpCard.desc, "([가-힣 ]+) +.{0,4}?<color=.+?>[+]{0,}([-]{0,}[0-9]{1,3})");
 
                 for (int j = 0; j < m.Count; j++)
                 {
