@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:At the end of Chaos/Assets/Resources/Sounds/Environment/ImminentThreat.meta
 guid: fd9d2378c9202164584d912f487d721e
 folderAsset: yes
 DefaultImporter:
+========
+guid: ad24991c1d4c1d946a6fc0e5609d3286
+NativeFormatImporter:
+>>>>>>>> Collection_Dev:At the end of Chaos/Assets/Material/Train_f2.mat.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

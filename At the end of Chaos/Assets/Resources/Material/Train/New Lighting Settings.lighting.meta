@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:At the end of Chaos/Assets/Resources/Material/Train/New Lighting Settings.lighting.meta
 guid: 3c2a3e73318271144b7ac138c5640175
+========
+guid: 929b49d4728e57245b93f17113505629
+>>>>>>>> Collection_Dev:At the end of Chaos/Assets/Material/Train_f1.mat.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 4890085278179872738
