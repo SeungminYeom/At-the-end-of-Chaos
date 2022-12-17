@@ -11,18 +11,20 @@ public class GroundMove : MonoBehaviour
 
     void Update()
     {
-        if (!(GameManager.instance.timeState == TimeState.night ||
-            GameManager.instance.timeState == TimeState.nightStart ||
-            GameManager.instance.timeState == TimeState.nightEnd))
+        if (!(GameManager.instance.timeState == TimeState.night
+                || GameManager.instance.timeState == TimeState.nightStart
+                || GameManager.instance.timeState == TimeState.nightEnd))
             return;
 
-        transform.localPosition = new Vector3(transform.localPosition.x - GameManager.instance.groundSpeed * Time.deltaTime,
-                                                transform.localPosition.y, transform.localPosition.z);
-        if (transform.localPosition.x <= -60)
+
+        for (int i = 0; i < transform.childCount; i++)
         {
-            transform.localPosition = new Vector3(transform.localPosition.x + 120,
-                                                    transform.localPosition.y,
-                                                    transform.localPosition.z);
+            transform.GetChild(i).position -= transform.GetChild(i).right * GameManager.instance.groundSpeed * Time.deltaTime;
+
+            if (transform.GetChild(i).position.x < -12.5 * (transform.childCount - 1))
+            {
+                transform.GetChild(i).position += transform.GetChild(i).right * 25 * transform.childCount;
+            }
         }
     }
 }
