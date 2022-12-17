@@ -193,7 +193,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
                     break;
 
                 case TimeState.nightStart:
-                    SoundPlayer.instance.BGMChange("Night");
                     GameManager.instance.timeState = TimeState.night;
                     break;
 
@@ -202,7 +201,6 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
                     break;
 
                 case TimeState.nightEnd:
-                    SoundPlayer.instance.BGMChange("Afternoon");
                     GameManager.instance.timeState = TimeState.afternoon;
                     break;
 

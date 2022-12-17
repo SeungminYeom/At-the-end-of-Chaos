@@ -166,6 +166,23 @@ public class CSVReader : MonoBehaviour
                             };
                             break;
 
+                        case "체력":
+                            tmpCard.Selected += () =>
+                            {
+                                for (int i = 1; i <= 5; i++)
+                                {
+                                    TrainManager.instance.GetTrain(i).GetComponent<Train>().Hp =
+
+                                    TrainManager.instance.GetTrain(i).GetComponent<Train>().Hp =
+                                    Math.Clamp((TrainManager.instance.GetTrain(i).GetComponent<Train>().Hp +
+                                    TrainManager.instance.GetTrain(i).GetComponent<Train>().maxHealth * _input / 100),
+                                    1,
+                                    TrainManager.instance.GetTrain(i).GetComponent<Train>().maxHealth); ;
+                                }
+                                Debug.Log(_name + " : " + _input);
+                            };
+                            break;
+
                         case "방어구 관통력":
                             tmpCard.Selected += () =>
                             {
@@ -177,7 +194,7 @@ public class CSVReader : MonoBehaviour
                         case "이동속도":
                             tmpCard.Selected += () =>
                             {
-                                GameServerManager.instance.player.GetComponent<PlayerMovement>().moveSpeed *= _input;
+                                GameServerManager.instance.player.GetComponent<PlayerMovement>().moveSpeed += _input / 10;
                                 Debug.Log(_name + " : " + _input);
                             };
                             break;
@@ -228,7 +245,14 @@ public class CSVReader : MonoBehaviour
                             break;
                     }
                 }
-            } else
+            } else if (tmpCard.type == 3)
+            {
+                tmpCard.Selected += () =>
+                {
+                    Debug.Log("총 변경");
+                };
+            }
+            else
             {
                 tmpCard.Selected += () =>
                 {

@@ -87,6 +87,8 @@ public class Train : MonoBehaviour
             origins[i+1] = nextTrains[i].position;
         }
 
+        SoundPlayer.instance.BGMChange("LowHealthIntro");
+
         while (true)
         {
             if (Time.timeScale == 1f) break;

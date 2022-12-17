@@ -288,6 +288,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.nightStart:
+                SoundPlayer.instance.BGMChange("Night");
                 stateStartTime = Time.time;
                 yield return new WaitForSeconds(2f);
                 select_UI.SetActive(false);
@@ -316,6 +317,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.nightEnd:
+                SoundPlayer.instance.BGMChange("Afternoon");
                 stateStartTime = Time.time;
                 joystick.SetActive(false);
                 shootBtn.SetActive(false);

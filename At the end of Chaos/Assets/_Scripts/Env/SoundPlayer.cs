@@ -97,6 +97,12 @@ public class SoundPlayer : MonoBehaviour
             if (!previousSource || previousSource.volume != 1)
             {
                 interrupt = true;
+            } else if (_BGMName == "LowHealthIntro")
+            {
+                audioClipDictionary.TryGetValue("Bridge", out clip);
+                source.clip = clip;
+                StartCoroutine(Fader(source, 1));
+                return;
             }
         }
         
@@ -105,6 +111,7 @@ public class SoundPlayer : MonoBehaviour
 
     IEnumerator Fader(AudioSource _source, int _fadeTime)
     {
+        Debug.Log("노래 변경");
         time = 0;
         playTime = DateTime.Now.Second;
         while ((DateTime.Now.Second - playTime) % 4 == 0)
@@ -125,9 +132,21 @@ public class SoundPlayer : MonoBehaviour
             }
             yield return null;
         }
+
         previousSource = _source;
         previousVolume = previousSource.volume;
         interrupt = false;
-        
+
+        if (_source.clip.name == "Bridge")
+        {
+            AudioClip ac;
+            audioClipDictionary.TryGetValue("LowHealthIntro", out ac);
+            _source.clip = ac;
+            _source.Play();
+            yield return new WaitForSeconds(ac.length);
+            audioClipDictionary.TryGetValue("LowHealth", out ac);
+            _source.clip = ac;
+            _source.Play();
+        }
     }
 }
