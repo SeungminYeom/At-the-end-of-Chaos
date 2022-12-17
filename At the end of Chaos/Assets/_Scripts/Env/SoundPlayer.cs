@@ -47,7 +47,7 @@ public class SoundPlayer : MonoBehaviour
     bool interrupt = false;
     float previousVolume;
 
-    int fadeTime = 5;
+    const int fadeTime = 3;
 
     void Awake()
     {
@@ -78,7 +78,7 @@ public class SoundPlayer : MonoBehaviour
         AudioSource.PlayClipAtPoint(_clip[Random.Range(0, _clip.Length)], _pos);
     }
 
-    public void BGMChange(string _BGMName)
+    public void BGMChange(string _BGMName, int _fadeTime = fadeTime)
     {
         nowPlayer++;
         GameObject audio = new GameObject("Audio" + nowPlayer, typeof(AudioSource));
@@ -100,10 +100,10 @@ public class SoundPlayer : MonoBehaviour
             }
         }
         
-        StartCoroutine(Fader(source));
+        StartCoroutine(Fader(source, _fadeTime));
     }
 
-    IEnumerator Fader(AudioSource _source)
+    IEnumerator Fader(AudioSource _source, int _fadeTime)
     {
         time = 0;
         playTime = DateTime.Now.Second;
@@ -115,13 +115,13 @@ public class SoundPlayer : MonoBehaviour
         _source.Play();
         while (_source.volume != 1 && !interrupt)
         {
-            time += Time.deltaTime / fadeTime;
+            time += Time.deltaTime / _fadeTime;
 
             _source.volume = Mathf.Lerp(0, 1, time);
             if (previousSource)
             {
                 previousSource.volume = Mathf.Lerp(previousVolume, 0, time);
-                Destroy(previousSource.gameObject, fadeTime);
+                Destroy(previousSource.gameObject, _fadeTime);
             }
             yield return null;
         }
