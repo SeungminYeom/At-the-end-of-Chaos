@@ -127,15 +127,10 @@ public class Gun : MonoBehaviour
                         VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, r.direction);
                         pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit.collider.gameObject.GetPhotonView().ViewID);
                     }
-                    else
-                    {
-                        for (int i = 0; i < 4; i++)
-                        {
-                            RaycastHit hitInfo;
-                            Physics.Raycast(linePos, Quaternion.AngleAxis(Random.Range(-1f, 1f), Vector3.up) * transform.forward, out hitInfo, range, layerMask);
-                            //Fire
-                        }
-                    }
+                    BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
+                    VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, r.direction);
+                    pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit.collider.gameObject.GetPhotonView().ViewID);
+                    //if ()
                 }
             }
         }
