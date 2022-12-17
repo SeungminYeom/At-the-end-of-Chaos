@@ -44,8 +44,10 @@ public class SoundPlayer : MonoBehaviour
     Dictionary<string, AudioClip> audioClipDictionary;
     AudioSource previousSource;
     int playTime;
+    bool interrupt = false;
+    float previousVolume;
 
-    int fadeTime = 10;
+    int fadeTime = 5;
 
     void Awake()
     {
@@ -69,13 +71,6 @@ public class SoundPlayer : MonoBehaviour
         }
 
         BGMChange("CharacterSelect");
-
-        Invoke("Test", 12);
-    }
-
-    void Test()
-    {
-        BGMChange("Night");
     }
 
     public void PlaySound(AudioClip[] _clip, Vector3 _pos)
@@ -97,27 +92,42 @@ public class SoundPlayer : MonoBehaviour
         source.volume = 0;
         source.clip = clip;
 
+        if (nowPlayer != 1)
+        {
+            if (!previousSource || previousSource.volume != 1)
+            {
+                interrupt = true;
+            }
+        }
+        
         StartCoroutine(Fader(source));
     }
 
     IEnumerator Fader(AudioSource _source)
     {
         time = 0;
-        
+        playTime = DateTime.Now.Second;
+        while ((DateTime.Now.Second - playTime) % 4 == 0)
+        {
+            yield return null;
+        }
+
         _source.Play();
-        while (_source.volume != 1)
+        while (_source.volume != 1 && !interrupt)
         {
             time += Time.deltaTime / fadeTime;
 
             _source.volume = Mathf.Lerp(0, 1, time);
             if (previousSource)
             {
-                previousSource.volume = Mathf.Lerp(1, 0, time);
+                previousSource.volume = Mathf.Lerp(previousVolume, 0, time);
                 Destroy(previousSource.gameObject, fadeTime);
             }
             yield return null;
         }
-        Debug.Log("Á¾·á");
         previousSource = _source;
+        previousVolume = previousSource.volume;
+        interrupt = false;
+        
     }
 }

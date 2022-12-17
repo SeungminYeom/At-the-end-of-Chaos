@@ -182,6 +182,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
                     CardManager.instance.PlayerInit();
                     characterSelectUI.SetActive(false);
                     GameManager.instance.timeState = TimeState.nightStart;
+                    SoundPlayer.instance.BGMChange("Night");
                     break;
 
                 case TimeState.afternoon:
