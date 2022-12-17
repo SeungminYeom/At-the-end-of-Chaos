@@ -66,11 +66,11 @@ public class SceneChanger : MonoBehaviour
         img.gameObject.SetActive(false);
     }
 
-    IEnumerator Close()
+    IEnumerator Close(bool _ending = false)
     {
         img.gameObject.SetActive(true);
         time = 0;
-        fadeTime = 1f;
+        fadeTime = 0.8f;
         AudioSource audio = GetComponent<AudioSource>();
 
         while (time <= fadeTime)

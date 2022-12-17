@@ -288,7 +288,13 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.nightStart:
-                SoundPlayer.instance.BGMChange("Night");
+                if (GameManager.instance.trainCount == 1)
+                {
+                    SoundPlayer.instance.BGMChange("LowHealthIntro", 1);
+                } else
+                {
+                    SoundPlayer.instance.BGMChange("Night");
+                }
                 stateStartTime = Time.time;
                 yield return new WaitForSeconds(2f);
                 select_UI.SetActive(false);

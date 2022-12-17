@@ -97,10 +97,18 @@ public class SoundPlayer : MonoBehaviour
             if (!previousSource || previousSource.volume != 1)
             {
                 interrupt = true;
-            } else if (_BGMName == "LowHealthIntro")
+            } else if (_BGMName == "LowHealthIntro" && GameManager.instance.timeState == TimeState.night)
             {
                 audioClipDictionary.TryGetValue("Bridge", out clip);
                 source.clip = clip;
+                StartCoroutine(Fader(source, 1));
+                return;
+            } else if (_BGMName == "GameOver")
+            {
+                previousSource.loop = false;
+                source.volume = 1;
+                source.playOnAwake = false;
+                source.loop = false;
                 StartCoroutine(Fader(source, 1));
                 return;
             }
@@ -111,42 +119,53 @@ public class SoundPlayer : MonoBehaviour
 
     IEnumerator Fader(AudioSource _source, int _fadeTime)
     {
-        Debug.Log("노래 변경");
-        time = 0;
-        playTime = DateTime.Now.Second;
-        while ((DateTime.Now.Second - playTime) % 4 == 0)
+        if (_source.clip.name == "GameOver")
         {
-            yield return null;
-        }
-
-        _source.Play();
-        while (_source.volume != 1 && !interrupt)
-        {
-            time += Time.deltaTime / _fadeTime;
-
-            _source.volume = Mathf.Lerp(0, 1, time);
-            if (previousSource)
+            while (previousSource.isPlaying)
             {
-                previousSource.volume = Mathf.Lerp(previousVolume, 0, time);
-                Destroy(previousSource.gameObject, _fadeTime);
+                Debug.Log("wait");
+                yield return null;
             }
-            yield return null;
-        }
-
-        previousSource = _source;
-        previousVolume = previousSource.volume;
-        interrupt = false;
-
-        if (_source.clip.name == "Bridge")
+            Debug.Log("Over");
+            _source.Play();
+            interrupt = true;
+        } 
+        else
         {
-            AudioClip ac;
-            audioClipDictionary.TryGetValue("LowHealthIntro", out ac);
-            _source.clip = ac;
-            _source.Play();
-            yield return new WaitForSeconds(ac.length);
-            audioClipDictionary.TryGetValue("LowHealth", out ac);
-            _source.clip = ac;
-            _source.Play();
+            Debug.Log("노래 변경");
+            time = 0;
+            if (_source.clip.name != "LowHealthIntro")
+            {
+                _source.Play();
+            }
+            while (_source.volume != 1 && !interrupt)
+            {
+                time += Time.deltaTime / _fadeTime;
+
+                _source.volume = Mathf.Lerp(0, 1, time);
+                if (previousSource)
+                {
+                    previousSource.volume = Mathf.Lerp(previousVolume, 0, time);
+                    Destroy(previousSource.gameObject, _fadeTime);
+                }
+                yield return null;
+            }
+
+            previousSource = _source;
+            previousVolume = previousSource.volume;
+            interrupt = false;
+
+            if (_source.clip.name == "Bridge" || _source.clip.name == "LowHealthIntro")
+            {
+                AudioClip ac;
+                audioClipDictionary.TryGetValue("LowHealthIntro", out ac);
+                _source.clip = ac;
+                _source.Play();
+                yield return new WaitForSeconds(ac.length);
+                audioClipDictionary.TryGetValue("LowHealth", out ac);
+                _source.clip = ac;
+                _source.Play();
+            }
         }
     }
 }

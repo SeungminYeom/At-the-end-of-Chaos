@@ -89,7 +89,7 @@ public class GameServerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     void Update()
     {
-
+        
     }
 
     #region BUTTON_ACTION

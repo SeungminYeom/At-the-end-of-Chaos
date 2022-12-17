@@ -2748,7 +2748,7 @@ MonoBehaviour:
   stateStartTime: 0
   timeAfternoonValue: 20
   timeUpgradeValue: 3
-  timeNightValue: 30
+  timeNightValue: 60
   timeNightStartValue: 3
   timeNightEndValue: 3
   timeStartPhase: 2
