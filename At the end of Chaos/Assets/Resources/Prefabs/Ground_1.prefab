@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &2204642026704846776
 Transform:
@@ -135,6 +135,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e544d9ac726ebce4584aa8f3a389bedd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e544d9ac726ebce4584aa8f3a389bedd, type: 3}
 --- !u!4 &7899542695948533820 stripped
@@ -210,11 +215,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: railroad_fix_n_fix
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0197146f5632d3141b4e2931187cd9fc,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372101842476191254, guid: 0197146f5632d3141b4e2931187cd9fc,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3599888468071615769, guid: 0197146f5632d3141b4e2931187cd9fc,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 8737e8a543c410e4f89dd694a058ff2a, type: 2}
+    - target: {fileID: 7742780737561719692, guid: 0197146f5632d3141b4e2931187cd9fc,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0197146f5632d3141b4e2931187cd9fc, type: 3}
 --- !u!4 &8293991117556388699 stripped
@@ -313,6 +333,11 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 08a8c850d96a69a4292e8a3486854c1f,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 08a8c850d96a69a4292e8a3486854c1f,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

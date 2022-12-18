@@ -442,7 +442,7 @@ public class GameManager : MonoBehaviour
 
     public void inCreaseResource(int _wood, int _iron)
     {
-        Debug.Log("占쏙옙占쏙옙 : " + _wood + ", " + _iron);
+        Debug.Log("Resource : " + _wood + ", " + _iron);
         woodResource += _wood;
         ironResource += _iron;
     }

@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (isFarming) return;
         Move();
         if (CrossPlatformInputManager.GetButton("JoystickBtn") && pv.IsMine)
         {
@@ -58,7 +59,8 @@ public class PlayerMovement : MonoBehaviour
             //transform.position = new Vector3(0, 2.0f, 0);
             TrainManager trainManager = GameObject.Find("TrainManager").GetComponent<TrainManager>();
             GameObject myPosObj = trainManager.GetTrain(GameManager.instance.trainCount);
-            
+
+            Debug.Log(myPosObj.transform.Find("Player_" + pv.CreatorActorNr + "_Pos").name);
             transform.position = myPosObj.transform.Find("Player_"+ pv.CreatorActorNr + "_Pos").position;
             return;
         }
@@ -67,7 +69,6 @@ public class PlayerMovement : MonoBehaviour
         //playerRigid.velocity = new Vector3(CrossPlatformInputManager.GetAxisRaw("Horizontal"), 0, 
         //                                    CrossPlatformInputManager.GetAxisRaw("Vertical")).normalized * moveSpeed;
 
-        if (isFarming) return;
 
         if (CrossPlatformInputManager.GetButton("JoystickBtn") && pv.IsMine)
         {
@@ -109,6 +110,13 @@ public class PlayerMovement : MonoBehaviour
         if (targetResource != null)
         {
             //GameManager.instance.inCreaseResource(targetResource.GetComponent<Resource>().wood, targetResource.GetComponent<Resource>().iron);
+            if (targetResource.tag == "WoodResource")
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.woodResource, transform.position);
+            else
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.ironResource, transform.position);
+
+            GameManager.instance.inCreaseResource(targetResource.GetComponent<Resource>().wood, targetResource.GetComponent<Resource>().iron);
+            targetResource.GetComponent<Resource>().resource_piece_target = this.gameObject.transform;
             Destroy(targetResource);
         }
             isFarming = false;

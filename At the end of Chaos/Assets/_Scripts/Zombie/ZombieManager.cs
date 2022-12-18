@@ -14,7 +14,7 @@ public class ZombieManager : MonoBehaviour
 
     public static ZombieManager instance;
 
-    string[] idleZombie = new string[3];
+    string[] idleZombie = new string[6];
     public TrainManager trainManager;
     public Transform spawnSpot;
     [SerializeField] List<GameObject> zombieList = new List<GameObject>();
@@ -31,6 +31,11 @@ public class ZombieManager : MonoBehaviour
     float a = 80000f, b = 20, c = 0;
     GameObject zombieAnchor;
 
+    // 라운드 진행 수
+    int roundCount = 0;
+    // 스폰 시킬 좀비 범위
+    int spawnRange = 3;
+
     private void Awake()
     {
         if (instance == null) instance = this;
@@ -42,6 +47,9 @@ public class ZombieManager : MonoBehaviour
         idleZombie[0] = "zombie_body_standing";
         idleZombie[1] = "zombie_man_standing";
         idleZombie[2] = "zombie_woman_standing";
+        idleZombie[3] = "zombie_giant";
+        idleZombie[4] = "zombie_guard";
+        idleZombie[5] = "zombie_ranger";
         trainManager = GameObject.Find("TrainManager").GetComponent<TrainManager>();
         zombieAnchor = GameObject.Find("ZombieManager");
     }
@@ -55,13 +63,25 @@ public class ZombieManager : MonoBehaviour
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            roundCount++;
+
+            if (spawnRange < 6)
+            {
+                if (roundCount == 3)
+                    spawnRange++;
+                else if (roundCount == 6)
+                    spawnRange++;
+                else if (roundCount == 10)
+                    spawnRange++;
+            }
+
             while (true)
             {
                 int angle = UnityEngine.Random.Range(0, 360);
                 float x = Mathf.Cos(angle * Mathf.Deg2Rad) * spawnDistance;
                 float z = Mathf.Sin(angle * Mathf.Deg2Rad) * spawnDistance;
                 Vector3 pos = trainManager.GetTrain(GameManager.instance.trainCount).transform.position + new Vector3(x, 1f, z);
-                zombieList.Add(PhotonNetwork.InstantiateRoomObject(idleZombie[UnityEngine.Random.Range(0, 3)], pos, Quaternion.identity));
+                zombieList.Add(PhotonNetwork.InstantiateRoomObject(idleZombie[UnityEngine.Random.Range(0, spawnRange)], pos, Quaternion.identity));
                 zombieList[zombieList.Count - 1].transform.parent = zombieAnchor.transform;
                 yield return new WaitForSeconds(spawnTimeInterval);
             }

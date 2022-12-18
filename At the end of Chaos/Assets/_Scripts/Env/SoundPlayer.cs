@@ -37,6 +37,9 @@ public class SoundPlayer : MonoBehaviour
 
     public AudioClip[] backgroundMusics;
 
+    public AudioClip[] ironResource;
+    public AudioClip[] woodResource;
+
     float time = 0f;
 
     byte nowPlayer = 0;
@@ -58,6 +61,9 @@ public class SoundPlayer : MonoBehaviour
         pistolIM = Resources.LoadAll<AudioClip>("Sounds/GunSound/Pistol/InsertMag");
         TrainAttacked = Resources.LoadAll<AudioClip>("Sounds/TrainSound/Attacked");
         backgroundMusics = Resources.LoadAll<AudioClip>("Sounds/Environment/ImminentThreat");
+
+        ironResource = Resources.LoadAll<AudioClip>("Sounds/Iron");
+        woodResource = Resources.LoadAll<AudioClip>("Sounds/Wood");
     }
 
     void Start()

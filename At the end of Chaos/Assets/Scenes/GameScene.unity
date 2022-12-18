@@ -2157,6 +2157,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 375185597}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &387669175 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1756170192727113428, guid: 6fd53eb4fb636de48868e0f1b1fc1f3f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6295982734783454859}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &407672779
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2377,23 +2383,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trains:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 454955951}
+  - {fileID: 1510683389}
+  - {fileID: 387669175}
+  - {fileID: 1761148348}
+  - {fileID: 662824222}
   _trains:
     array:
     - Key: 1
-      Value: {fileID: 0}
+      Value: {fileID: 454955951}
     - Key: 2
-      Value: {fileID: 0}
+      Value: {fileID: 1510683389}
     - Key: 3
-      Value: {fileID: 0}
+      Value: {fileID: 387669175}
     - Key: 4
-      Value: {fileID: 0}
+      Value: {fileID: 1761148348}
     - Key: 5
-      Value: {fileID: 0}
+      Value: {fileID: 662824222}
   healthMultiplier: 100
   maxHealth: 20
 --- !u!4 &414468489
@@ -2485,6 +2491,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5368443330766550190, guid: fd2bc9363e8d65e4188a6c03eb59145a,
     type: 3}
   m_PrefabInstance: {fileID: 419990037}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &454955951 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7220158102444124001, guid: c319622355de56444ad708a2a4fcb5cb,
+    type: 3}
+  m_PrefabInstance: {fileID: 3214881379392997244}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &464674717
 PrefabInstance:
@@ -2925,7 +2937,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &505128155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3216,9 +3228,9 @@ MonoBehaviour:
   _groundSpeed: 0
   _timeState: 2
   stateStartTime: 0
-  timeAfternoonValue: 20
+  timeAfternoonValue: 30
   timeUpgradeValue: 3
-  timeNightValue: 60
+  timeNightValue: 20
   timeNightStartValue: 3
   timeNightEndValue: 3
   timeStartPhase: 2
@@ -3229,9 +3241,9 @@ MonoBehaviour:
   woodResource: 0
   ironResource: 0
   spawnValue: 10
-  WoodResource: {fileID: 7165729110340431487, guid: e0d654f2369472c488ae2ef051f0d374,
+  WoodResource: {fileID: 4852298259850040373, guid: 658e5f8775fd7e24c982f007799f29d2,
     type: 3}
-  IronResource: {fileID: 7165729110340431487, guid: ad7191d3c4547ae4f8e8b51b7f168ade,
+  IronResource: {fileID: 2086135092388288818, guid: 410e7b664f8094949af3f242c6e60df9,
     type: 3}
   timeScale: 1
 --- !u!1 &611528111
@@ -3535,6 +3547,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 658342459}
   m_CullTransparentMesh: 1
+--- !u!1 &662824222 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1249685875846352375, guid: 1bd9a334e6af2e74780e1ad17efb79ac,
+    type: 3}
+  m_PrefabInstance: {fileID: 7202594684136678397}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &671920433
 GameObject:
   m_ObjectHideFlags: 0
@@ -6308,9 +6326,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3214881379392997245}
-  - {fileID: 3388705408644894659}
   - {fileID: 4719696374624006937}
   - {fileID: 6295982734783454860}
+  - {fileID: 3388705408644894659}
   - {fileID: 7202594684136678398}
   - {fileID: 464674718}
   - {fileID: 1838102861}
@@ -6871,6 +6889,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1509632282}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1510683389 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3241130249906850566, guid: 81963c51c2bcc864a98f08a76cf43efc,
+    type: 3}
+  m_PrefabInstance: {fileID: 4719696374624006936}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1532201771 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8146661832374949819, guid: fcc676a19e80c4d4abc06f7acb6c6648,
@@ -7287,6 +7311,8 @@ MonoBehaviour:
   sniperIM: []
   TrainAttacked: []
   backgroundMusics: []
+  ironResource: []
+  woodResource: []
 --- !u!114 &1557604952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8077,6 +8103,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1746135092}
   m_CullTransparentMesh: 1
+--- !u!1 &1761148348 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5589015853088066178, guid: e4b92b14c5e348b42bb8e8ae44165a7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3388705408644894658}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1793587464
 GameObject:
   m_ObjectHideFlags: 0
@@ -9977,6 +10009,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_4_Pos
       objectReference: {fileID: 0}
+    - target: {fileID: 5105952654138740792, guid: e4b92b14c5e348b42bb8e8ae44165a7a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589015853088066178, guid: e4b92b14c5e348b42bb8e8ae44165a7a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7474839327860895432, guid: e4b92b14c5e348b42bb8e8ae44165a7a,
         type: 3}
       propertyPath: m_Name
@@ -10016,6 +10058,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player_3_Pos
+      objectReference: {fileID: 0}
+    - target: {fileID: 2860100665463067068, guid: 81963c51c2bcc864a98f08a76cf43efc,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3473147128381498079, guid: 81963c51c2bcc864a98f08a76cf43efc,
         type: 3}
@@ -10131,6 +10178,16 @@ PrefabInstance:
         type: 3}
       propertyPath: invincible
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1375000660450255982, guid: 6fd53eb4fb636de48868e0f1b1fc1f3f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1756170192727113428, guid: 6fd53eb4fb636de48868e0f1b1fc1f3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2788410117621389954, guid: 6fd53eb4fb636de48868e0f1b1fc1f3f,
         type: 3}
@@ -10346,6 +10403,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1390085110}
     m_Modifications:
+    - target: {fileID: 1249685875846352375, guid: 1bd9a334e6af2e74780e1ad17efb79ac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881402943456237389, guid: 1bd9a334e6af2e74780e1ad17efb79ac,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2586900208981571884, guid: 1bd9a334e6af2e74780e1ad17efb79ac,
         type: 3}
       propertyPath: m_Name
