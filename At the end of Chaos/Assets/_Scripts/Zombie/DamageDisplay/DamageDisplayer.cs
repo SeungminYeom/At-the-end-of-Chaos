@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class DamageDisplayer : MonoBehaviour
 {
-    
     float fadeTime = 0.5f;
 
     float time;

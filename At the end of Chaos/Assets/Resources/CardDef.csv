@@ -1,23 +1,23 @@
 ﻿표시이름,번호,실제로 적용되는 효과,나무 소모량,고철 소모량,재등장여부,등급,세부설정용
-돌풍,0,공격속도 <color=blue>+15%</color> \n재장전속도 <color=red>-5%</color>,5,10,FALSE,3,1
-유리대포,1,공격력 <color=blue>+75%</color>\n재장전속도 <color=red>-15%</color>\n공격속도 <color=red>-15%</color>,0,20,FALSE,4,1
-확장 탄창,2,장탄수 <color=blue>+15%</color>,0,0,TRUE,1,1
-보이지 않는 손,3,무작위 <color=#008080ff>자원</color>을\n얻습니다.,0,0,TRUE,2,2
-추가 탑승,4,열차의 수 <color=blue>+1</color>,0,0,TRUE,3,1
-긴급 수리,5,현재 열차의 체력\n<color=blue>전부 회복</color>,0,0,TRUE,2,2
-장갑 강화,6,열차의 최대 체력 <color=blue>+7%</color>,0,0,TRUE,2,1
-통찰력,7,자원채집배율 <color=blue>+10%</color>,0,0,TRUE,2,1
-빠른발,8,주간 이동속도 <color=blue>+10%</color>,0,0,TRUE,2,1
-재활용,9,객차<color=red>-1</color>\n나무<color=blue>+10</color>\n고철<color=blue>+10</color>,0,0,TRUE,2,1
-과회전,10,<color=blue>+5%</color>확률로\n<color=#008080ff>2배</color>의 피해를 입힙니다.,0,0,TRUE,1,2
-할로포인트,11,공격력<color=blue>+8%</color>,0,0,TRUE,1,1
-폭풍,12,공격속도 <color=yellow>+50%</color>\n장탄수 <color=yellow>+100%</color>\n재장전속도 <color=red>-30%</color>,0,0,FALSE,5,1
-예리한 총알,13,방어구 관통력 <color=blue>+5%</color>,0,0,TRUE,1,1
-급속냉각,14,공격속도 <color=blue>+10%</color>,0,0,TRUE,1,1
-장비:저격소총,101,높은 공격력과  관통력의\n<color=#008080ff>저격소총</color>을 얻습니다.,5,5,FALSE,3,3
-장비:산탄총,102,넓은 범위와\n방어파괴를 가진\n<color=#008080ff>산탄총</color>을 얻습니다.,5,5,FALSE,3,3
-장비:자동소총,103,높은 공격속도를 가진\n<color=#008080ff>자동소총</color>을 얻습니다.,5,5,FALSE,3,3
-전술 재장전,15,장탄수 <color=red>-10%</color>\n재장전속도 <color=blue>+15%</color>,6,4,TRUE,2,1
-빠른 재장전,16,재장전속도 <color=blue>+5%</color>,2,2,TRUE,1,1
-Careful Planning,17,낮시간 <color=blue>+5초</color>,10,10,TRUE,3,1
-이거 스릴있는데!,18,열차의 최대 체력 <color=red>-50%</color>\n좀비의 속도 <color=red>+25%</color>\n재장전속도 <color=yellow>+300%</color>,15,15,FALSE,5,1
+돌풍,0,공격속도 <color=green>+15%</color> \n재장전속도 <color=red>-5%</color>,5,10,FALSE,3,1
+유리대포,1,공격력 <color=green>+75%</color>\n재장전속도 <color=red>-15%</color>\n공격속도 <color=red>-15%</color>,0,15,FALSE,4,1
+확장 탄창,2,장탄수 <color=green>+15%</color>,3,3,TRUE,1,1
+보이지 않는 손,3,무작위 <color=#008080ff>자원</color>을\n얻습니다.\n(0~11,6,6,TRUE,2,2
+추가 탑승,4,열차의 수 <color=green>+1</color>,12,12,TRUE,3,1
+긴급 수리,5,체력 <color=green>50%</color> 회복,8,0,TRUE,2,1
+장갑 강화,6,최대 체력 <color=green>+7%</color>,0,0,TRUE,2,1
+통찰력,7,자원채집배율 <color=green>+10%</color>,0,0,TRUE,2,1
+빠른발,8,이동속도 <color=green>+5%</color>,5,1,TRUE,2,1
+재활용,9,열차의 수 <color=red>-1</color>\n나무 <color=green>+10</color>\n고철 <color=green>+10</color>,0,0,TRUE,2,1
+과회전,10,<color=green>+5%</color>확률로\n<color=#008080ff>2배</color>의 피해를 입힙니다.,0,0,TRUE,1,2
+할로포인트,11,공격력 <color=green>+8%</color>,1,3,TRUE,1,1
+폭풍,12,공격속도 <color=yellow>+50%</color>\n장탄수 <color=yellow>+100%</color>\n재장전속도 <color=red>-30%</color>,10,5,FALSE,5,1
+예리한 총알,13,방어구 관통력 <color=green>+5</color>,2,2,TRUE,1,1
+급속냉각,14,공격속도 <color=green>+5%</color>,3,2,TRUE,1,1
+전술 재장전,15,장탄수 <color=red>-10%</color>\n재장전속도 <color=green>+15%</color>,3,3,TRUE,2,1
+빠른 재장전,16,재장전속도 <color=green>+8%</color>,2,2,TRUE,1,1
+계획적인 움직임,17,낮시간 <color=green>+5초</color>,10,10,TRUE,3,1
+영웅 난이도,18,최대 체력 <b><color=red>-50%</color></b>\n좀비의 속도 <b><color=red>+25%</color></b>\n재장전속도 <color=yellow>+300%</color>,15,15,FALSE,5,1
+장비:저격소총,19,높은 공격력과  관통력의\n<color=#008080ff>저격소총</color>을 얻습니다.,5,5,FALSE,3,3
+장비:산탄총,20,넓은 범위와\n방어파괴를 가진\n<color=#008080ff>산탄총</color>을 얻습니다.,5,5,FALSE,3,3
+장비:자동소총,21,높은 공격속도를 가진\n<color=#008080ff>자동소총</color>을 얻습니다.,5,5,FALSE,3,3

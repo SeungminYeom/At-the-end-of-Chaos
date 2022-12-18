@@ -12,7 +12,7 @@ public class Zombie : MonoBehaviourPun, IPunObservable
     //공격할 대상
     [SerializeField] GameObject target;
 
-    [SerializeField] int health;
+    [SerializeField] public int health;
     [SerializeField] float def;
     [SerializeField] float speed;
     int attackPoint;
@@ -33,6 +33,7 @@ public class Zombie : MonoBehaviourPun, IPunObservable
     {
         health = ((int)ZombieManager.instance.health);
         def = ZombieManager.instance.def;
+        speed *= ZombieManager.instance.speedMultiplier;
         train = GameObject.Find("TrainManager");
         rigid = GetComponent<Rigidbody>();
         pv = GetComponent<PhotonView>();

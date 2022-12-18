@@ -11,7 +11,7 @@ public class DamageDisplayManager : MonoBehaviour
     GameObject damageDisplayPool;
     public GameObject damageDisplayGameObject;
     int damageDisplayPoolSize;
-    int DDPoolSize = 10;
+    int DDPoolSize = 30;
 
     void Start()
     {

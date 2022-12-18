@@ -7,12 +7,14 @@ using UnityEngine;
 
 public class Train : MonoBehaviour
 {
-    [SerializeField] int health = 10;
+    [SerializeField] int health = 20;
     [SerializeField] bool invincible;
+
+    public int maxHealth = 20;
 
     void Start()
     {
-        
+        health = maxHealth;
     }
 
     void Update()
@@ -57,53 +59,83 @@ public class Train : MonoBehaviour
         }
         Debug.Log("느리게 만들기 끝");
 
-        Vector3 originPos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
-        Vector3 targetPos = new Vector3(Camera.main.transform.position.x + 6.34f, Camera.main.transform.position.y, Camera.main.transform.position.z);
-        sTime = Time.time;
-        while (true)
+        if (GameManager.instance.trainCount != 1)
         {
-            if (Vector3.Distance(Camera.main.transform.position, targetPos) <= 0.01) break;
-            Camera.main.transform.position = Vector3.Lerp(originPos, targetPos, (Time.time - sTime) / 0.2f);
-            yield return null;
-        }
-        Debug.Log("카메라 이동 끝");
+            Vector3 originPos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
+            Vector3 targetPos = new Vector3(Camera.main.transform.position.x + 6.34f, Camera.main.transform.position.y, Camera.main.transform.position.z);
+            sTime = Time.time;
+            while (true)
+            {
+                if (Vector3.Distance(Camera.main.transform.position, targetPos) <= 0.01) break;
+                Camera.main.transform.position = Vector3.Lerp(originPos, targetPos, (Time.time - sTime) / 0.2f);
+                yield return null;
+            }
+            Debug.Log("카메라 이동 끝");
 
-        sTime = Time.time;
-        GameServerManager.instance.GetComponent<SceneChanger>().StartCoroutine("Cinema", false);
-        int trainCount = transform.GetSiblingIndex();
-        Transform[] nextTrains = new Transform[trainCount];
+            sTime = Time.time;
+            GameServerManager.instance.GetComponent<SceneChanger>().StartCoroutine("Cinema", false);
+            int trainCount = transform.GetSiblingIndex();
+            Transform[] nextTrains = new Transform[trainCount];
 
-        for (int i = 0; i < trainCount; i++)
-        {
-            nextTrains[i] = transform.parent.GetChild(trainCount - i - 1);
-        }
-
-        Vector3[] origins = new Vector3[trainCount + 1];
-        origins[0] = Vector3.zero;
-        for (int i = 0; i < trainCount; i++)
-        {
-            origins[i+1] = nextTrains[i].position;
-        }
-
-        while (true)
-        {
-            if (Time.timeScale == 1f) break;
-            Time.timeScale = Mathf.Lerp(Time.timeScale, 1f, (Time.time - sTime) / 0.5f);
-            Camera.main.transform.position = Vector3.Lerp(targetPos, originPos, (Time.time - sTime) / 0.5f);
             for (int i = 0; i < trainCount; i++)
             {
-                nextTrains[i].position = Vector3.Lerp(origins[i+1], origins[i], (Time.time - sTime) / 0.5f);
+                nextTrains[i] = transform.parent.GetChild(trainCount - i - 1);
             }
-            
-            Time.fixedDeltaTime = 0.02f * Time.timeScale;
-            yield return null;
+
+            Vector3[] origins = new Vector3[trainCount + 1];
+            origins[0] = Vector3.zero;
+            for (int i = 0; i < trainCount; i++)
+            {
+                origins[i + 1] = nextTrains[i].position;
+            }
+            if (GameManager.instance.trainCount == 2)
+            {
+                SoundPlayer.instance.BGMChange("LowHealthIntro");
+            }
+
+            while (true)
+            {
+                if (Time.timeScale == 1f) break;
+                Time.timeScale = Mathf.Lerp(Time.timeScale, 1f, (Time.time - sTime) / 0.5f);
+                Camera.main.transform.position = Vector3.Lerp(targetPos, originPos, (Time.time - sTime) / 0.5f);
+                for (int i = 0; i < trainCount; i++)
+                {
+                    nextTrains[i].position = Vector3.Lerp(origins[i + 1], origins[i], (Time.time - sTime) / 0.5f);
+                }
+
+                Time.fixedDeltaTime = 0.02f * Time.timeScale;
+                yield return null;
+            }
+            Debug.Log("빠르게 만들기 끝");
+            transform.Find("default").gameObject.SetActive(true);
+            GameManager.instance.trainCount--;
         }
-        Debug.Log("빠르게 만들기 끝");
+        else
+        {
+            SoundPlayer.instance.BGMChange("GameOver");
+            GameServerManager.instance.GetComponent<SceneChanger>().StartCoroutine("Close", true);
+        }
         
-        transform.Find("default").gameObject.SetActive(true);
-        GameManager.instance.trainCount--;
+        
+        
 
 
         yield break;
+    }
+
+    public int Hp
+    {
+        get {
+            return health;
+        }
+
+        set {
+            health = value;
+        }
+    }
+
+    public void RestoreHealth()
+    {
+        health = maxHealth;
     }
 }

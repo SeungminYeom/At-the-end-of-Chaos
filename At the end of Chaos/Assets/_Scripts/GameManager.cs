@@ -47,14 +47,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] double stateStartTime;
 
     [Header("TimeStateValue")]
-    [SerializeField] float timeAfternoonValue = 60f;
+    [SerializeField] public float timeAfternoonValue = 60f;
     [SerializeField] float timeUpgradeValue = 30f;
     [SerializeField] float timeNightValue = 120f;
     [SerializeField] float timeNightStartValue = 3f;
     [SerializeField] float timeNightEndValue = 3;
     [SerializeField] float timeStartPhase = 2;
 
-    WaitForSeconds wfs_Afternoon;
+    public WaitForSeconds wfs_Afternoon;
     WaitForSeconds wfs_Upgrade;
     WaitForSeconds wfs_Night;
     WaitForSeconds wfs_NightStart;
@@ -259,6 +259,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.startPhase:
+                select_UI.SetActive(false);
                 yield return wfs_StartPhase;
                 GameServerManager.instance.IReady = true;
                 break;
@@ -287,6 +288,14 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.nightStart:
+                if (GameManager.instance.trainCount == 1)
+                {
+                    SoundPlayer.instance.BGMChange("LowHealthIntro", 1);
+                } else
+                {
+                    SoundPlayer.instance.BGMChange("Night");
+                }
+                stateStartTime = Time.time;
                 yield return new WaitForSeconds(2f);
                 select_UI.SetActive(false);
                 timeUI_night.SetActive(true);
@@ -298,7 +307,6 @@ public class GameManager : MonoBehaviour
                 resourcePool.Clear();
 
                 TrainStart();
-                stateStartTime = Time.time;
                 yield return wfs_NightStart;
                 GameServerManager.instance.IReady = true;
                 break;
@@ -315,6 +323,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case TimeState.nightEnd:
+                SoundPlayer.instance.BGMChange("Afternoon");
                 stateStartTime = Time.time;
                 joystick.SetActive(false);
                 shootBtn.SetActive(false);

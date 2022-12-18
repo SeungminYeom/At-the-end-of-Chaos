@@ -17,7 +17,7 @@ public class SceneChanger : MonoBehaviour
     float time = 0;
 
     Color color = Color.black; //시작 색
-    float fadeTime = 5f; // 배경 사라지는 시간
+    float fadeTime = 1f; // 배경 사라지는 시간
     float start = -5f; //시작시 각도
     float end = 25f; //종료 각도
     float easing = 2f; // x < 1 = ease in , x > 1 ease out x = 1 linear  ///  fadeTime이랑 무관한 시간
@@ -43,7 +43,11 @@ public class SceneChanger : MonoBehaviour
     {
         img.color = color;
         yield return new WaitForSeconds(2f);
-        if (isLobby) yield return new WaitForSeconds(2f);
+        if (isLobby)
+        {
+            fadeTime = 5f;
+            yield return new WaitForSeconds(2f);
+        }
         while (color.a > 0f)
         {
             time += Time.deltaTime / fadeTime;
@@ -59,12 +63,14 @@ public class SceneChanger : MonoBehaviour
             img.color = color;
             yield return null;
         }
+        img.gameObject.SetActive(false);
     }
 
-    IEnumerator Close()
+    IEnumerator Close(bool _ending = false)
     {
+        img.gameObject.SetActive(true);
         time = 0;
-        fadeTime = 1f;
+        fadeTime = 0.8f;
         AudioSource audio = GetComponent<AudioSource>();
 
         while (time <= fadeTime)
@@ -93,7 +99,14 @@ public class SceneChanger : MonoBehaviour
 
     public IEnumerator Cinema(bool _toCine)
     {
-        
+        if (_toCine)
+        {
+            img.gameObject.SetActive(true);
+        } else
+        {
+            img.gameObject.SetActive(false);
+        }
+
         time = 0;
         fadeTime = 1.2f;
         Vector2 size = new Vector2(top.sizeDelta.x, 0);
