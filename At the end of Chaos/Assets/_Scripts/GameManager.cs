@@ -68,8 +68,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] float nightLightIntensity = 0.5f;
 
     [Header("ResourcesCollecting")]
-    [SerializeField] int woodResource = 0;
-    [SerializeField] int ironResource = 0;
+    public int woodResource = 0;
+    public int ironResource = 0;
     [SerializeField] int spawnValue = 10;
     public GameObject WoodResource;
     public GameObject IronResource;

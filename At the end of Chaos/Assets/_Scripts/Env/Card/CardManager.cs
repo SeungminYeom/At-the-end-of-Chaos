@@ -34,8 +34,8 @@ public class CardManager : MonoBehaviour
 
     public TMP_Text remainWood;
     public TMP_Text remainIron;
-    public int remainWoodI = 100;
-    public int remainIronI = 100;
+    public int remainWoodI = 0;
+    public int remainIronI = 0;
 
     Button ready;
     Button reload;
@@ -138,8 +138,10 @@ public class CardManager : MonoBehaviour
             cards[i].rank.color = Color.white;
             tmpDeck.RemoveAt(rand);
         }
-        remainIron.text = remainIronI.ToString();
-        remainWood.text = remainWoodI.ToString();
+        //remainIron.text = remainIronI.ToString();
+        //remainWood.text = remainWoodI.ToString();
+        remainIron.text = GameManager.instance.ironResource.ToString();
+        remainWood.text = GameManager.instance.woodResource.ToString();
     }
 
     public void CardSelect(int _cNum)
@@ -152,11 +154,15 @@ public class CardManager : MonoBehaviour
                 cards[_cNum - 1].rank.color = Color.blue;
                 return;
             }
-            remainIronI -= cards[_cNum - 1].resIronI;
-            remainWoodI -= cards[_cNum - 1].resWoodI;
+            //remainIronI -= cards[_cNum - 1].resIronI;
+            //remainWoodI -= cards[_cNum - 1].resWoodI;
+            GameManager.instance.ironResource -= cards[_cNum - 1].resIronI;
+            GameManager.instance.woodResource -= cards[_cNum - 1].resWoodI;
 
-            remainIron.text = remainIronI.ToString();
-            remainWood.text = remainWoodI.ToString();
+            //remainIron.text = remainIronI.ToString();
+            //remainWood.text = remainWoodI.ToString();
+            remainIron.text = GameManager.instance.ironResource.ToString();
+            remainWood.text = GameManager.instance.woodResource.ToString();
 
             cards[_cNum - 1].def.Selected();
 
