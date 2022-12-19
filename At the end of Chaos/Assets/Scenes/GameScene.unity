@@ -3230,7 +3230,7 @@ MonoBehaviour:
   stateStartTime: 0
   timeAfternoonValue: 30
   timeUpgradeValue: 3
-  timeNightValue: 20
+  timeNightValue: 60
   timeNightStartValue: 3
   timeNightEndValue: 3
   timeStartPhase: 2

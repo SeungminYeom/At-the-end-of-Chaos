@@ -143,6 +143,7 @@ MonoBehaviour:
   attackDelayTime: 0
   targeting: 1
   pv: {fileID: 0}
+  acid: {fileID: 5648938140250277776, guid: d6c59d19f62dfae4f8e5e819028e234b, type: 3}
 --- !u!1001 &5161210348025802037
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -28,6 +28,8 @@ public class Zombie : MonoBehaviourPun, IPunObservable
 
     protected int takenDamage = 0;
 
+    IEnumerator ie;
+
 
     void Start()
     {
@@ -78,24 +80,24 @@ public class Zombie : MonoBehaviourPun, IPunObservable
         //transform.position = vec;
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        //if (collision.gameObject == train)
-        //{
-        //    attackDelayTime += Time.deltaTime;
-        //    if (attackDelayTime > attackDelay)
-        //    {
-        //        attackDelayTime = 0f;
-        //        AttackFromZombie();
-        //    }
-        //}
+        if (collision.gameObject.tag == "Train")
+        {
+            ie = Attack();
+            StartCoroutine(ie);
+        }
     }
 
     protected void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject == train)
+        if (collision.gameObject.tag == "Train")
         {
-            attackDelayTime = 0f;
+            if (ie != null)
+            {
+                ie = null;
+                StopCoroutine(ie);
+            }
         }
     }
 
@@ -132,5 +134,16 @@ public class Zombie : MonoBehaviourPun, IPunObservable
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         //throw new System.NotImplementedException();
+    }
+
+    protected virtual IEnumerator Attack()
+    {
+        while(true)
+        {
+            target.GetComponent<Train>().Attacked();
+            SoundPlayer.instance.PlaySound(SoundPlayer.instance.TrainAttacked, transform.position);
+
+            yield return new WaitForSeconds(3f);
+        }
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1756170192727113429}
   m_Layer: 0
   m_Name: Train_3
-  m_TagString: Untagged
+  m_TagString: Train
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 1

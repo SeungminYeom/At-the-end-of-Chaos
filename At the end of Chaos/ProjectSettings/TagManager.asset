@@ -12,6 +12,8 @@ TagManager:
   - Player_2
   - Player_1
   - Zombie
+  - Acid
+  - Train
   layers:
   - Default
   - TransparentFX

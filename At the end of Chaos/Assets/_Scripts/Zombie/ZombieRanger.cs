@@ -6,6 +6,9 @@ using UnityEngine;
 public class ZombieRanger : Zombie
 {
     bool isAttack;
+    public GameObject acid;
+
+    IEnumerator ie;
 
     void Start()
     {
@@ -16,34 +19,51 @@ public class ZombieRanger : Zombie
         rigid = GetComponent<Rigidbody>();
         pv = GetComponent<PhotonView>();
     }
+
     protected override void FixedUpdate()
     {
+        target = train.GetComponent<TrainManager>().GetTrain(GameManager.instance.trainCount);
+
         if (targeting)
         {
             if (Mathf.Pow(transform.position.x - target.transform.position.x, 2)
-                + Mathf.Pow(transform.position.z - target.transform.position.z, 2) < 10f)
+                + Mathf.Pow(transform.position.z - target.transform.position.z, 2) < 100f)
             {
                 if (!isAttack)
                 {
                     isAttack = true;
-                    StartCoroutine(Attack());
+                    ie = Attack();
+                    StartCoroutine(ie);
                 }
             }
-            else isAttack = false;
+            else
+            {
+                isAttack = false;
 
-            target = train.GetComponent<TrainManager>().GetTrain(GameManager.instance.trainCount);
-            Vector3 zombieToTarget = target.transform.position - transform.position;
-            zombieToTarget = zombieToTarget.normalized * speed;
-            zombieToTarget.y = rigid.velocity.y;
-            rigid.velocity = zombieToTarget;
+                if (ie != null)
+                {
+                    ie = null;
+                    StopCoroutine(ie);
+                }    
+
+                Vector3 zombieToTarget = target.transform.position - transform.position;
+                zombieToTarget = zombieToTarget.normalized * speed;
+                zombieToTarget.y = rigid.velocity.y;
+                rigid.velocity = zombieToTarget;
+            }
         }
     }
 
-    IEnumerator Attack()
+    protected override IEnumerator Attack()
     {
-        yield return new WaitForSeconds(2f);
+        while (true)
+        {
+            yield return new WaitForSeconds(3f);
 
-
+            GameObject spitAcid = Instantiate(acid, transform.position + Vector3.up * 2, Quaternion.identity);
+            spitAcid.GetComponent<Acid>().SetPos(spitAcid.transform.position, target.transform.position);
+            yield return null;
+        }
     }
 }
     

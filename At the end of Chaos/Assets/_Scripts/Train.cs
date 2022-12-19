@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Train : MonoBehaviour
@@ -17,17 +18,11 @@ public class Train : MonoBehaviour
         health = maxHealth;
     }
 
-    void Update()
+    public void Attacked()
     {
-
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Zombie" && !invincible)
+        if (!invincible)
         {
             health -= 1;
-            SoundPlayer.instance.PlaySound(SoundPlayer.instance.TrainAttacked, collision.transform.position);
             if (health == 0)
             {
                 StartCoroutine(trainTimeEffect());
@@ -35,6 +30,35 @@ public class Train : MonoBehaviour
             }
         }
     }
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.gameObject.tag == "Zombie" && !invincible)
+    //    {
+    //        health -= 1;
+    //        SoundPlayer.instance.PlaySound(SoundPlayer.instance.TrainAttacked, collision.transform.position);
+    //        if (health == 0)
+    //        {
+    //            StartCoroutine(trainTimeEffect());
+    //            //GameManager.instance.trainCount--;
+    //        }
+    //    }
+    //}
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.tag == "Acid" && !invincible)
+    //    {
+    //        Destroy(other.gameObject);
+    //        health -= 1;
+    //        SoundPlayer.instance.PlaySound(SoundPlayer.instance.TrainAttacked, other.transform.position);
+    //        if (health == 0)
+    //        {
+    //            StartCoroutine(trainTimeEffect());
+    //            //GameManager.instance.trainCount--;
+    //        }
+    //    }
+    //}
 
     IEnumerator trainTimeEffect()
     {
