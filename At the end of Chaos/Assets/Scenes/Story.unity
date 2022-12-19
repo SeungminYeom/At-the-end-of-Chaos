@@ -376,7 +376,7 @@ GameObject:
   - component: {fileID: 219182060}
   - component: {fileID: 219182059}
   m_Layer: 5
-  m_Name: Cartoon_07
+  m_Name: Text_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -422,7 +422,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a6b95282faea6254cbc1b8db701159dd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8148804ab245b42498cb52d2e4eb1d74, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -452,7 +452,7 @@ GameObject:
   - component: {fileID: 456773212}
   - component: {fileID: 456773211}
   m_Layer: 5
-  m_Name: Cartoon_11
+  m_Name: Text_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 25e2754230f5cb14485a9270e2f9c51e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fa05d99e3be44fd4fb5c33632117dd58, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -642,7 +642,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ce846f02d6cc9024da14d05e0a8c1911, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b30c85f435eb876418a5fa3bf0a42d26, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -865,7 +865,7 @@ GameObject:
   - component: {fileID: 920477040}
   - component: {fileID: 920477039}
   m_Layer: 5
-  m_Name: Cartoon_01
+  m_Name: Text_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -911,7 +911,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 13e67d38acc11f64db9a76a842c14fbe, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4918d9d475562674d9a8ba2fe199803b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -941,7 +941,7 @@ GameObject:
   - component: {fileID: 1367762788}
   - component: {fileID: 1367762787}
   m_Layer: 5
-  m_Name: Cartoon_05
+  m_Name: Text_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -987,7 +987,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9084f8b5d311ecb46939a4307428af66, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 79c99caced9307a418788799be1eb6c0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1093,7 +1093,7 @@ GameObject:
   - component: {fileID: 1417844214}
   - component: {fileID: 1417844213}
   m_Layer: 5
-  m_Name: Cartoon_02
+  m_Name: Cartoon_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1139,7 +1139,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5a30adf16a80cc54392ec565b16e2ff2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f43d1490f2aa26248a888b33227756f3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1302,7 +1302,7 @@ GameObject:
   - component: {fileID: 1477326266}
   - component: {fileID: 1477326265}
   m_Layer: 5
-  m_Name: Cartoon_08
+  m_Name: Cartoon_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1348,7 +1348,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3c4934fbd4045be47bc68a45e139a5f1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dc52320ecc1209747a313d0af64aaa72, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1378,7 +1378,7 @@ GameObject:
   - component: {fileID: 1713521583}
   - component: {fileID: 1713521582}
   m_Layer: 5
-  m_Name: Cartoon_10
+  m_Name: Cartoon_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1424,7 +1424,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cad7a03951bf07d46b53bc10ba2ea1b7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6e1a31c69e84d1f40b38bf41511c8a10, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1614,7 +1614,7 @@ GameObject:
   - component: {fileID: 1980627131}
   - component: {fileID: 1980627130}
   m_Layer: 5
-  m_Name: Cartoon_03
+  m_Name: Text_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1660,7 +1660,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4082a0d3c1f922142b2752b6e6d875ba, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7ae54f74319957247ba5e0a0bbb39f3c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1690,7 +1690,7 @@ GameObject:
   - component: {fileID: 2014073710}
   - component: {fileID: 2014073709}
   m_Layer: 5
-  m_Name: Cartoon_04
+  m_Name: Cartoon_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1736,7 +1736,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 55c4126fcd051ca4a816dcb63e340a9e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a1f4c54114f754a4689ab81a76ce75f5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1766,7 +1766,7 @@ GameObject:
   - component: {fileID: 2036035271}
   - component: {fileID: 2036035270}
   m_Layer: 5
-  m_Name: Cartoon_06
+  m_Name: Cartoon_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1812,7 +1812,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6aea04bb3a72e0e45bfbbbf9ff58363a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ff8d10403e37a2d47b78237f97a0443f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1842,7 +1842,7 @@ GameObject:
   - component: {fileID: 2091555840}
   - component: {fileID: 2091555839}
   m_Layer: 5
-  m_Name: Cartoon_09
+  m_Name: Text_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1888,7 +1888,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3b61aec067b521242ae9931d9353ebed, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 398663379f2a5b5488b18ec27dc1b982, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

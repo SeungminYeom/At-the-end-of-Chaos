@@ -95,8 +95,8 @@ public class Zombie : MonoBehaviourPun, IPunObservable
         {
             if (ie != null)
             {
-                ie = null;
                 StopCoroutine(ie);
+                ie = null;
             }
         }
     }

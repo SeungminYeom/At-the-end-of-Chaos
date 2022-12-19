@@ -29,7 +29,7 @@ public class Gun : MonoBehaviour
     LineRenderer bulletLine;
 
     bool targeting = false;
-    RaycastHit hit;
+    RaycastHit[] hit = new RaycastHit[5];
     Ray r = new Ray();
     Transform gun;
     Vector3 gunPos;
@@ -79,10 +79,10 @@ public class Gun : MonoBehaviour
             r.direction = transform.forward;
             if (GameManager.instance.timeState == TimeState.night)
             {
-                if (rounds > 0 && Physics.Raycast(linePos, transform.forward, out hit, range, layerMask))
+                if (rounds > 0 && Physics.Raycast(linePos, transform.forward, out hit[0], range, layerMask))
                 {
-                    r.direction = hit.point;
-                    hitOffsetPos = hit.collider.transform.position + Vector3.up * hitOffset;
+                    r.direction = hit[0].point;
+                    hitOffsetPos = hit[0].collider.transform.position + Vector3.up * hitOffset;
                     targetingLazer.colorGradient = r2b;
                     targetingLazer.SetPosition(1, hitOffsetPos);
                     //Debug.DrawRay(gunPos, hitOffsetPos - gunPos, Color.red);
@@ -118,14 +118,22 @@ public class Gun : MonoBehaviour
                 }
                 gun.LookAt(hitOffsetPos);
 
+                if (typeOnHand == GunType.Shotgun)
+                {
+                    for (int i = 1; i < 4; i++)
+                    {
+                        Physics.Raycast(linePos, transform.forward, out hit[i], range * ((float)new System.Random().NextDouble() * 0.1f + 0.95f), layerMask);
+                    }
+                }
+
                 if (CrossPlatformInputManager.GetButtonDown("Shoot"))
                 {
                     if (typeOnHand != GunType.Shotgun)
                     {
                         BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
                         VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, Quaternion.Euler(r.direction));
-                        if (hit.collider != null)
-                            pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit.collider.gameObject.GetPhotonView().ViewID);
+                        if (hit[0].collider != null)
+                            pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit[0].collider.gameObject.GetPhotonView().ViewID);
                         else
                         {
                             pv.RPC("Shoot", Photon.Pun.RpcTarget.All, -1);
@@ -133,10 +141,12 @@ public class Gun : MonoBehaviour
                         }
                         return;
                     }
-                    BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
-                    VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, r.direction);
-                    pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit.collider.gameObject.GetPhotonView().ViewID);
-                    //if ()
+                    for (int i = 0; i < 4; i++)
+                    {
+                        BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos * Random.Range(0.95f, 1.05f));
+                        VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), Quaternion.Euler(r.direction));
+                        pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit[0].collider.gameObject.GetPhotonView().ViewID);
+                    }
                 }
             }
         }
@@ -146,12 +156,6 @@ public class Gun : MonoBehaviour
     public void Shoot(int _target)
     {
         SoundPlayer.instance.PlaySound(gunFireSFX, gunPos);
-
-        if (typeOnHand == GunType.Shotgun)
-            for (int i = 0; i < 5; i++)
-                BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
-        else
-            BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
 
         if (_target == -1)
         { //아무도 못맞췄을떄
