@@ -55,10 +55,18 @@ public class SoundPlayer : MonoBehaviour
     void Awake()
     {
         instance = this;
+
         pistolFire = Resources.LoadAll<AudioClip>("Sounds/GunSound/Pistol/Fire");
         pistolCocking = Resources.LoadAll<AudioClip>("Sounds/GunSound/Pistol/Cocking");
         pistolRM = Resources.LoadAll<AudioClip>("Sounds/GunSound/Pistol/RemoveMag");
         pistolIM = Resources.LoadAll<AudioClip>("Sounds/GunSound/Pistol/InsertMag");
+
+        shotgunFire = Resources.LoadAll<AudioClip>("Sounds/GunSound/Shotgun/Fire");
+
+        sniperFire = Resources.LoadAll<AudioClip>("Sounds/GunSound/Sniper/Fire");
+
+        assaultFire = Resources.LoadAll<AudioClip>("Sounds/GunSound/Assault/Fire");
+
         TrainAttacked = Resources.LoadAll<AudioClip>("Sounds/TrainSound/Attacked");
         backgroundMusics = Resources.LoadAll<AudioClip>("Sounds/Environment/ImminentThreat");
 

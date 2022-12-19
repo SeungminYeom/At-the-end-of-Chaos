@@ -6,6 +6,7 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine.Rendering.UI;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 public class Gun : MonoBehaviour
 {
@@ -42,6 +43,7 @@ public class Gun : MonoBehaviour
     [SerializeField] Gradient dr2b;
 
     AudioClip[] gunFireSFX;
+    bool oneShot;
 
     void Start()
     {
@@ -118,13 +120,15 @@ public class Gun : MonoBehaviour
                 }
                 gun.LookAt(hitOffsetPos);
 
-                if (typeOnHand == GunType.Shotgun)
-                {
-                    for (int i = 1; i < 4; i++)
-                    {
-                        Physics.Raycast(linePos, transform.forward, out hit[i], range * ((float)new System.Random().NextDouble() * 0.1f + 0.95f), layerMask);
-                    }
-                }
+                //if (typeOnHand == GunType.Shotgun)
+                //{
+                //    for (int i = 1; i < 5; i++)
+                //    {
+                //        float theta = 90 - 45 - transform.eulerAngles.y;
+                //        Vector3 vec = new Vector3(Mathf.Cos(theta * Mathf.Deg2Rad), transform.position.y, Mathf.Sin(theta * Mathf.Deg2Rad));
+                //        Physics.Raycast(linePos, vec, out hit[i], range * ((float)new System.Random().NextDouble() * 0.1f + 0.95f), layerMask);
+                //    }
+                //}
 
                 if (CrossPlatformInputManager.GetButtonDown("Shoot"))
                 {
@@ -141,12 +145,27 @@ public class Gun : MonoBehaviour
                         }
                         return;
                     }
-                    for (int i = 0; i < 4; i++)
-                    {
-                        BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos * Random.Range(0.95f, 1.05f));
-                        VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), Quaternion.Euler(r.direction));
-                        pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit[0].collider.gameObject.GetPhotonView().ViewID);
-                    }
+                    //for (int i = 0; i < 5; i++)
+                    //{
+                    //    if (hit[i].collider != null)
+                    //    {
+                    //        hitOffsetPos = hit[i].collider.transform.position + Vector3.up * hitOffset;
+
+                    //        pv.RPC("Shoot", Photon.Pun.RpcTarget.All, hit[0].collider.gameObject.GetPhotonView().ViewID);
+                    //    }
+                    //    else
+                    //    {
+                    //        hitOffsetPos = r.GetPoint(range);
+                    //        hitOffsetPos.y = 0;
+
+                    //        pv.RPC("Shoot", Photon.Pun.RpcTarget.All, -1);
+                    //        VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), hitOffsetPos, Quaternion.Inverse(gun.rotation));
+                    //    }
+
+                    //    BulletTrailManager.instance.pv.RPC("PlayEffect", RpcTarget.All, gunPos, hitOffsetPos);
+                    //    VFXPlayer.instance.pv.RPC("PlayVFX", RpcTarget.All, ((int)VFXPlayer.vfx.gunSpark), gunPos, Quaternion.Euler(r.direction));
+                    //}
+                    //oneShot = false;
                 }
             }
         }
@@ -155,7 +174,11 @@ public class Gun : MonoBehaviour
     [PunRPC]
     public void Shoot(int _target)
     {
-        SoundPlayer.instance.PlaySound(gunFireSFX, gunPos);
+        //if (!oneShot)
+        //{
+        //    oneShot = true;
+            SoundPlayer.instance.PlaySound(gunFireSFX, gunPos);
+        //}
 
         if (_target == -1)
         { //아무도 못맞췄을떄
@@ -182,7 +205,7 @@ public class Gun : MonoBehaviour
                 knockbackMul = 1f;
                 break;
             case GunType.SniperRifle:
-                damage = 30f;
+                damage = 200f;
                 knockbackMul = 1f;
                 break;
             case GunType.AssaultRifle:
@@ -203,6 +226,8 @@ public class Gun : MonoBehaviour
 
     IEnumerator Reload()
     {
+        Debug.Log("호출");
+
         if (pv.IsMine)
         {
             targetingLazer.enabled = false;
@@ -226,8 +251,20 @@ public class Gun : MonoBehaviour
             case GunType.Shotgun:
                 break;
             case GunType.SniperRifle:
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
+                yield return time;
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolIM, gunPos);
+                yield return time;
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolCocking, gunPos);
+                yield return time;
                 break;
             case GunType.AssaultRifle:
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolRM, gunPos);
+                yield return time;
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolIM, gunPos);
+                yield return time;
+                SoundPlayer.instance.PlaySound(SoundPlayer.instance.pistolCocking, gunPos);
+                yield return time;
                 break;
             default:
                 break;
